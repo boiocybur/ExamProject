@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("")
 public class overviewController {
-    @GetMapping("")
-    public String test(Model model) {
-        return "test2";
+    @GetMapping("/test")
+    public String test() {
+        return "test";
     }
 
 }
