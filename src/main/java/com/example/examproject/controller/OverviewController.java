@@ -5,13 +5,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import service.OverviewService;
+import com.example.examproject.service.OverviewService;
 
 @Controller
 @RequestMapping("/overview")
 public class OverviewController {
 
-    private final OverviewService overviewService;
+    private OverviewService overviewService;
 
     public OverviewController(OverviewService overviewService) {
         this.overviewService = overviewService;

@@ -1,5 +1,4 @@
-package model;
-
+package com.example.examproject.model;
 
 
 public class Overview {
@@ -7,6 +6,7 @@ public class Overview {
     private String overviewName;
     private String overviewDescription;
     //private List<Project> overviewList;
+
 
     public Overview(int overviewId, String overviewName, String overviewDescription) {
         this.overviewId = overviewId;

@@ -1,6 +1,6 @@
 package com.example.examproject.repository;
 
-import model.Overview;
+import com.example.examproject.model.Overview;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -13,11 +13,7 @@ public class OverviewRepository {
     @Value("${spring.datasource.password}")
     String pwd;
 
-    private final Overview overview;
-
-    public OverviewRepository(Overview overview) {
-        this.overview = overview;
-    }
+    private Overview overview;
 
 
     public boolean showProjects() {

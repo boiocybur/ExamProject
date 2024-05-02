@@ -1,4 +1,4 @@
-package service;
+package com.example.examproject.service;
 
 import org.springframework.stereotype.Service;
 import com.example.examproject.repository.OverviewRepository;
@@ -6,7 +6,8 @@ import com.example.examproject.repository.OverviewRepository;
 @Service
 public class OverviewService {
 
-    private final OverviewRepository overviewRepository;
+
+    private OverviewRepository overviewRepository;
 
     public OverviewService(OverviewRepository overviewRepository) {
         this.overviewRepository = overviewRepository;
