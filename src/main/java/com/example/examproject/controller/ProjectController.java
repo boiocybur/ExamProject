@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("")  // Base path for all endpoints in this controller
+@RequestMapping("")
+
 public class ProjectController {
 
     private final ProjectService projectService;
