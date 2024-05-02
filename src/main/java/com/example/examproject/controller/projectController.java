@@ -1,4 +1,4 @@
 package com.example.examproject.controller;
 
-public class projectController {
+public class ProjectController {
 }
