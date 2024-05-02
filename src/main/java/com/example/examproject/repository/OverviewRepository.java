@@ -1,4 +1,4 @@
-package repository;
+package com.example.examproject.repository;
 
 import model.Overview;
 import org.springframework.beans.factory.annotation.Value;

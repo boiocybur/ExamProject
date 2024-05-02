@@ -1,7 +1,7 @@
 package service;
 
 import org.springframework.stereotype.Service;
-import repository.OverviewRepository;
+import com.example.examproject.repository.OverviewRepository;
 
 @Service
 public class OverviewService {
