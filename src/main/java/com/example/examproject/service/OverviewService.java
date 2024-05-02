@@ -1,5 +1,6 @@
 package com.example.examproject.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.examproject.repository.OverviewRepository;
 
@@ -9,6 +10,7 @@ public class OverviewService {
 
     private OverviewRepository overviewRepository;
 
+    @Autowired
     public OverviewService(OverviewRepository overviewRepository) {
         this.overviewRepository = overviewRepository;
     }
