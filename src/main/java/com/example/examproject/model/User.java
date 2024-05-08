@@ -1,5 +1,7 @@
 package com.example.examproject.model;
 
+import java.util.List;
+
 public class User {
     private String userName;
     private String password;
@@ -47,5 +49,25 @@ public class User {
 
     public void setUserRank(String userRank) {
         this.userRank = userRank;
+    }
+
+    public String formatProjectDetails(List<Project> projects) {
+        StringBuilder builder = new StringBuilder();
+
+        for (Project project : projects) {
+            builder.append("Project Name: ").append(project.getProjectName()).append("\n");
+
+            List<String> tasks = project.getProjectTasks();
+            if (tasks.isEmpty()) {
+                builder.append("  No tasks found.\n");
+            } else {
+                for (String task : tasks) {
+                    builder.append("  Task: ").append(task).append("\n");
+                }
+            }
+            builder.append("\n"); // Extra newline for better separation between projects
+        }
+
+        return builder.toString();
     }
 }
