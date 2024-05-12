@@ -1,102 +1,63 @@
 package com.example.examproject.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
-    private String projectName;
-    private String projectDescription;
-    private int projectId;
-    private LocalDate projectStartDate;
-    private LocalDate projectEndDate;
-    private double projectBudget;
-    private List<String> projectTasks;
-    private LocalDate completionDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private double budget;
+    private List<String> tasks;
+    private List<String> resources;
 
-    public Project(String projectName, String projectDescription, LocalDate projectStartDate, LocalDate projectEndDate, double projectBudget, List<String> projectTasks, LocalDate completionDate) {
-        this.projectName = projectName;
-        this.projectDescription = projectDescription;
-        this.projectStartDate = projectStartDate;
-        this.projectEndDate = projectEndDate;
-        this.projectBudget = projectBudget;
-        this.projectTasks = projectTasks != null ? projectTasks : new ArrayList<>();
-        this.completionDate = completionDate;
+    public Project(LocalDate startDate, LocalDate endDate, double budget, List<String> tasks, List<String> resources) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.budget = budget;
+        this.tasks = tasks;
+        this.resources = resources;
     }
 
     public Project() {
     }
 
-    public Project(String projectName) {
-        this.projectName = projectName;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setProjectEndDate(LocalDate projectEndDate) {
-        this.projectEndDate = projectEndDate;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDate getCompletionDate() {
-        return completionDate;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setCompletionDate(LocalDate completionDate) {
-        this.completionDate = completionDate;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public double getBudget() {
+        return budget;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setBudget(double budget) {
+        this.budget = budget;
     }
 
-    public String getProjectDescription() {
-        return projectDescription;
+    public List<String> getTasks() {
+        return tasks;
     }
 
-    public void setProjectDescription(String projectDescription) {
-        this.projectDescription = projectDescription;
+    public void setTasks(List<String> tasks) {
+        this.tasks = tasks;
     }
 
-    public int getProjectId() {
-        return projectId;
+    public List<String> getResources() {
+        return resources;
     }
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
-    }
-
-    public LocalDate getProjectStartDate() {
-        return projectStartDate;
-    }
-
-    public void setProjectStartDate(LocalDate projectStartDate) {
-        this.projectStartDate = projectStartDate;
-    }
-
-    public LocalDate getProjectEndDate() {
-        return projectEndDate;
-    }
-
-    public void setDueDate(LocalDate projectEndDate) {
-        this.projectEndDate = projectEndDate;
-    }
-
-    public double getProjectBudget() {
-        return projectBudget;
-    }
-
-    public void setProjectBudget(double projectBudget) {
-        this.projectBudget = projectBudget;
-    }
-
-    public List<String> getProjectTasks() {
-        return projectTasks;
-    }
-
-    public void setProjectTasks(List<String> projectTasks) {
-        this.projectTasks = projectTasks;
+    public void setResources(List<String> resources) {
+        this.resources = resources;
     }
 }
-
