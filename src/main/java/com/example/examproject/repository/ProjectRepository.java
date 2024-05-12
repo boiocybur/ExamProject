@@ -1,6 +1,7 @@
 package com.example.examproject.repository;
 
 import com.example.examproject.model.Project;
+import com.example.examproject.model.ProjectList;
 import com.example.examproject.util.ConnectionManager;
 import org.springframework.beans.factory.annotation.Value;
 import java.sql.*;
@@ -11,6 +12,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class ProjectRepository {
+    @Value("${spring.datasource.url}")
+    String db_url;
+    @Value("${spring.datasource.username}")
+    String uid;
+    @Value("${spring.datasource.password}")
+    String pwd;
+
+    private Project project;
 
     public void showBudget() {
     }

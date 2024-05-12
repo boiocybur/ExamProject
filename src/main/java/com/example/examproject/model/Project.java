@@ -18,6 +18,9 @@ public class Project {
         this.resources = resources;
     }
 
+    public Project() {
+    }
+
     public LocalDate getStartDate() {
         return startDate;
     }
