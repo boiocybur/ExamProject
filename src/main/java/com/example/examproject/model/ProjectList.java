@@ -58,6 +58,4 @@ public class ProjectList {
     public void setProjectListDescription(String projectListDescription) {
         this.projectListDescription = projectListDescription;
     }
-
-    // getter for List
 }
