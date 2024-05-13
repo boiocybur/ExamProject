@@ -13,6 +13,7 @@
         <ul>
             <li th:each="project : ${imminentProjects}">
                 <span th:text="${project.projectName}">Project Name</span>:
+                <span th:text="${project.projectDescription}">Project Description</span>:
                 <span th:text="${project.projectEndDate}">End Date</span>
             </li>
         </ul>
@@ -23,6 +24,7 @@
         <ul>
             <li th:each="project : ${overdueProjects}">
                 <span th:text="${project.projectName}">Project Name</span>:
+                <span th:text="${project.projectDescription}">Project Description</span>:
                 <span th:text="${project.projectEndDate}">End Date</span>
             </li>
         </ul>
@@ -33,6 +35,7 @@
         <ul>
             <li th:each="project : ${completedProjects}">
                 <span th:text="${project.projectName}">Project Name</span>:
+                <span th:text="${project.projectDescription}">Project Description</span>:
                 <span th:text="${project.completionDate}">Completion Date</span>
             </li>
         </ul>
@@ -42,8 +45,8 @@
         <h2>All Projects</h2>
         <ul>
             <li th:each="project : ${allProjects}">
-                <span th:text="${project.projectName}">Project Name</span>:
-                </li>
+                <span th:text="${project.projectName}">Project Name</span>
+            </li>
         </ul>
     </section>
 
