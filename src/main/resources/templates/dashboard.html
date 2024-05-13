@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Management Dashboard</title>
+</head>
+<body>
+<div>
+    <h1>Project Dashboard</h1>
+
+    <section>
+        <h2>Imminent Projects</h2>
+        <ul>
+            <li th:each="project : ${imminentProjects}">
+                <span th:text="${project.projectName}">Project Name</span>:
+                <span th:text="${project.projectEndDate}">End Date</span>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Overdue Projects</h2>
+        <ul>
+            <li th:each="project : ${overdueProjects}">
+                <span th:text="${project.projectName}">Project Name</span>:
+                <span th:text="${project.projectEndDate}">End Date</span>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Completed Projects</h2>
+        <ul>
+            <li th:each="project : ${completedProjects}">
+                <span th:text="${project.projectName}">Project Name</span>:
+                <span th:text="${project.completionDate}">Completion Date</span>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>All Projects</h2>
+        <ul>
+            <li th:each="project : ${allProjects}">
+                <span th:text="${project.projectName}">Project Name</span>:
+                </li>
+        </ul>
+    </section>
+
+</div>
+</body>
+</html>
