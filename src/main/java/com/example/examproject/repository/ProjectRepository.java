@@ -21,7 +21,6 @@ public class ProjectRepository {
     @Value("${spring.datasource.password}")
     private String dbPassword;
 
-    @Autowired
     private DataSource dataSource;
 
     private Connection getConnection() throws SQLException {
