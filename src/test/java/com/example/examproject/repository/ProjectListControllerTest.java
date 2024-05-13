@@ -4,6 +4,7 @@ import com.example.examproject.controller.ProjectListController;
 import com.example.examproject.model.ProjectList;
 import com.example.examproject.service.ProjectListService;
 import com.example.examproject.service.ProjectService;
+import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
