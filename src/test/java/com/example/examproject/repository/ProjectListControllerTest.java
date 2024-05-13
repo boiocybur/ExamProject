@@ -1,4 +1,4 @@
-package com.example.examproject;
+package com.example.examproject.repository;
 
 import com.example.examproject.controller.ProjectListController;
 import com.example.examproject.model.ProjectList;
