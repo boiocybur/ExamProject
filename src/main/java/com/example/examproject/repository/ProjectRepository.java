@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Repository
 public class ProjectRepository {
 
@@ -67,7 +68,6 @@ public class ProjectRepository {
     }
 
 
-
     public List<Project> findProjectsByImminentDeadlines() {
         LocalDate today = LocalDate.now();
         LocalDate imminentDeadline = today.plusDays(3);
@@ -102,30 +102,5 @@ public class ProjectRepository {
             System.err.println("Error fetching all projects: " + e.getMessage());
         }
         return projects;
-    }
-
-    public void showBudget() {
-    }
-
-    public LocalDate showProjectTime(int projectId) {
-        return null;
-    }
-
-    public void showResources() {
-    }
-
-    public void showUnfinishedTasks() {
-    }
-
-    public void showFinishedTasks() {
-    }
-
-    public void showOverdueTasks() {
-    }
-
-    public void attachResourcesToTask() {
-    }
-
-    public void removeResourceFromTask() {
     }
 }
