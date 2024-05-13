@@ -1,4 +1,3 @@
-
 CREATE SCHEMA IF NOT EXISTS ProjectManager;
        SET SCHEMA ProjectManager;
 drop table if exists ProjectManager.tasks;
