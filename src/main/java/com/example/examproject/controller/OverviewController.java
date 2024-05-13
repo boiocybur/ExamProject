@@ -33,7 +33,7 @@ public class OverviewController {
         return null;
     }
 
-    @GetMapping("/{id]/delete")
+    @GetMapping("/{id}/delete")
     public String deleteProject() {
         return null;
     }
