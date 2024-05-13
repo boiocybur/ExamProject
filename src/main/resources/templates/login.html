@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/main.css}">
+</head>
+<body>
+
+<h2>Current User:</h2>
+<p th:if="${#ctx.session.isLoggedIn != null}" th:text="'Logged in as ' + ${#ctx.session.username}"></p>
+<p th:unless="${#ctx.session.isLoggedIn != null}">No user logged in. Please login or register.</p>
+
+<form action="/user/login" method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required/>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required/>
+
+    <input type="submit" value="Login" class="btn"/>
+
+    <div th:if="${param.error}">
+        <p>Invalid username or password, please try again.</p>
+    </div>
+</form>
+
+<footer class="footer">
+    <div th:if="${#ctx.session.isLoggedIn != null}">
+        <a th:href="@{'/user/' + ${#ctx.session.username} + '/delete'}" class="btn">Delete Account</a>
+        <a href="/user/logout" class="btn">Logout</a>
+        <a th:href="@{'/user/' + ${#ctx.session.userid} + '/edit'}" class="btn">Edit Account</a>
+    </div>
+    <div th:unless="${#ctx.session.isLoggedIn != null}">
+        <a href="/user/createUser" class="btn">Register</a>
+    </div>
+</footer>
+
+</body>
+</html>

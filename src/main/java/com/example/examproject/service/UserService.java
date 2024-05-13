@@ -10,23 +10,23 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean registerUser(User newUser) {
-        return userRepository.registerUser(newUser);
+    public boolean createUser(User newUser) {
+        return userRepository.createUser(newUser);
     }
     public boolean loginUser(String username, String password) {
         return userRepository.loginUser(username, password);
     }
-    public int findUserId(String userName){
+    public int findUserById(String userName){
         return userRepository.findUserById(userName);
     }
+    public User getUserById(int userId) {
+        return userRepository.getUserById(userId);
+    }
 
-    public boolean editUser(User user){
-        return userRepository.editUser(user);
+    public void editUser(User user){
+        userRepository.editUser(user);
     }
     public boolean deleteUser(String userName){
         return userRepository.deleteUser(userName);
-    }
-    public boolean validateUser(String userName, String password) {
-        return userRepository.validateUser(userName, password);
     }
 }
