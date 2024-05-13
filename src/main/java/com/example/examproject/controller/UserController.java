@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserController {
     UserService userService;
     private User user;
