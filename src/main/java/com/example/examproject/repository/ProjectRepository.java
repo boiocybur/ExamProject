@@ -71,7 +71,7 @@ import java.util.List;
 
         public List<Project> findProjectsByImminentDeadlines() {
             LocalDate today = LocalDate.now();
-            LocalDate imminentDeadline = today.plusDays(7);
+            LocalDate imminentDeadline = today.plusDays(3);
             String sql = "SELECT * FROM projects WHERE due_date BETWEEN ? AND ? AND completion_date IS NULL";
             return executeProjectQuery(sql, today, imminentDeadline);
         }
