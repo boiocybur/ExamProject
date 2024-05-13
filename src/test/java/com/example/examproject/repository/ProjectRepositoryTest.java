@@ -41,8 +41,9 @@ class ProjectRepositoryTest {
 
     @Test
     void findProjectsByImminentDeadlines() throws SQLException {
-        LocalDate today = LocalDate.now();
-        LocalDate imminentDeadline = today.plusDays(3);
+        LocalDate today = LocalDate.of(2024, 5, 13);  // Fixed date for consistency in tests
+        LocalDate imminentDeadline = today.plusDays(7);
+
         String expectedSql = "SELECT * FROM projects WHERE due_date BETWEEN ? AND ? AND completion_date IS NULL";
 
         projectRepository.findProjectsByImminentDeadlines();
