@@ -12,18 +12,18 @@ import java.util.List;
 @Repository
 public class ProjectListRepository {
     @Value("${spring.datasource.url}")
-    String db_url;
+    String dbUrl;
     @Value("${spring.datasource.username}")
-    String uid;
+    String dbUserName;
     @Value("${spring.datasource.password}")
-    String pwd;
+    String dbPassword;
 
     private ProjectList projectList;
 
 
     public List<ProjectList> showAllProjectLists() {
         List<ProjectList> allProjectLists = new ArrayList<>();
-        Connection connection = ConnectionManager.getConnection(db_url, uid, pwd);
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String sql = "SELECT project.projectId, project.projectName, project.projectDescription FROM projectList JOIN project ON projectList.projectListID = project.projectListID";
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
@@ -44,7 +44,7 @@ public class ProjectListRepository {
 
     public List<ProjectList> showProjectList(int projectListId) {
         List<ProjectList> projectLists = new ArrayList<>();
-        Connection connection = ConnectionManager.getConnection(db_url, uid, pwd);
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String sql = "SELECT project.projectId, project.projectName, project.projectDescription FROM projectList JOIN project ON projectList.projectListID = project.projectListID WHERE projectList.projectListID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, projectListId);
@@ -65,7 +65,7 @@ public class ProjectListRepository {
 
 
     public ProjectList createProjectList(ProjectList projectList) {
-        Connection connection = ConnectionManager.getConnection(db_url, uid, pwd);
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String sql = "INSERT INTO projectList (projectListName) VALUES(?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, projectList.getProjectListName());
@@ -79,7 +79,7 @@ public class ProjectListRepository {
 
     public boolean deleteProjectlist(int projectListID) {
         int rows = 0;
-        Connection connection = ConnectionManager.getConnection(db_url, uid, pwd);
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String sql = "DELETE FROM projectList WHERE projectListId = ?";
         try {
 
@@ -95,7 +95,7 @@ public class ProjectListRepository {
 
     public ProjectList searchToUpdate(int projectListID) {
         ProjectList projectList1 = null;
-        Connection connection = ConnectionManager.getConnection(db_url, uid, pwd);
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String sql = "SELECT projectListID, projectListName, projectListDescription FROM projectList WHERE projectList.projectListID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, projectListID);
@@ -121,7 +121,7 @@ public class ProjectListRepository {
         WHERE projectListID = ? AND EXISTS (SELECT 1 FROM project
         WHERE project.projectListID = projectList.projectListID)
         """;
-        Connection connection = ConnectionManager.getConnection(db_url, uid, pwd);
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setString(1, projectList.getProjectListName());
