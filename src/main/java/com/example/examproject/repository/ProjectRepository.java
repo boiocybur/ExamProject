@@ -20,6 +20,13 @@ import java.util.List;
         @Value("${spring.datasource.password}")
         private String dbPassword;
 
+<<<<<<< User-Login
+        private Connection getConnection() throws SQLException {
+            return DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+        }
+
+=======
+>>>>>>> main
         private Project projectMap(ResultSet rs) throws SQLException {
             Project project = new Project();
             project.setProjectID(rs.getInt("projectID"));

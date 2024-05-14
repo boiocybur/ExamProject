@@ -12,8 +12,11 @@
 <form action="/user/save" method="post" th:object="${user}">
     <input type="hidden" name="userId" th:value="${user.userId}"/> <!-- Skjult inputfelt til brugerens id -->
 
-    <label for="userName">New Username:</label>
+    <label for="userName">New username:</label>
     <input type="text" id="userName" name="userName" th:value="${user.getUserName()}" required/>
+
+    <label for="userEmail">New Email:</label>
+    <input type="text" id="userEmail" name="userEmail" th:value="${user.getUserEmail()}" required/>
 
     <label for="password">New Password:</label>
     <input type="password" id="password" name="password" required/>

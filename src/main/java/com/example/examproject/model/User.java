@@ -7,14 +7,16 @@ public class User {
     private String userName;
     private String password;
     private int userId;
+    private String userEmail;
     public User() {
 
     }
 
-    public User(String userName, String password, int userId) {
+    public User(String userName, String password, int userId, String userEmail) {
         this.userName = userName;
         this.password = password;
         this.userId = userId;
+        this.userEmail = userEmail;
     }
 
     public String getUserName() {
@@ -39,6 +41,14 @@ public class User {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     @Override
