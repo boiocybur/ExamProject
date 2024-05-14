@@ -1,7 +1,6 @@
 package com.example.examproject.repository;
 
 import com.example.examproject.model.User;
-import com.example.examproject.util.ConnectionManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -10,17 +9,16 @@ import java.sql.*;
 @Repository
 public class UserRepository {
     @Value("${spring.datasource.url}")
-    String db_url;
+    String dbUrl;
     @Value("${spring.datasource.username}")
-    String uid;
+    String dbUserName;
     @Value("${spring.datasource.password}")
-    String pwd;
+    String dbPassword;
     public int findUserById(String userName) {
         int userid = 0;
-        String query = "SELECT userid FROM bruger WHERE username = ?";
-
-        try (Connection connection = DriverManager.getConnection(db_url, uid, pwd);
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        String sql = "SELECT userID FROM user WHERE username = ?";
+        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setString(1, userName);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -34,9 +32,9 @@ public class UserRepository {
         return userid;
     }
     public User getUserById(int userId) {
-        String sql = "SELECT * FROM bruger WHERE userid = ?";
+        String sql = "SELECT * FROM user WHERE userID = ?";
         User user = null;
-        try (Connection connection = DriverManager.getConnection(db_url, uid, pwd);
+        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -53,9 +51,9 @@ public class UserRepository {
     }
 
     public boolean createUser(User newUser) {
-        String query = "INSERT INTO bruger (username, userpassword) VALUES (?, ?)";
+        String query = "INSERT INTO user (username, userpassword) VALUES (?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(db_url, uid, pwd);
+        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, newUser.getUserName());
@@ -71,9 +69,9 @@ public class UserRepository {
     }
 
     public boolean loginUser(String username, String password) {
-        String query = "SELECT COUNT(*) AS count FROM bruger WHERE username = ? AND userpassword = ?";
+        String query = "SELECT COUNT(*) AS count FROM user WHERE userName = ? AND userPassword = ?";
 
-        try (Connection connection = DriverManager.getConnection(db_url, uid, pwd);
+        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, username);
@@ -92,8 +90,8 @@ public class UserRepository {
     }
     public User editUser(User user) {
         int rows = 0;
-        try (Connection con = DriverManager.getConnection(db_url, uid, pwd)) {
-            String SQL = "UPDATE bruger SET username = ?, userpassword = ? WHERE userid = ? ";
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUserName, dbPassword)) {
+            String SQL = "UPDATE user SET userName = ?, userPassword = ? WHERE userID = ? ";
             PreparedStatement pstmt = con.prepareStatement(SQL);
 
             pstmt.setString(1, user.getUserName());
@@ -111,9 +109,9 @@ public class UserRepository {
             return null;
     }
     public boolean deleteUser(String userName) {
-        String query = "DELETE FROM bruger WHERE username = ?";
+        String query = "DELETE FROM user WHERE userName = ?";
 
-        try (Connection connection = DriverManager.getConnection(db_url, uid, pwd);
+        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, userName);
