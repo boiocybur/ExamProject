@@ -1,49 +1,54 @@
 CREATE SCHEMA if not exists alphaSolutions;
 use alphasolutions;
 
-
-ALTER TABLE project DROP FOREIGN KEY project_ibfk_1;
-
-drop table if exists projectList;
-CREATE TABLE projectList (
-                            projectListID INTEGER auto_increment,
-                            projectListName VARCHAR(50) NOT NULL,
-                            primary key(projectListID)
-    );
-
-drop table if exists project;
-CREATE TABLE project (
-                            projectID INTEGER AUTO_INCREMENT PRIMARY KEY,
-                            projectName VARCHAR(255) NOT NULL,
-                            projectDescription TEXT,
-                            projectStartDate DATE,
-                            projectBudget DOUBLE,
-                            dueDate DATE,
-                            completionDate DATE,
-                            projectListID INTEGER,
-                            primary key(projectID),
-                            FOREIGN KEY(projectListID) REFERENCES projectList(projectListID)
-    );
-
-drop table if exists task;
-CREATE TABLE task (
-                            taskID INTEGER AUTO_INCREMENT PRIMARY KEY,
-                            projectID INTEGER NOT NULL,
-                            taskDescription TEXT,
-                            taskStartDate DATE,
-                            taskEndDate DATE,
-                            status VARCHAR(50),
-                            FOREIGN KEY (project_id) REFERENCES projects(project_id)
-                            ON DELETE CASCADE ON UPDATE CASCADE
-    );
+drop table if exists projectLists;
+drop table if exists tasks;
+drop table if exists projects;
+drop table if exists users;
 
 
-drop table if exists user;
-CREATE TABLE user (
-                        userID INTEGER AUTO_INCREMENT PRIMARY KEY,
-                        userName VARCHAR(100),
-                        userPassword VARCHAR(100)
+CREATE TABLE users (
+                       userID INTEGER AUTO_INCREMENT,
+                       userName VARCHAR(100),
+                       userPassword VARCHAR(100),
+                       userEmail VARCHAR(100),
+                       primary key (userID)
 );
+
+CREATE TABLE projects (
+                          projectID INTEGER AUTO_INCREMENT,
+                          projectName VARCHAR(255) NOT NULL,
+                          projectDescription TEXT,
+                          projectStartDate DATE,
+                          projectBudget DOUBLE,
+                          dueDate DATE,
+                          completionDate DATE,
+                          primary key (projectID)
+);
+
+CREATE TABLE tasks (
+                       taskID INTEGER AUTO_INCREMENT,
+                       taskDescription TEXT,
+                       taskStartDate DATE,
+                       taskEndDate DATE,
+                       status VARCHAR(50),
+                       projectID INTEGER NOT NULL,
+                       FOREIGN KEY (projectID) REFERENCES projects(projectID)
+                           ON DELETE CASCADE ON UPDATE CASCADE,
+                       primary key(taskID)
+
+);
+
+CREATE TABLE projectLists (
+                              projectID INTEGER ,
+                              FOREIGN KEY (projectID) REFERENCES projects(projectID),
+                              userID INTEGER,
+                              FOREIGN KEY (userID) REFERENCES users(userID),
+                              primary key(projectID)
+);
+
+
+
 
 -- Overdue projects
 INSERT INTO projects
@@ -74,13 +79,8 @@ VALUES
     (1, 'Implement responsive features', '2022-02-15', '2022-03-15', 'InProgress'),
     (2, 'Prepare marketing materials', '2022-02-05', '2022-03-05', 'Completed');
 
-INSERT INTO projectlist (projectListName)
+INSERT INTO users (userName, userPassword, userEmail)
 VALUES
-    ('Per Olesen'),
-    ('Rasmus Hansen');
-
-INSERT INTO bruger (userName, userPassword)
-VALUES
-    ('Oskar', '1234'),
-    ('Mikkel', '1234'),
-    ('Jesper', '1234');
+    ('Oskar', '1234', 'osth0002@stud.kea.dk'),
+    ('Mikkel', '1234', 'test'),
+    ('Jesper', '1234', 'test');
