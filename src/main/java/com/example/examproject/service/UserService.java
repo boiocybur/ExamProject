@@ -26,8 +26,8 @@ public class UserService {
         return userRepository.getUserById(userId);
     }
 
-    public void editUser(User user){
-        userRepository.editUser(user);
+    public User editUser(User user){
+        return userRepository.editUser(user);
     }
     public boolean deleteUser(String userEmail){
         return userRepository.deleteUser(userEmail);

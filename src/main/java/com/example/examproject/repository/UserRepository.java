@@ -45,6 +45,7 @@ public class UserRepository {
                 user.setUserId(resultSet.getInt("userid"));
                 user.setUserName(resultSet.getString("username"));
                 user.setPassword(resultSet.getString(("userpassword")));
+                user.setUserEmail(resultSet.getString("userEmail"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
