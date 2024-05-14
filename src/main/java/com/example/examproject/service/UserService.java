@@ -11,13 +11,16 @@ public class UserService {
     private UserRepository userRepository;
 
     public boolean createUser(User newUser) {
+        if (userRepository.existingEmail(newUser.getUserEmail())) {
+            return false;
+        }
         return userRepository.createUser(newUser);
     }
-    public boolean loginUser(String username, String password) {
-        return userRepository.loginUser(username, password);
+    public boolean loginUser(String userEmail, String password) {
+        return userRepository.loginUser(userEmail, password);
     }
-    public int findUserById(String userName){
-        return userRepository.findUserById(userName);
+    public int findUserById(String userEmail){
+        return userRepository.findUserById(userEmail);
     }
     public User getUserById(int userId) {
         return userRepository.getUserById(userId);
@@ -26,7 +29,7 @@ public class UserService {
     public void editUser(User user){
         userRepository.editUser(user);
     }
-    public boolean deleteUser(String userName){
-        return userRepository.deleteUser(userName);
+    public boolean deleteUser(String userEmail){
+        return userRepository.deleteUser(userEmail);
     }
 }

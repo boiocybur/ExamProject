@@ -21,11 +21,8 @@ import java.util.List;
         @Value("${spring.datasource.password}")
         private String dbPassword;
 
-        @Autowired
-        private DataSource dataSource;
-
         private Connection getConnection() throws SQLException {
-            return dataSource.getConnection();
+            return DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
         }
 
         private Project projectMap(ResultSet rs) throws SQLException {
