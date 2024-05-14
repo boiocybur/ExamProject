@@ -1,7 +1,6 @@
 package com.example.examproject.repository;
 
 import com.example.examproject.model.User;
-import com.example.examproject.util.ConnectionManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -10,16 +9,17 @@ import java.sql.*;
 @Repository
 public class UserRepository {
     @Value("${spring.datasource.url}")
-    String db_url;
+    String dbUrl;
     @Value("${spring.datasource.username}")
-    String uid;
+    String dbUserName;
     @Value("${spring.datasource.password}")
-    String pwd;
+    String dbPassword;
+  
     public int findUserById(String userEmail) {
         int userid = 0;
         String query = "SELECT userid FROM bruger WHERE useremail = ?";
 
-        try (Connection connection = DriverManager.getConnection(db_url, uid, pwd);
+        try (Connection connection = DriverManager.getConnection(dburl, dbUserName, dbPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, userEmail);
@@ -33,10 +33,11 @@ public class UserRepository {
         }
         return userid;
     }
+  
     public User getUserById(int userId) {
-        String sql = "SELECT * FROM bruger WHERE userid = ?";
+        String sql = "SELECT * FROM user WHERE userID = ?";
         User user = null;
-        try (Connection connection = DriverManager.getConnection(db_url, uid, pwd);
+        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -52,9 +53,10 @@ public class UserRepository {
         }
         return user;
     }
+  
     public boolean existingEmail(String userEmail) {
         String query = "SELECT COUNT(*) FROM bruger WHERE useremail = ?";
-        try (Connection connection = ConnectionManager.getConnection(db_url, uid, pwd);
+        try (Connection connection = DriverManager.getConnection(dburl, dbUserName, dbPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, userEmail);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -71,7 +73,7 @@ public class UserRepository {
     public boolean createUser(User newUser) {
         String query = "INSERT INTO bruger (username, userpassword, useremail) VALUES (?, ?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(db_url, uid, pwd);
+        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, newUser.getUserName());
@@ -90,7 +92,7 @@ public class UserRepository {
     public boolean loginUser(String userEmail, String password) {
         String query = "SELECT COUNT(*) AS count FROM bruger WHERE useremail = ? AND userpassword = ?";
 
-        try (Connection connection = DriverManager.getConnection(db_url, uid, pwd);
+        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, userEmail);
@@ -107,13 +109,13 @@ public class UserRepository {
         }
         return false;
     }
+  
     public User editUser(User user) {
         int rows = 0;
 
         String SQL = "UPDATE bruger SET username = ?, userpassword = ?, useremail = ? WHERE userid = ? ";
-        try (Connection connection = DriverManager.getConnection(db_url, uid, pwd);
+        try (Connection connection = DriverManager.getConnection(dburl, dbUserName, dbPassword);
              PreparedStatement pstmt = connection.prepareStatement(SQL)) {
-
 
             pstmt.setString(1, user.getUserName());
             pstmt.setString(2, user.getPassword());
@@ -130,10 +132,12 @@ public class UserRepository {
         else
             return null;
     }
+          
     public boolean deleteUser(String userEmail) {
         String query = "DELETE FROM bruger WHERE useremail = ?";
 
-        try (Connection connection = DriverManager.getConnection(db_url, uid, pwd);
+
+        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, userEmail);

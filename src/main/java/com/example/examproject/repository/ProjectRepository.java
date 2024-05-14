@@ -1,11 +1,10 @@
 package com.example.examproject.repository;
 
 import com.example.examproject.model.Project;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.examproject.util.ConnectionManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,29 +16,32 @@ import java.util.List;
         @Value("${spring.datasource.url}")
         private String dbUrl;
         @Value("${spring.datasource.username}")
-        private String dbUsername;
+        private String dbUserName;
         @Value("${spring.datasource.password}")
         private String dbPassword;
 
+<<<<<<< User-Login
         private Connection getConnection() throws SQLException {
             return DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
         }
 
+=======
+>>>>>>> main
         private Project projectMap(ResultSet rs) throws SQLException {
             Project project = new Project();
-            project.setProjectId(rs.getInt("project_id"));
-            project.setProjectName(rs.getString("project_name"));
-            project.setProjectDescription(rs.getString("project_description"));
-            Date startDate = rs.getDate("project_start_date");
+            project.setProjectID(rs.getInt("projectID"));
+            project.setProjectName(rs.getString("projectName"));
+            project.setProjectDescription(rs.getString("projectDescription"));
+            Date startDate = rs.getDate("projectStartDate");
             if (startDate != null) {
                 project.setProjectStartDate(startDate.toLocalDate());
             }
-            project.setProjectBudget(rs.getDouble("project_budget"));
-            Date dueDate = rs.getDate("due_date");
+            project.setProjectBudget(rs.getDouble("projectBudget"));
+            Date dueDate = rs.getDate("dueDate");
             if (dueDate != null) {
                 project.setDueDate(dueDate.toLocalDate());
             }
-            Date completionDate = rs.getDate("completion_date");
+            Date completionDate = rs.getDate("completionDate");
             if (completionDate != null) {
                 project.setCompletionDate(completionDate.toLocalDate());
             }
@@ -48,8 +50,8 @@ import java.util.List;
 
         private List<Project> executeProjectQuery(String sql, LocalDate... params) {
             List<Project> projects = new ArrayList<>();
-            try (Connection connection = getConnection();
-                 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 for (int i = 0; i < params.length; i++) {
                     preparedStatement.setDate(i + 1, Date.valueOf(params[i])); // Correctly converting LocalDate to sql.Date
                 }
@@ -69,31 +71,31 @@ import java.util.List;
         public List<Project> findProjectsByImminentDeadlines() {
             LocalDate today = LocalDate.now();
             LocalDate imminentDeadline = today.plusDays(3);
-            String sql = "SELECT * FROM projects WHERE due_date BETWEEN ? AND ? AND completion_date IS NULL";
+            String sql = "SELECT * FROM project WHERE dueDate BETWEEN ? AND ? AND completionDate IS NULL";
             return executeProjectQuery(sql, today, imminentDeadline);
         }
 
 
         public List<Project> findCompletedProjects() {
-            String sql = "SELECT * FROM projects WHERE completion_date IS NOT NULL";
+            String sql = "SELECT * FROM project WHERE completionDate IS NOT NULL";
             return executeProjectQuery(sql);
 
         }
 
         public List<Project> findOverdueProjects() {
             LocalDate today = LocalDate.now();
-            String sql = "SELECT * FROM projects WHERE due_date < ? AND completion_date IS NULL";
+            String sql = "SELECT * FROM project WHERE dueDate < ? AND completionDate IS NULL";
             return executeProjectQuery(sql, today);
         }
 
         public List<Project> findAllProjects() {
             List<Project> projects = new ArrayList<>();
-            String sql = "SELECT * FROM projects";
-            try (Connection conn = getConnection();
-                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
-                 ResultSet resultSet = preparedStatement.executeQuery()) {
+            String sql = "SELECT * FROM project";
+            Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
-                    Project project = new Project(resultSet.getString("project_name"));
+                    Project project = new Project(resultSet.getString("projectName"));
                     projects.add(project);
                 }
             } catch (SQLException e) {

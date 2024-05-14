@@ -7,7 +7,7 @@ import java.util.List;
 public class Project {
     private String projectName;
     private String projectDescription;
-    private int projectId;
+    private int projectID;
     private LocalDate projectStartDate;
     private LocalDate projectEndDate;
     private double projectBudget;
@@ -59,12 +59,12 @@ public class Project {
         this.projectDescription = projectDescription;
     }
 
-    public int getProjectId() {
-        return projectId;
+    public int getProjectID() {
+        return projectID;
     }
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public void setProjectID(int projectID) {
+        this.projectID = projectID;
     }
 
     public LocalDate getProjectStartDate() {
