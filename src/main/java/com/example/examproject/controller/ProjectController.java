@@ -17,8 +17,6 @@ public class ProjectController {
     private final ProjectListService projectListService;
     private Project project;
 
-    private final ProjectService projectService;
-
 
     public ProjectController(ProjectService projectService, ProjectListService projectListService) {
         this.projectService = projectService;
