@@ -26,14 +26,14 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam("username") String userName,
+    public String login(@RequestParam("userEmail") String userEmail,
                         @RequestParam("password") String password,
                         HttpSession session,
                         RedirectAttributes redirectAttributes) {
-        if (userService.loginUser(userName, password)) {
+        if (userService.loginUser(userEmail, password)) {
             session.setAttribute("isLoggedIn", true);
-            session.setAttribute("username", userName);
-            session.setAttribute("userid", userService.findUserById(userName));
+            session.setAttribute("userEmail", userEmail);
+            session.setAttribute("userid", userService.findUserById(userEmail));
             return "redirect:/user/login";
         } else {
             redirectAttributes.addAttribute("error", true);
@@ -44,8 +44,8 @@ public class UserController {
     public String result(HttpSession session, Model model) {
         Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
         if (Boolean.TRUE.equals(isLoggedIn)) {
-            String username = (String) session.getAttribute("username");
-            model.addAttribute("username", username);
+            String userEmail = (String) session.getAttribute("userEmail");
+            model.addAttribute("userEmail", userEmail);
             return "/user/login";
         } else {
             return "redirect:/user/login";
@@ -78,20 +78,20 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{username}/delete")
-    public String deleteUser(@PathVariable String username, HttpSession session) {
-        String loggedInUsername = (String) session.getAttribute("username");
-        if (loggedInUsername != null && loggedInUsername.equals(username)) {
-            userService.deleteUser(username);
+    @GetMapping("/{userEmail}/delete")
+    public String deleteUser(@PathVariable String userEmail, HttpSession session) {
+        String loggedInUserEmail = (String) session.getAttribute("userEmail");
+        if (loggedInUserEmail != null && loggedInUserEmail.equals(userEmail)) {
+            userService.deleteUser(userEmail);
         }
         return "redirect:/user/login";
     }
 
     @GetMapping("/{userId}/edit")
     public String editUser(@PathVariable int userId, HttpSession session, Model model) {
-        String loggedInUsername = (String) session.getAttribute("username");
+        String loggedInUserEmail = (String) session.getAttribute("userEmail");
         User user = userService.getUserById(userId);
-        if (user != null && loggedInUsername != null && user.getUserName().equals(loggedInUsername)) {
+        if (user != null && loggedInUserEmail != null && user.getUserEmail().equals(loggedInUserEmail)) {
             model.addAttribute("user", user);
             return "editUser";
         } else {
@@ -99,12 +99,17 @@ public class UserController {
         }
     }
 
-    @PostMapping("/save")
+    /*@PostMapping("/save")
     public String saveEdit(@ModelAttribute User savedEdit, HttpSession session) {
         String loggedInUsername = (String) session.getAttribute("username");
         if (loggedInUsername != null && savedEdit.getUserName().equals(loggedInUsername)) {
             userService.editUser(savedEdit);
         }
+        return "redirect:/user/login";
+    }*/
+    @PostMapping("/save")
+    public String saveEdit(@ModelAttribute User savedEdit) {
+        userService.editUser(savedEdit);
         return "redirect:/user/login";
     }
 

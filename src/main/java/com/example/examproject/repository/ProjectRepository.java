@@ -22,8 +22,6 @@ public class ProjectRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void showBudget() {
-    }
 
     // RowMapper to map SQL result to Project object
     private static final class ProjectRowMapper implements RowMapper<Project> {
@@ -52,6 +50,33 @@ public class ProjectRepository {
             // Log error details
             System.err.println("Error fetching imminent projects: " + e.getMessage());
             throw e; // Optionally, rethrow or handle exception accordingly
+        }
+    }
+
+        public void showBudget() {
+        }
+
+        public LocalDate showProjectTime(int projectId) {
+            return null;
+        }
+
+        public void showResources() {
+        }
+
+        public void showUnfinishedTasks() {
+        }
+
+        public void showFinishedTasks() {
+        }
+
+        public void showOverdueTasks() {
+        }
+
+        public void attachResourcesToTask() {
+        }
+
+        public void removeResourceFromTask() {
+
         }
     }
 
