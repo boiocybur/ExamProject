@@ -38,18 +38,7 @@ public class ProjectController {
         return "dashboard";
     }
 
-    @GetMapping("/{projectID}/createProject")
-    public String createProjectForm(@PathVariable int projectID, Model model) {
-        model.addAttribute("projectID", projectID);
-        model.addAttribute("projectObject", new Project());
-        return "project_create_project";
-    }
 
-    @PostMapping("/createProject")
-    public String createProject(@ModelAttribute("projectObject") Project project) {
-        projectService.createProject(project);
-        return "redirect:/dashboard";
-    }
 
 
 }
