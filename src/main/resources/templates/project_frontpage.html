@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title class="frontPageHeader">AlphaSolutions</title>
+    <link th:href="@{/main.css}" rel="stylesheet">
+</head>
+<body>
+<nav>
+    <div class="navbar">
+        <a href="#" class="logo">AlphaSolutions</a>
+        <ul class="nav-links">
+            <li><a href="#">Products</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="content">
+    <h1>Welcome to AlphaSolutions</h1>
+    <p th:text="${welcome}"></p>
+    <table class="mainTable">
+        <thead>
+        <tr>
+            <th colspan="6">Here are your projects</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Edit</th>
+            <th>delete</th>
+        </tr>
+        <tr th:each="projects : ${projecs}">
+
+            <td class="table-header" th:text="${projectList}">
+            </td>
+
+            <td>
+                <a th:href="@{'wish_list_frontpage/' + ${wish.wishlistID} + '/edit'}">
+                    <input type="button" value="Edit" class="button">
+                </a>
+            </td>
+
+            <td>
+                <a th:href="@{'wish_list_frontpage/' + ${wish.wishlistID} + '/delete'}">
+                    <input type="button" value="delete" class="button">
+                </a>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+<footer>
+    <div class="about-us">
+        <h2>About Us</h2>
+        <p>Write your company information here.</p>
+    </div>
+</footer>
+<footer>
+    <div class="services">
+        <h2>Services</h2>
+        <p>Write your services in here</p>
+    </div>
+</footer>
+<footer>
+    <div class="contact">
+        <h2>Contact</h2>
+        <p>Write your contacts in here</p>
+    </div>
+</footer>
+</body>
+</html>
