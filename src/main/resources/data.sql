@@ -49,6 +49,7 @@ CREATE TABLE projectLists (
 
 
 
+
 -- Overdue projects
 INSERT INTO projects
 (projectName, projectDescription, projectStartDate, projectBudget, dueDate, completionDate)
@@ -60,8 +61,8 @@ VALUES
 INSERT INTO projects
 (projectName, projectDescription, projectStartDate, projectBudget, dueDate, completionDate)
 VALUES
-    ('New Software', 'Launch of new software version', '2023-01-01', 15000, '2024-05-16', NULL),
-    ('Office Move', 'Relocation of office premises', '2023-02-01', 20000,'2024-05-15', NULL);
+    ('New Software', 'Launch of new software version', '2023-01-01', 15000, '2024-05-10', NULL),
+    ('Office Move', 'Relocation of office premises', '2023-02-01', 20000, '2024-05-15', NULL);
 
 -- Completed projects
 INSERT INTO projects
