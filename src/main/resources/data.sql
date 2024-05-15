@@ -10,6 +10,7 @@ CREATE TABLE ProjectManager.projects (
     project_description TEXT,
     project_start_date DATE,
     project_budget DOUBLE,
+    budget_spent DOUBLE
     due_date DATE,
     completion_date DATE
     );
@@ -38,8 +39,8 @@ VALUES
 INSERT INTO projects
 (project_name, project_description, project_start_date, project_budget, due_date, completion_date)
 VALUES
-    ('New Software', 'Launch of new software version', '2023-01-01', 15000, '2024-05-10', NULL),
-    ('Office Move', 'Relocation of office premises', '2023-02-01', 20000, '2024-05-15', NULL);
+    ('New Software', 'Launch of new software version', '2023-01-01', 15000, '2024-05-16', NULL),
+    ('Office Move', 'Relocation of office premises', '2023-02-01', 20000,'2024-05-15', NULL);
 
 -- Completed projects
 INSERT INTO projects

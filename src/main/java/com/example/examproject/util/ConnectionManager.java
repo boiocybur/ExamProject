@@ -6,15 +6,18 @@ import java.sql.SQLException;
 
 public class ConnectionManager {
     private static Connection conn;
+
     private ConnectionManager() {
     }
-    public static Connection getConnection(String db_url, String uid, String pwd) {
-        if (conn != null) return conn;
-        try {
-            conn = DriverManager.getConnection(db_url, uid, pwd);
-        } catch (SQLException e) {
-            System.out.println("Couldn't connect to db");
-            e.printStackTrace();
+
+    public static synchronized Connection getConnection(String dbUrl, String dbUsername, String dbPassword) {
+        if (conn == null) {
+            try {
+                conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+            } catch (SQLException e) {
+                System.out.println("Couldn't connect to db");
+                e.printStackTrace();
+            }
         }
         return conn;
     }
