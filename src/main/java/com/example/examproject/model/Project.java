@@ -9,22 +9,19 @@ public class Project {
     private String projectDescription;
     private int projectID;
     private LocalDate projectStartDate;
-    private LocalDate dueDate;
+    private LocalDate projectDueDate;
     private double projectBudget;
     private List<String> projectTasks;
     private LocalDate completionDate;
-    private double budgetSpent;
 
-    public Project(String projectName, String projectDescription, LocalDate projectStartDate, LocalDate dueDate, double projectBudget, List<String> projectTasks, LocalDate completionDate, double budgetSpent) {
+    public Project(String projectName, String projectDescription, LocalDate projectStartDate, LocalDate projectDueDate, double projectBudget, List<String> projectTasks, LocalDate completionDate) {
         this.projectName = projectName;
         this.projectDescription = projectDescription;
         this.projectStartDate = projectStartDate;
-        this.dueDate = dueDate;
-
+        this.projectDueDate = projectDueDate;
         this.projectBudget = projectBudget;
         this.projectTasks = projectTasks != null ? projectTasks : new ArrayList<>();
         this.completionDate = completionDate;
-        this.budgetSpent = budgetSpent;
     }
 
     public Project() {
@@ -32,6 +29,10 @@ public class Project {
 
     public Project(String projectName) {
         this.projectName = projectName;
+    }
+
+    public void setProjectDueDate(LocalDate projectDueDate) {
+        this.projectDueDate = projectDueDate;
     }
 
     public LocalDate getCompletionDate() {
@@ -74,13 +75,12 @@ public class Project {
         this.projectStartDate = projectStartDate;
     }
 
-    public LocalDate getDueDate() {
-        return dueDate;
+    public LocalDate getProjectDueDate() {
+        return projectDueDate;
     }
 
     public void setDueDate(LocalDate projectEndDate) {
-        this.dueDate = projectEndDate;
-
+        this.projectDueDate = projectEndDate;
     }
 
     public double getProjectBudget() {
@@ -97,21 +97,6 @@ public class Project {
 
     public void setProjectTasks(List<String> projectTasks) {
         this.projectTasks = projectTasks;
-    }
-
-    public double getBudgetSpent() {
-        return budgetSpent;
-    }
-
-    public void setBudgetSpent(double budgetSpent) {
-        this.budgetSpent = budgetSpent;
-    }
-
-    public String getBudgetStatus() {
-        if (projectBudget > 0) {
-            return String.format("%.2f%%", (budgetSpent / projectBudget) * 100);
-        }
-        return "N/A";
     }
 }
 

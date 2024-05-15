@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 public class ConnectionManager {
     private static Connection conn;
-
     private ConnectionManager() {
     }
     public static Connection getConnection(String dbUrl, String dbUserName, String dbPassword) {

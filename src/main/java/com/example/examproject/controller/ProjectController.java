@@ -1,6 +1,5 @@
 package com.example.examproject.controller;
 
-import com.example.examproject.model.Project;
 import com.example.examproject.service.ProjectListService;
 import com.example.examproject.service.ProjectService;
 import com.example.examproject.model.Project;
@@ -9,15 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @Controller
-@RequestMapping("/project")
+@RequestMapping("project")
 public class ProjectController {
     private final ProjectService projectService;
     private final ProjectListService projectListService;
     private Project project;
 
-    private final ProjectService projectService;
 
 
     public ProjectController(ProjectService projectService, ProjectListService projectListService) {
@@ -32,44 +29,27 @@ public class ProjectController {
         return "project_frontpage";
     }
 
-    @GetMapping
-    public String defaultDashboard(Model model) {
-        model.addAttribute("section", "default");
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        model.addAttribute("imminentProjects", projectService.findProjectsByImminentDeadlines());
+        model.addAttribute("overdueProjects", projectService.findOverdueProjects());
+        model.addAttribute("completedProjects", projectService.findCompletedProjects());
+        model.addAttribute("allProjects", projectService.findAllProjects());
         return "dashboard";
     }
 
-    @GetMapping("/imminentProjects")
-    public String imminentProjects(Model model) {
-        List<Project> imminentProjects = projectService.findProjectsByImminentDeadlines();
-        model.addAttribute("imminentProjects", imminentProjects);
-        return "imminentProjects";
+    @GetMapping("/{projectID}/createProject")
+    public String createProjectForm(@PathVariable int projectID, Model model) {
+        model.addAttribute("projectID", projectID);
+        model.addAttribute("projectObject", new Project());
+        return "project_create_project";
     }
 
-    @GetMapping("/overdueProjects")
-    public String overdueProjects(Model model) {
-        List<Project> overdueProjects = projectService.findOverdueProjects();
-        model.addAttribute("overdueProjects", overdueProjects);
-        return "overdueProjects";
+    @PostMapping("/createProject")
+    public String createProject(@ModelAttribute("projectObject") Project project) {
+        projectService.createProject(project);
+        return "redirect:/dashboard";
     }
 
-    @GetMapping("/allProjects")
-    public String allProjects(Model model) {
-        List<Project> allProjects = projectService.findAllProjects();
-        model.addAttribute("allProjects", allProjects);
-        return "allProjects";
-    }
 
-    @GetMapping("/completedProjects")
-    public String completedProjects(Model model) {
-        List<Project> completedProjects = projectService.findCompletedProjects();
-        model.addAttribute("completedProjects", completedProjects);
-        return "completedProjects";
-    }
-
-    @GetMapping("/budgetOverview")
-    public String budgetOverview(Model model) {
-        List<Project> allProjects = projectService.findAllProjects();
-        model.addAttribute("allProjects", allProjects);
-        return "budgetOverview";
-    }
 }
