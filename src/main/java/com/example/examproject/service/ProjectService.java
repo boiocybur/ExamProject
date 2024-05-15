@@ -11,17 +11,12 @@ import java.util.List;
 
 @Service
 public class ProjectService {
-    private ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
 
     @Autowired
     public ProjectService(ProjectRepository projectRepository){
         this.projectRepository = projectRepository;
     }
-
-    public void createProject(Project project) {
-        projectRepository.createProject(project);
-    }
-
 
     public LocalDate getProjectEndDate(int projectId) {
         return projectRepository.showProjectTime(projectId);
@@ -39,7 +34,7 @@ public class ProjectService {
             System.out.println("No end time found for project " + projectId);
         }
     }
-    public void showUnfinishedTasks() {
+   /* public void showUnfinishedTasks() {
         projectRepository.showUnfinishedTasks();
     }
 
@@ -61,7 +56,7 @@ public class ProjectService {
 
     public void removeResourceFromTask() {
         projectRepository.removeResourceFromTask();
-    }
+    }*/
     public List<Project> findProjectsByImminentDeadlines() {
         return projectRepository.findProjectsByImminentDeadlines();
     }

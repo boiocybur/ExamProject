@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Imminent Projects</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header>
+    <h1>Imminent Projects</h1>
+    <button onclick="location.href='/dashboard'">Back to Dashboard</button>
+</header>
+<main>
+    <ul>
+        <li th:each="project : ${imminentProjects}">
+            <span th:text="${project.projectName}"></span> - <span th:text="${project.dueDate}"></span>
+        </li>
+    </ul>
+    <div th:if="${#lists.isEmpty(imminentProjects)}">No imminent projects found.</div>
+</main>
+<footer>
+    <p>&copy; 2024 Project Dashboard</p>
+</footer>
+</body>
+</html>
