@@ -7,7 +7,7 @@
 </head>
 <body>
 <h2>Current User:</h2>
-<p th:if="${#ctx.session.isLoggedIn != null}" th:text="'Logged in as ' + ${#ctx.session.username}"></p>
+<p th:if="${#ctx.session.isLoggedIn != null}" th:text="'Logged in as ' + ${#ctx.session.userEmail}"></p>
 <p th:unless="${#ctx.session.isLoggedIn != null}">No user logged in. Please login or register.</p>
 </body>
 </html>
