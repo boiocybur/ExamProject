@@ -20,6 +20,25 @@ import java.util.List;
         @Value("${spring.datasource.password}")
         private String dbPassword;
 
+
+        public void createProject(Project project) {
+            Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+            String sql = "INSERT INTO projects (projectName, projectDescription, projectStartDate, projectBudget, dueDate, completionDate) VALUES (?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+                pstmt.setString(1, project.getProjectName());
+                pstmt.setString(2, project.getProjectDescription());
+                pstmt.setDate(3, Date.valueOf(project.getProjectStartDate()));
+                pstmt.setDouble(4, project.getProjectBudget());
+                pstmt.setDate(5, Date.valueOf(project.getProjectDueDate()));
+                pstmt.setDate(6, Date.valueOf(project.getCompletionDate()));
+
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         private Project projectMap(ResultSet rs) throws SQLException {
             Project project = new Project();
             project.setProjectID(rs.getInt("projectID"));
