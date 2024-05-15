@@ -1,5 +1,6 @@
 package com.example.examproject.service;
 
+import com.example.examproject.model.Project;
 import com.example.examproject.model.ProjectList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,16 +23,16 @@ public class ProjectListService {
         return projectListRepository.showAllProjectLists();
     }
 
-    public List<ProjectList> showProjectList(int projectListId) {
-        return projectListRepository.showProjectList(projectListId);
+    public List<ProjectList> showProjectList(int userID) {
+        return projectListRepository.showProjectList(userID);
     }
 
     public ProjectList createProjectList(ProjectList projectList) {
         return projectListRepository.createProjectList(projectList);
     }
 
-    public boolean deleteProjectList(int projectListID) {
-        return projectListRepository.deleteProjectlist(projectListID);
+    public boolean deleteProjectList(int userID) {
+        return projectListRepository.deleteProjectList(userID);
     }
 
     public ProjectList searchToUpdate(int projectListID) {
@@ -40,5 +41,9 @@ public class ProjectListService {
 
     public boolean updateProjectList(ProjectList projectList) {
         return projectListRepository.updateProjectList(projectList);
+    }
+
+    public void createProject(Project project, int userID) {
+        projectListRepository.createProject(project, userID);
     }
 }

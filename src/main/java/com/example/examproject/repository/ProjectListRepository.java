@@ -1,5 +1,6 @@
 package com.example.examproject.repository;
 
+import com.example.examproject.model.Project;
 import com.example.examproject.model.ProjectList;
 import com.example.examproject.util.ConnectionManager;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ public class ProjectListRepository {
     String dbPassword;
 
     private ProjectList projectList;
+    private Project project;
 
 
     public List<ProjectList> showAllProjectLists() {
@@ -31,8 +33,8 @@ public class ProjectListRepository {
             while (rs.next()) {
                 projectList = new ProjectList(
                         rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3)
+                        rs.getString(2)
+
                 );
                 allProjectLists.add(projectList);
             }
@@ -42,18 +44,17 @@ public class ProjectListRepository {
         return allProjectLists;
     }
 
-    public List<ProjectList> showProjectList(int projectListId) {
+    public List<ProjectList> showProjectList(int userID) {
         List<ProjectList> projectLists = new ArrayList<>();
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
-        String sql = "SELECT project.projectId, project.projectName, project.projectDescription FROM projectList JOIN project ON projectList.projectListID = project.projectListID WHERE projectList.projectListID = ?";
+        String sql = "SELECT projectListID, projectListName FROM projectList WHERE userID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, projectListId);
-            ResultSet rs = ps.executeQuery(); // Corrected this line
+            ps.setInt(3, userID);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 projectList = new ProjectList(
                         rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3)
+                        rs.getString(2)
                 );
                 projectLists.add(projectList);
             }
@@ -68,7 +69,7 @@ public class ProjectListRepository {
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String sql = "INSERT INTO projectList (projectListName) VALUES(?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, projectList.getProjectListName());
+            ps.setString(1, project.getProjectName());
             ps.executeUpdate();
             return projectList;
 
@@ -77,14 +78,14 @@ public class ProjectListRepository {
         }
     }
 
-    public boolean deleteProjectlist(int projectListID) {
+    public boolean deleteProjectList(int userID) {
         int rows = 0;
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
-        String sql = "DELETE FROM projectList WHERE projectListId = ?";
+        String sql = "DELETE FROM projectList WHERE userID = ?";
         try {
 
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, projectListID);
+            ps.setInt(1, userID);
             rows = ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -104,8 +105,7 @@ public class ProjectListRepository {
             while (rs.next()) {
                 projectList1 = new ProjectList(
                         rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3)
+                        rs.getString(2)
                 );
             }
         } catch (SQLException e) {
@@ -119,7 +119,7 @@ public class ProjectListRepository {
         String sql = """
         UPDATE projectList SET projectListName = ?
         WHERE projectListID = ? AND EXISTS (SELECT 1 FROM project
-        WHERE project.projectListID = projectList.projectListID)
+        WHERE projectListID = projectList.projectListID)
         """;
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -132,5 +132,24 @@ public class ProjectListRepository {
             throw new RuntimeException(e);
         }
         return rows == 1;
+    }
+
+    public void createProject(Project project, int userID) {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String sql = "INSERT INTO projects (projectName, projectDescription, projectStartDate, projectBudget, dueDate, completionDate, userID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setString(1, project.getProjectName());
+            pstmt.setString(2, project.getProjectDescription());
+            pstmt.setDate(3, Date.valueOf(project.getProjectStartDate()));
+            pstmt.setDouble(4, project.getProjectBudget());
+            pstmt.setDate(5, Date.valueOf(project.getProjectDueDate()));
+            pstmt.setDate(6, Date.valueOf(project.getCompletionDate()));
+            pstmt.setInt(7, userID);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

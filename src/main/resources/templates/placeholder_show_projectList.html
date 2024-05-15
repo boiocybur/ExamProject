@@ -9,14 +9,6 @@
 <nav>
     <div class="navbar">
         <a href="#" class="logo">alphasolutions</a>
-        <ul class="nav-links">
-            <li>
-                <a class="new_project_list_button" th:href="${''}">
-                    <input type="button" value="New project" class="button">
-                </a>
-            </li>
-            <li><a href="#">Contact</a></li>
-        </ul>
     </div>
 </nav>
 
@@ -24,6 +16,9 @@
     <h1>list of ongoing projects</h1>
     <p th:text="${welcome}"></p>
     <table class="mainTable">
+        <a class="new_project_list_button" th:href="${''}">
+            <input type="button" value="New project" class="button">
+        </a>
         <thead>
         <tr>
             <th colspan="6">here are your projects</th>
