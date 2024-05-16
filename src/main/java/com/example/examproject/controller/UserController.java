@@ -34,7 +34,7 @@ public class UserController {
             session.setAttribute("isLoggedIn", true);
             session.setAttribute("userEmail", userEmail);
             session.setAttribute("userID", userService.findUserById(userEmail));
-            return "redirect:/projectList";
+            return "redirect:/login";
         } else {
             redirectAttributes.addAttribute("error", true);
             return "redirect:";
