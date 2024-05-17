@@ -18,7 +18,6 @@
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required/>
 
-
     <input type="submit" value="Login" class="btn"/>
 
     <div th:if="${param.error}">
@@ -29,7 +28,7 @@
 <footer class="footer">
     <div th:if="${#ctx.session.isLoggedIn != null}">
         <a th:href="@{'' + ${#ctx.session.userEmail} + '/delete'}" class="btn">Delete Account</a>
-        <a href="/user/logout" class="btn">Logout</a>
+        <a href="/logout" class="btn">Logout</a>
         <a th:href="@{'' + ${#ctx.session.userID} + '/edit'}" class="btn">Edit Account</a>
     </div>
     <div th:unless="${#ctx.session.isLoggedIn != null}">

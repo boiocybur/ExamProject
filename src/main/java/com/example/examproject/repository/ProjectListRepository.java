@@ -152,4 +152,101 @@ public class ProjectListRepository {
             throw new RuntimeException(e);
         }
     }
+
+
+    public List<Project> getOpenProjectsCreatedByUser(int userID) {
+        List<Project> projects = new ArrayList<>();
+        String sql = """
+                SELECT projects.projectID, projects.projectName, projects.projectDescription, projects.projectStartDate, projects.projectBudget, projects.dueDate, projects.completionDate, users.userName 
+                FROM projects
+                LEFT JOIN users ON projects.userID = users.userID
+                WHERE users.userID = ? AND projects.completionDate IS NULL
+                """;
+
+        try (Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Project project = new Project();
+                project.setProjectID(resultSet.getInt("projectID"));
+                project.setProjectName(resultSet.getString("projectName"));
+                project.setProjectDescription(resultSet.getString("projectDescription"));
+                project.setProjectStartDate(resultSet.getDate("projectStartDate").toLocalDate());
+                project.setProjectBudget(resultSet.getDouble("projectBudget"));
+                project.setDueDate(resultSet.getDate("dueDate").toLocalDate());
+                project.setCompletionDate(resultSet.getDate("completionDate") != null ? resultSet.getDate("completionDate").toLocalDate() : null);
+
+                projects.add(project);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return projects;
+    }
+
+    public List<Project> getOpenProjectsCreatedByUser2(int userID) {
+        List<Project> items = new ArrayList<>();
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String sql = """
+                SELECT projects.projectName, projects.projectDescription 
+                FROM projects 
+                JOIN users ON projects.userID = users.userID 
+                WHERE users.userid = ? AND projects.completionDate IS NULL
+                """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                project = new Project(
+                        rs.getString(1),
+                        rs.getString(2)
+                );
+                items.add(project);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return items;
+    }
+
+
+    public List<Project> getClosedProjectsCreatedByUser(int userID) {
+        List<Project> projects = new ArrayList<>();
+        String sql = """
+            SELECT projects.projectID, projects.projectName, projects.projectDescription, projects.projectStartDate, projects.projectBudget, projects.dueDate, projects.completionDate, users.userName 
+            FROM projects
+            LEFT JOIN users ON projects.userID = users.userID
+            WHERE users.userID = ? AND projects.completionDate IS NOT NULL
+            """;
+
+
+        try (Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Project project = new Project();
+                project.setProjectID(resultSet.getInt("projectID"));
+                project.setProjectName(resultSet.getString("projectName"));
+                project.setProjectDescription(resultSet.getString("projectDescription"));
+                project.setProjectStartDate(resultSet.getDate("projectStartDate").toLocalDate());
+                project.setProjectBudget(resultSet.getDouble("projectBudget"));
+                project.setDueDate(resultSet.getDate("dueDate").toLocalDate());
+                project.setCompletionDate(resultSet.getDate("completionDate").toLocalDate());
+
+                projects.add(project);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return projects;
+    }
 }

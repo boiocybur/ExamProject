@@ -16,16 +16,16 @@ CREATE TABLE users (
 );
 
 CREATE TABLE projects (
-                          projectID INTEGER AUTO_INCREMENT,
-                          projectName VARCHAR(255) NOT NULL,
-                          projectDescription TEXT,
-                          projectStartDate DATE,
-                          projectBudget DOUBLE,
-                          dueDate DATE,
-                          completionDate DATE,
-                          userID INTEGER NOT NULL,
-                          FOREIGN KEY (userID) REFERENCES users(userID),
-                          primary key (projectID)
+                        projectID INTEGER AUTO_INCREMENT,
+                        projectName VARCHAR(255) NOT NULL,
+                        projectDescription TEXT,
+                        projectStartDate DATE,
+                        projectBudget DOUBLE,
+                        dueDate DATE,
+                        completionDate DATE,
+                        userID INTEGER NOT NULL,
+                        FOREIGN KEY (userID) REFERENCES users(userID),
+                        primary key (projectID)
 );
 
 CREATE TABLE tasks (
@@ -39,14 +39,6 @@ CREATE TABLE tasks (
                            ON DELETE CASCADE ON UPDATE CASCADE,
                        primary key(taskID)
 
-);
-
-CREATE TABLE projectLists (
-                              projectListID INTEGER AUTO_INCREMENT,
-                              projectListName VARCHAR(50),
-                              userID INTEGER,
-                              FOREIGN KEY (userID) REFERENCES users(userID),
-                              primary key(projectListID)
 );
 
 
@@ -84,11 +76,3 @@ VALUES
     (1, 'Design new layout', '2022-01-10', '2022-02-10', 'Completed'),
     (1, 'Implement responsive features', '2022-02-15', '2022-03-15', 'InProgress'),
     (2, 'Prepare marketing materials', '2022-02-05', '2022-03-05', 'Completed');
-
-INSERT INTO projectLists
-(projectListName, userID)
-VALUES
-    ('Oskar', 1),
-    ('Mikkel', 2),
-    ('Jesper', 3);
-

@@ -24,6 +24,11 @@ public class Project {
         this.completionDate = completionDate;
     }
 
+    public Project(String projectName, String projectDescription) {
+        this.projectName = projectName;
+        this.projectDescription = projectDescription;
+    }
+
     public Project() {
     }
 

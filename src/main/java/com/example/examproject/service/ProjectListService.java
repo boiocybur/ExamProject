@@ -46,4 +46,16 @@ public class ProjectListService {
     public void createProject(Project project, int userID) {
         projectListRepository.createProject(project, userID);
     }
+
+    public List<Project> getOpenProjectsCreatedByUser(int userID) {
+        return projectListRepository.getOpenProjectsCreatedByUser(userID);
+    }
+
+    public List<Project> getOpenProjectsCreatedByUser2(int userID) {
+        return projectListRepository.getOpenProjectsCreatedByUser2(userID);
+    }
+
+    public List<Project> getClosedProjectsCreatedByUser(int userID) {
+        return projectListRepository.getClosedProjectsCreatedByUser(userID);
+    }
 }

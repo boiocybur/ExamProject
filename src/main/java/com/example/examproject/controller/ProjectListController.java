@@ -31,9 +31,13 @@ public class ProjectListController {
     }
 
     @GetMapping("")
-    public String frontpage(Model model, int userID) {
-        model.addAttribute("projectList", projectListService.showProjectList(userID));
-        return "projectList_frontpage";
+    public String frontpage(Model model, HttpSession session) {
+        Integer userID = (Integer) session.getAttribute("userID");
+        if (userID != null) {
+            model.addAttribute("userID", userID);
+            model.addAttribute("projectList", projectListService.getOpenProjectsCreatedByUser2(userID));
+            return "projectList_frontpage";
+        } else return "errorPage";
     }
 
     @GetMapping("/showAllProjectLists")
@@ -43,22 +47,20 @@ public class ProjectListController {
     }
 
     @GetMapping("/{userID}/showProjectList")
-    public String showProjects(@PathVariable int userID, Model model) {
+    public String showProjects(@PathVariable int userID, Model model, HttpSession session) {
         model.addAttribute("projectList", projectListService.showProjectList(userID));
         model.addAttribute("projectListId", userID);
         return "placeholder_show_projectList";
     }
 
-    @GetMapping("/createProjectList")
-    public String createProjectListForm(Model model) {
-        model.addAttribute("projectListObject", new Project());
-        return "projectList_create_projectList";
+    @GetMapping("/{userID}/createProjectList")
+    public String createProjectListForm(@PathVariable int userID) {
+        return "placeholder_create_projectList";
     }
 
-    @PostMapping("/createProjectList")
-    public String createProjectList(@ModelAttribute ("projectListObject") ProjectList projectList) {
-        projectListService.createProjectList(projectList);
-        return "redirect:/projectList_show_projectList";
+    @PostMapping("/{userID}/createProjectList")
+    public String createProjectList(@PathVariable String userID) {
+        return "placeholder_create_projectList";
     }
 
     @GetMapping("/{userID}/deleteProjectList")
@@ -80,17 +82,19 @@ public class ProjectListController {
         return "redirect:/projectList_show_projectList";
     }
 
-    @GetMapping("/{projectID}/createProject")
-    public String createProjectForm(@PathVariable int projectID, String userEmail, Model model) {
-        model.addAttribute("projectID", projectID);
+    @GetMapping("/{userID}/createProject")
+    public String createProjectForm(@PathVariable int userID, Model model) {
+        model.addAttribute("userID", userID);
         model.addAttribute("projectObject", new Project());
-        model.addAttribute("userID", userService.findUserById(userEmail));
         return "projectList_create_project";
     }
 
     @PostMapping("/createProject")
-    public String createProject(@ModelAttribute("projectObject") Project project, int userID) {
+    public String createProject(@ModelAttribute("projectObject") Project project, HttpSession session) {
+        Integer userID = (Integer) session.getAttribute("userID");
         projectListService.createProject(project, userID);
-        return "redirect:";
+        return "redirect:/projectList";
     }
+
+
 }

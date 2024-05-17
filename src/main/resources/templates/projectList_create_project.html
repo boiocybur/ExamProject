@@ -9,10 +9,9 @@
 <body>
 <fieldset>
     <legend>Create Project</legend>
-    <form action="/project/createProject" th:object="${projectObject}" method="post">
+    <form action="/projectList/createProject" th:object="${projectObject}" method="post">
 
-        <input type="hidden" name="projectID" th:value="${projectID}">
-        <input type="hidden" name="userID" th:value="${#ctx.session.userEmail}">
+        <input type="hidden" name="userID" th:value="${#ctx.session.userID}">
 
         <p>
             <label for="projectName">Project name</label>
@@ -37,11 +36,6 @@
         <p>
             <label for="projectDueDate">Project Due Date</label>
             <input type="datetime-local" id="projectDueDate" min="2024-01-01T00:00">
-        </p>
-
-        <p>
-            <label for="projectCompletionDate">Project Completion Date</label>
-            <input type="datetime-local" id="projectCompletionDate" min="2024-01-01T00:00">
         </p>
 
         <input id="projectID" type="hidden" th:field="*{projectID}">

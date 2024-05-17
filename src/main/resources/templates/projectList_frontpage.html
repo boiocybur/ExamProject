@@ -16,33 +16,21 @@
     <h1>list of ongoing projects</h1>
     <p th:text="${welcome}"></p>
     <table class="mainTable">
-        <a class="new_project_list_button" th:href="${'/projectList/createProject'}">
-            <input type="button" value="create project" class="button">
-        </a>
-        <thead>
-        <tr>
-            <th colspan="6">here are your projects</th>
-        </tr>
-        </thead>
         <tbody>
         <tr>
-            <th>Name</th>
-            <th>Project</th>
-            <th>Edit</th>
+            <th>Project Name</th>
         </tr>
         <tr th:each="project : ${projectList}">
+            <td class="table-header" th:text="${project.getProjectName()}"></td>
 
-            <td class="table-header" th:text="${project.projectListName}">
-            </td>
-
-            <td class="table-header">
-                <a th:href="@{'projectList/' + ${project.projectListID} + '/showProjectList'}">
+            <td>
+                <a th:href="@{'projectList/' + ${userID} + '/showProjectList'}">
                     <input type="button" value="Project" class="button">
                 </a>
             </td>
 
             <td>
-                <a th:href="@{'projectList/' + ${project.projectListID} + '/updateProjectList'}">
+                <a th:href="@{'projectList/' + ${userID} + '/updateProjectList'}">
                     <input type="button" value="Edit" class="button">
                 </a>
             </td>
@@ -50,6 +38,9 @@
         </tr>
         </tbody>
     </table>
+    <a th:href="@{'projectList/' + ${userID} + '/createProject'}">
+        <input type="button" value="Create Project" class="button">
+    </a>
 </div>
 <footer>
     <div class="contact">

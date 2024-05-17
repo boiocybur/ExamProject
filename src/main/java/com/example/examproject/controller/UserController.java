@@ -34,7 +34,7 @@ public class UserController {
             session.setAttribute("isLoggedIn", true);
             session.setAttribute("userEmail", userEmail);
             session.setAttribute("userID", userService.findUserById(userEmail));
-            return "redirect:/login";
+            return "redirect:/projectList";
         } else {
             redirectAttributes.addAttribute("error", true);
             return "redirect:";
@@ -46,7 +46,7 @@ public class UserController {
         if (Boolean.TRUE.equals(isLoggedIn)) {
             String userEmail = (String) session.getAttribute("userEmail");
             model.addAttribute("userEmail", userEmail);
-            return "/projectList";
+            return "/login";
         } else {
             return "redirect:/login";
         }
