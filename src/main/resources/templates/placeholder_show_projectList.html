@@ -1,40 +1,66 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Wishes</title>
-    <link th:href="@{/main.css}" rel="stylesheet">
+    <title>AlphaSolutions</title>
+    <link rel="stylesheet" th:href="@{/main.css}">
 </head>
 <body>
+<nav>
+    <div class="navbar">
+        <a href="#" class="logo">alphasolutions</a>
+        <ul class="nav-links">
+            <li>
+                <a class="new_project_list_button" th:href="${''}">
+                    <input type="button" value="New project" class="button">
+                </a>
+            </li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
 <div class="content">
+    <h1>list of ongoing projects</h1>
+    <p th:text="${welcome}"></p>
     <table class="mainTable">
         <thead>
         <tr>
-            <th colspan="6">Wishes</th>
+            <th colspan="6">here are your projects</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="wish : ${wishVariable}">
-            <td class="table-header" th:text="${wish.wishName}"></td>
-            <td class="table-header" th:text="${wish.wishDescription}"></td>
-            <td class="table-header" th:text="${wish.wishPrice}"></td>
-            <td>
-                <a th:href="@{'/wish_list_frontpage/' + ${wish.wishID} + '/edit_wish'}">
-                    <input type="button" value="Edit" class="button">
+        <tr>
+            <th>Name</th>
+            <th>Project</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        <tr th:each="project : ${projectList}">
+
+            <td class="table-header" th:text="${project.projectListName}">
+            </td>
+
+            <td class="table-header">
+                <a th:href="@{'projectList/' + ${project.projectListID} + '/showProjectList'}">
+                    <input type="button" value="Project" class="button">
                 </a>
             </td>
+
             <td>
-                <a th:href="@{'/wish_list_frontpage/' + ${wish.wishID} + '/remove'}">
-                    <input type="button" value="delete" class="button">
+                <a th:href="@{'projectList/' + ${project.projectListID} + '/updateProjectList'}">
+                    <input type="button" value="Edit" class="button">
                 </a>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
-<a class="new_wish" th:href="${'/wish_list_frontpage/' + wishlistId + '/wish_creation'}">
-    <input type="button" value="New wish" class="button">
-</a>
-<a type="button" th:href="@{/wish_list_frontpage}" class="button">Cancel</a>
+<footer>
+    <div class="contact">
+        <h2>Contact</h2>
+        <p>Write your contacts in here</p>
+    </div>
+</footer>
 </body>
 </html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Project</title>
+    <link th:href="@{/main.css}" rel="stylesheet">
+</head>
+<h3>Create Project</h3>
+<body>
+<fieldset>
+    <legend>Create Project</legend>
+    <form action="/project/createProject" th:object="${projectObject}" method="post">
+
+        <input type="hidden" name="projectID" th:value="${projectId}">
+        <p>
+            <label for="projectName">Project name</label>
+            <input id="projectName" th:field="*{projectName}" placeholder="projectName">
+        </p>
+        <p>
+            <label for="projectDescription">Project description</label>
+            <input id="projectDescription" th:field="*{projectDescription}" placeholder="project description">
+        </p>
+        <p>
+            <label for="projectStartDate">Project Start Date</label>
+            <input type="datetime-local" id="projectStartDate" min="2024-01-01T00:00">
+        </p>
+        <p>
+            <label for="projectBudget">Project Budget</label>
+            <input id="projectBudget" th:field="*{projectBudget}" placeholder="project budget">
+        </p>
+        <p>
+            <label for="projectDueDate">Project Due Date</label>
+            <input type="datetime-local" id="projectDueDate" min="2024-01-01T00:00">
+        </p>
+        <p>
+            <label for="projectCompletionDate">Project Completion Date</label>
+            <input type="datetime-local" id="projectCompletionDate" min="2024-01-01T00:00">
+        </p>
+
+        <input id="projectID" type="hidden" th:field="*{projectID}">
+
+        <button type="submit">Create Project</button>
+    </form>
+</fieldset>
+</body>
+</html>
