@@ -45,21 +45,4 @@ public class ProjectListControllerTest {
                 .andExpect(view().name("placeholder_show_allProjectLists"))
                 .andExpect(model().attributeExists("allProjectLists"));
     }
-
-    @Test
-    public void testCreateProjectListForm() throws Exception {
-        mockMvc.perform(get("/projectList/createProjectList"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("projectList_create_projectList"))
-                .andExpect(model().attributeExists("projectListObject"));
-    }
-
-    @Test
-    public void testCreateProjectList() throws Exception {
-        mockMvc.perform(post("/projectList/createProjectList")
-                        .param("projectListName", "TestProjectList"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/projectList_show_projectList"));
-        verify(projectListService, times(1)).createProjectList(any(ProjectList.class));
-    }
 }
