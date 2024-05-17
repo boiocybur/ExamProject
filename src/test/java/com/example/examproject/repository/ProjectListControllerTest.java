@@ -62,15 +62,4 @@ public class ProjectListControllerTest {
                 .andExpect(redirectedUrl("/projectList_show_projectList"));
         verify(projectListService, times(1)).createProjectList(any(ProjectList.class));
     }
-
-
-    @Test
-    public void testUpdateProject() throws Exception {
-        mockMvc.perform(post("/projectList/updateProjectList")
-                        .param("projectListID", "1")
-                        .param("projectListName", "UpdatedProjectList"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/projectList_show_projectList"));
-        verify(projectListService, times(1)).updateProjectList(any(ProjectList.class));
-    }
 }

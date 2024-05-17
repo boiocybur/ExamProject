@@ -1,5 +1,6 @@
 package com.example.examproject.model;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,14 @@ public class Project {
     public Project(String projectName, String projectDescription) {
         this.projectName = projectName;
         this.projectDescription = projectDescription;
+    }
+
+    public Project(String projectName, String projectDescription, LocalDate projectStartDate, double projectBudget, LocalDate projectDueDate) {
+        this.projectName = projectName;
+        this.projectDescription = projectDescription;
+        this.projectStartDate = projectStartDate;
+        this.projectBudget = projectBudget;
+        this.projectDueDate = projectDueDate;
     }
 
     public Project() {

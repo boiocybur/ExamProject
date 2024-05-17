@@ -39,8 +39,12 @@ public class ProjectListService {
         return projectListRepository.searchToUpdate(projectListID);
     }
 
-    public boolean updateProjectList(ProjectList projectList) {
-        return projectListRepository.updateProjectList(projectList);
+    public Project findProject(int projectID) {
+        return projectListRepository.findProject(projectID);
+    }
+
+    public boolean updateProject(Project project) {
+        return projectListRepository.updateProject(project);
     }
 
     public void createProject(Project project, int userID) {
@@ -49,10 +53,6 @@ public class ProjectListService {
 
     public List<Project> getOpenProjectsCreatedByUser(int userID) {
         return projectListRepository.getOpenProjectsCreatedByUser(userID);
-    }
-
-    public List<Project> getOpenProjectsCreatedByUser2(int userID) {
-        return projectListRepository.getOpenProjectsCreatedByUser2(userID);
     }
 
     public List<Project> getClosedProjectsCreatedByUser(int userID) {

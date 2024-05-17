@@ -25,7 +25,7 @@
 
         <p>
             <label for="projectStartDate">Project Start Date</label>
-            <input type="datetime-local" id="projectStartDate" min="2024-01-01T00:00">
+            <input id="projectStartDate" type="date" th:field="*{projectStartDate}" min="2024-01-01T00:00">
         </p>
 
         <p>
@@ -35,7 +35,7 @@
 
         <p>
             <label for="projectDueDate">Project Due Date</label>
-            <input type="datetime-local" id="projectDueDate" min="2024-01-01T00:00">
+            <input id="projectDueDate" type="date" th:field="*{projectDueDate}" min="2024-01-01T00:00">
         </p>
 
         <input id="projectID" type="hidden" th:field="*{projectID}">

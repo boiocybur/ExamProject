@@ -35,7 +35,7 @@ public class ProjectListController {
         Integer userID = (Integer) session.getAttribute("userID");
         if (userID != null) {
             model.addAttribute("userID", userID);
-            model.addAttribute("projectList", projectListService.getOpenProjectsCreatedByUser2(userID));
+            model.addAttribute("projectList", projectListService.getOpenProjectsCreatedByUser(userID));
             return "projectList_frontpage";
         } else return "errorPage";
     }
@@ -70,15 +70,14 @@ public class ProjectListController {
     }
 
     @GetMapping("/{projectListID}/updateProjectList")
-    public String updateProject(@PathVariable int projectListID, Model model) {
+    public String updateProjectListForm(@PathVariable int projectListID, Model model) {
         ProjectList projectList = projectListService.searchToUpdate(projectListID);
         model.addAttribute("projectList", projectList);
         return "projectList_update_projectList";
     }
 
     @PostMapping("/updateProjectList")
-    public String updateProject(@ModelAttribute ProjectList projectList) {
-        projectListService.updateProjectList(projectList);
+    public String updateProjectList(@ModelAttribute ProjectList projectList) {
         return "redirect:/projectList_show_projectList";
     }
 
@@ -93,6 +92,21 @@ public class ProjectListController {
     public String createProject(@ModelAttribute("projectObject") Project project, HttpSession session) {
         Integer userID = (Integer) session.getAttribute("userID");
         projectListService.createProject(project, userID);
+        return "redirect:/projectList";
+    }
+
+    @GetMapping("/{projectID}/updateProject")
+    public String updateProjectForm(@PathVariable int projectID, Model model) {
+        Project project = projectListService.findProject(projectID);
+       // model.addAttribute("projectID", projectID);
+        model.addAttribute("project", project);
+        return "projectList_update_project";
+
+    }
+
+    @PostMapping("/updateProject")
+    public String updateProject(@ModelAttribute Project project) {
+        projectListService.updateProject(project);
         return "redirect:/projectList";
     }
 

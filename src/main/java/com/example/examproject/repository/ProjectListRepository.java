@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,19 +116,50 @@ public class ProjectListRepository {
         return projectList1;
     }
 
-    public boolean updateProjectList(ProjectList projectList) {
-        int rows = 0;
+    public Project findProject(int projectID) {
         String sql = """
-        UPDATE projectList SET projectListName = ?
-        WHERE projectListID = ? AND EXISTS (SELECT 1 FROM project
-        WHERE projectListID = projectList.projectListID)
+        SELECT projectName, projectDescription, projectStartDate, projectBudget, projectDueDate
+        FROM projects 
+        WHERE projectID = ?
         """;
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            preparedStatement.setString(1, projectList.getProjectListName());
-            preparedStatement.setInt(2, projectList.getProjectListID());
-            rows = preparedStatement.executeUpdate();
+            ps.setInt(1, projectID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                project = new Project(
+                    rs.getString(1),
+                    rs.getString(2),
+                    rs.getDate(3).toLocalDate(),
+                    rs.getDouble(4),
+                    rs.getDate(5).toLocalDate()
+                );
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return project;
+    }
+
+    public boolean updateProject(Project project) {
+        int rows = 0;
+        String sql = """
+        UPDATE projects SET projectName = ?, projectDescription = ?, projectStartDate = ?, projectBudget = ?, projectDueDate = ?
+        WHERE projectID = ?
+        """;
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, project.getProjectName());
+            ps.setString(2, project.getProjectDescription());
+            ps.setDate(3, Date.valueOf(project.getProjectStartDate()));
+            ps.setDouble(4, project.getProjectBudget());
+            ps.setDate(5, Date.valueOf(project.getProjectDueDate()));
+            ps.setInt(6, project.getProjectID());
+            rows = ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -136,7 +169,7 @@ public class ProjectListRepository {
 
     public void createProject(Project project, int userID) {
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
-        String sql = "INSERT INTO projects (projectName, projectDescription, projectStartDate, projectBudget, dueDate, completionDate, userID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO projects (projectName, projectDescription, projectStartDate, projectBudget, projectDueDate, userID) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setString(1, project.getProjectName());
@@ -144,8 +177,7 @@ public class ProjectListRepository {
             pstmt.setDate(3, Date.valueOf(project.getProjectStartDate()));
             pstmt.setDouble(4, project.getProjectBudget());
             pstmt.setDate(5, Date.valueOf(project.getProjectDueDate()));
-            pstmt.setDate(6, Date.valueOf(project.getCompletionDate()));
-            pstmt.setInt(7, userID);
+            pstmt.setInt(6, userID);
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -153,49 +185,14 @@ public class ProjectListRepository {
         }
     }
 
-
     public List<Project> getOpenProjectsCreatedByUser(int userID) {
-        List<Project> projects = new ArrayList<>();
-        String sql = """
-                SELECT projects.projectID, projects.projectName, projects.projectDescription, projects.projectStartDate, projects.projectBudget, projects.dueDate, projects.completionDate, users.userName 
-                FROM projects
-                LEFT JOIN users ON projects.userID = users.userID
-                WHERE users.userID = ? AND projects.completionDate IS NULL
-                """;
-
-        try (Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setInt(1, userID);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                Project project = new Project();
-                project.setProjectID(resultSet.getInt("projectID"));
-                project.setProjectName(resultSet.getString("projectName"));
-                project.setProjectDescription(resultSet.getString("projectDescription"));
-                project.setProjectStartDate(resultSet.getDate("projectStartDate").toLocalDate());
-                project.setProjectBudget(resultSet.getDouble("projectBudget"));
-                project.setDueDate(resultSet.getDate("dueDate").toLocalDate());
-                project.setCompletionDate(resultSet.getDate("completionDate") != null ? resultSet.getDate("completionDate").toLocalDate() : null);
-
-                projects.add(project);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return projects;
-    }
-
-    public List<Project> getOpenProjectsCreatedByUser2(int userID) {
         List<Project> items = new ArrayList<>();
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String sql = """
                 SELECT projects.projectName, projects.projectDescription 
                 FROM projects 
                 JOIN users ON projects.userID = users.userID 
-                WHERE users.userid = ? AND projects.completionDate IS NULL
+                WHERE users.userid = ? AND projects.projectCompletionDate IS NULL
                 """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, userID);
