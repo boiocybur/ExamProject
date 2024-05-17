@@ -19,12 +19,13 @@
         <tbody>
         <tr>
             <th>Project Name</th>
+            <th>project ID</th>
         </tr>
         <tr th:each="project : ${projectList}">
             <td class="table-header" th:text="${project.getProjectName()}"></td>
 
             <td>
-                <a th:href="@{'projectList/' + ${project.getProjectID()} + '/showProjectList'}">
+                <a th:href="@{'projectList/' + ${projectList} + '/showProjectList'}">
                     <input type="button" value="Project" class="button">
                 </a>
             </td>

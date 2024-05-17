@@ -30,7 +30,8 @@ public class Project {
         this.projectDescription = projectDescription;
     }
 
-    public Project(String projectName, String projectDescription, LocalDate projectStartDate, double projectBudget, LocalDate projectDueDate) {
+    public Project(int projectID, String projectName, String projectDescription, LocalDate projectStartDate, double projectBudget, LocalDate projectDueDate) {
+        this.projectID = projectID;
         this.projectName = projectName;
         this.projectDescription = projectDescription;
         this.projectStartDate = projectStartDate;
@@ -43,6 +44,12 @@ public class Project {
 
     public Project(String projectName) {
         this.projectName = projectName;
+    }
+
+    public Project(String projectName, String projectDescription, int projectID) {
+        this.projectName = projectName;
+        this.projectDescription = projectDescription;
+        this.projectID = projectID;
     }
 
     public void setProjectDueDate(LocalDate projectDueDate) {

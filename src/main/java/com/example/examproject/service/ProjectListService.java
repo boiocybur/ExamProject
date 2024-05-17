@@ -43,6 +43,10 @@ public class ProjectListService {
         return projectListRepository.findProject(projectID);
     }
 
+    public Project findProjectIDByProjectName(String projectName) {
+        return projectListRepository.findIDBProjectName(projectName);
+    }
+
     public boolean updateProject(Project project) {
         return projectListRepository.updateProject(project);
     }

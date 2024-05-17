@@ -98,7 +98,7 @@ public class ProjectListController {
     @GetMapping("/{projectID}/updateProject")
     public String updateProjectForm(@PathVariable int projectID, Model model) {
         Project project = projectListService.findProject(projectID);
-       // model.addAttribute("projectID", projectID);
+        model.addAttribute("projectID", projectID);
         model.addAttribute("project", project);
         return "projectList_update_project";
 

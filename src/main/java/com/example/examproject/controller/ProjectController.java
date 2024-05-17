@@ -37,8 +37,4 @@ public class ProjectController {
         model.addAttribute("allProjects", projectService.findAllProjects());
         return "dashboard";
     }
-
-
-
-
 }

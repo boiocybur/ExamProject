@@ -116,9 +116,36 @@ public class ProjectListRepository {
         return projectList1;
     }
 
+    public Project findIDBProjectName(String projectName) {
+        String sql = """
+                SELECT projectID, projectName, projectDescription, projectStartDate, projectBudget, projectDueDate FROM projects WHERE projectName = ?
+                """;
+
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, projectName);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                project = new Project(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDate(4).toLocalDate(),
+                        rs.getDouble(5),
+                        rs.getDate(6).toLocalDate()
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } return project;
+    }
+
     public Project findProject(int projectID) {
         String sql = """
-        SELECT projectName, projectDescription, projectStartDate, projectBudget, projectDueDate
+        SELECT projectID, projectName, projectDescription, projectStartDate, projectBudget, projectDueDate
         FROM projects 
         WHERE projectID = ?
         """;
@@ -130,11 +157,12 @@ public class ProjectListRepository {
 
             while (rs.next()) {
                 project = new Project(
-                    rs.getString(1),
+                        rs.getInt(1),
                     rs.getString(2),
-                    rs.getDate(3).toLocalDate(),
-                    rs.getDouble(4),
-                    rs.getDate(5).toLocalDate()
+                    rs.getString(3),
+                    rs.getDate(4).toLocalDate(),
+                    rs.getDouble(5),
+                    rs.getDate(6).toLocalDate()
                 );
 
             }
@@ -189,10 +217,10 @@ public class ProjectListRepository {
         List<Project> items = new ArrayList<>();
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String sql = """
-                SELECT projects.projectName, projects.projectDescription 
+                SELECT projectName, projectDescription, projectID 
                 FROM projects 
                 JOIN users ON projects.userID = users.userID 
-                WHERE users.userid = ? AND projects.projectCompletionDate IS NULL
+                WHERE users.userID = ? AND projects.projectCompletionDate IS NULL
                 """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, userID);
@@ -201,7 +229,8 @@ public class ProjectListRepository {
             while (rs.next()) {
                 project = new Project(
                         rs.getString(1),
-                        rs.getString(2)
+                        rs.getString(2),
+                        rs.getInt(3)
                 );
                 items.add(project);
             }
