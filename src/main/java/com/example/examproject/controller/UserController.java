@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("")
+@RequestMapping("/user")
 public class UserController {
     UserService userService;
     private User user;
@@ -33,11 +33,11 @@ public class UserController {
         if (userService.loginUser(userEmail, password)) {
             session.setAttribute("isLoggedIn", true);
             session.setAttribute("userEmail", userEmail);
-            session.setAttribute("userID", userService.findUserById(userEmail));
-            return "redirect:/projectList";
+            session.setAttribute("userid", userService.findUserById(userEmail));
+            return "redirect:/user/login";
         } else {
             redirectAttributes.addAttribute("error", true);
-            return "redirect:";
+            return "redirect:/user/login";
         }
     }
     @GetMapping("/result")
@@ -46,9 +46,9 @@ public class UserController {
         if (Boolean.TRUE.equals(isLoggedIn)) {
             String userEmail = (String) session.getAttribute("userEmail");
             model.addAttribute("userEmail", userEmail);
-            return "/login";
+            return "/user/login";
         } else {
-            return "redirect:/login";
+            return "redirect:/user/login";
         }
     }
 
@@ -58,7 +58,7 @@ public class UserController {
         if (session != null) {
             session.invalidate();
         }
-        return "redirect:/login";
+        return "redirect:/user/login";
     }
     @GetMapping("/createUser")
     public String register(Model model){
@@ -71,7 +71,7 @@ public class UserController {
 
         if (isRegistered) {
             redirectAttributes.addFlashAttribute("success", "Registration successful!");
-            return "redirect:/login";
+            return "redirect:/user/login";
         } else {
             model.addAttribute("error", "Registration failed. Try again.");
             return "createUser";
@@ -84,18 +84,18 @@ public class UserController {
         if (loggedInUserEmail != null && loggedInUserEmail.equals(userEmail)) {
             userService.deleteUser(userEmail);
         }
-        return "redirect:/login";
+        return "redirect:/user/login";
     }
 
-    @GetMapping("/{userID}/edit")
-    public String editUser(@PathVariable int userID, HttpSession session, Model model) {
+    @GetMapping("/{userId}/edit")
+    public String editUser(@PathVariable int userId, HttpSession session, Model model) {
         String loggedInUserEmail = (String) session.getAttribute("userEmail");
-        User user = userService.getUserById(userID);
+        User user = userService.getUserById(userId);
         if (user != null && loggedInUserEmail != null && user.getUserEmail().equals(loggedInUserEmail)) {
             model.addAttribute("user", user);
             return "editUser";
         } else {
-            return "redirect:/login";
+            return "redirect:/user/login";
         }
     }
 
@@ -110,7 +110,7 @@ public class UserController {
     @PostMapping("/save")
     public String saveEdit(@ModelAttribute User savedEdit) {
         userService.editUser(savedEdit);
-        return "redirect:/login";
+        return "redirect:/user/login";
     }
 
 }
