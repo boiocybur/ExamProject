@@ -4,6 +4,7 @@ import com.example.examproject.controller.ProjectListController;
 import com.example.examproject.model.ProjectList;
 import com.example.examproject.service.ProjectListService;
 import com.example.examproject.service.ProjectService;
+import com.example.examproject.service.UserService;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,10 +27,13 @@ public class ProjectListControllerTest {
     @Mock
     private ProjectService projectService;
 
+    @Mock
+    private UserService userService;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        ProjectListController projectListController = new ProjectListController(projectListService, projectService);
+        ProjectListController projectListController = new ProjectListController(projectListService, projectService, userService);
         mockMvc = MockMvcBuilders.standaloneSetup(projectListController).build();
     }
 
@@ -57,16 +61,5 @@ public class ProjectListControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/projectList_show_projectList"));
         verify(projectListService, times(1)).createProjectList(any(ProjectList.class));
-    }
-
-
-    @Test
-    public void testUpdateProject() throws Exception {
-        mockMvc.perform(post("/projectList/updateProjectList")
-                        .param("projectListID", "1")
-                        .param("projectListName", "UpdatedProjectList"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/projectList_show_projectList"));
-        verify(projectListService, times(1)).updateProjectList(any(ProjectList.class));
     }
 }

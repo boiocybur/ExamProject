@@ -18,9 +18,7 @@ public class ProjectService {
         this.projectRepository = projectRepository;
     }
 
-    public void createProject(Project project) {
-        projectRepository.createProject(project);
-    }
+
 
 
     public LocalDate getProjectEndDate(int projectId) {

@@ -5,17 +5,23 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionManager {
-    private static Connection conn;
+
+    private static Connection connection;
     private ConnectionManager() {
     }
+
     public static Connection getConnection(String dbUrl, String dbUserName, String dbPassword) {
-        if (conn != null) return conn;
-        try {
-            conn = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
+
+        if (connection != null) return connection;
+
+        try {connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
+
         } catch (SQLException e) {
-            System.out.println("Couldn't connect to db");
+            System.out.println("Couldn't connect to database.");
             e.printStackTrace();
         }
-        return conn;
+        return connection;
     }
+
 }
+
