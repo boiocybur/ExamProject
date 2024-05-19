@@ -5,6 +5,8 @@ import com.example.examproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     @Autowired
@@ -31,5 +33,12 @@ public class UserService {
     }
     public boolean deleteUser(String userEmail){
         return userRepository.deleteUser(userEmail);
+    }
+    public boolean isAdmin(int userId) {
+        User user = getUserById(userId);
+        return user != null && "admin".equals(user.getUserRank());
+    }
+    public List<User> findAllUsers() {
+        return userRepository.findAllUsers();
     }
 }

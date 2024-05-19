@@ -24,13 +24,13 @@ public class ProjectController {
         this.project = new Project();
     }
 
-    @GetMapping("")
+    @GetMapping("project/frontpage")
     public String frontPage(Model model, int userID) {
         model.addAttribute("projectList", projectListService.showProjectList(userID));
         return "project_frontpage";
     }
 
-    @GetMapping
+    @GetMapping("/project/dashboard")
     public String defaultDashboard(Model model) {
         model.addAttribute("section", "default");
         return "dashboard";

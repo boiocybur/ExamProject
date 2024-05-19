@@ -8,15 +8,17 @@ public class User {
     private String password;
     private int userId;
     private String userEmail;
+    private String userRank;
     public User() {
 
     }
 
-    public User(String userName, String password, int userId, String userEmail) {
+    public User(String userName, String password, int userId, String userEmail, String userRank) {
         this.userName = userName;
         this.password = password;
         this.userId = userId;
         this.userEmail = userEmail;
+        this.userRank = userRank;
     }
 
     public String getUserName() {
@@ -49,6 +51,14 @@ public class User {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getUserRank() {
+        return userRank;
+    }
+
+    public void setUserRank(String userRank) {
+        this.userRank = userRank;
     }
 
     @Override
