@@ -34,7 +34,7 @@ public class ProjectController {
         return "redirect:/dashboard";
     }
 
-    @GetMapping("")
+    @GetMapping("/dashboard")
     public String defaultDashboard(Model model) {
         model.addAttribute("section", "default");
         return "dashboard";
