@@ -87,7 +87,7 @@ public class UserController {
         return "redirect:/user/login";
     }
 
-    @GetMapping("/{userId}/edit")
+   /* @GetMapping("/{userId}/edit")
     public String editUser(@PathVariable int userId, HttpSession session, Model model) {
         String loggedInUserEmail = (String) session.getAttribute("userEmail");
         User user = userService.getUserById(userId);
