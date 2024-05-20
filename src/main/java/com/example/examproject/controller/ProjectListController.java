@@ -17,60 +17,55 @@ public class ProjectListController {
 
     private ProjectListService projectListService;
     private ProjectService projectService;
+    private UserService userService;
 
-    public ProjectListController(ProjectListService projectListService, ProjectService projectService) {
+    public ProjectListController(ProjectListService projectListService, ProjectService projectService, UserService userService) {
         this.projectListService = projectListService;
         this.projectService = projectService;
+        this.userService = userService;
         this.project = new Project();
         this.projectList = new ProjectList();
     }
 
     @GetMapping("")
-    public String frontpage() {
-        return "projectList_frontpage";
+    public String frontpage(Model model, HttpSession session) {
+        Integer userID = (Integer) session.getAttribute("userID");
+        if (userID != null) {
+            model.addAttribute("userID", userID);
+            model.addAttribute("projectList", projectListService.getOpenProjectsCreatedByUser(userID));
+            return "projectList_frontpage";
+        } else return "errorPage";
     }
 
-    @GetMapping("/showAllProjectLists")
-    public String showAllProjectLists(Model model) {
-        model.addAttribute("allProjectLists", projectListService.showAllProjectLists());
-        return "placeholder_show_allProjectLists";
+
+    @GetMapping("/{userID}/createProject")
+    public String createProjectForm(@PathVariable int userID, Model model) {
+        model.addAttribute("userID", userID);
+        model.addAttribute("projectObject", new Project());
+        return "projectList_create_project";
     }
 
-    @GetMapping("/{projectListId}/showProjectList")
-    public String showProjects(@PathVariable int projectListId, Model model) {
-        model.addAttribute("projectList", projectListService.showProjectList(projectListId));
-        model.addAttribute("projectListId", projectListId);
-        return "placeholder_show_projectList";
+    @PostMapping("/createProject")
+    public String createProject(@ModelAttribute("projectObject") Project project, HttpSession session) {
+        Integer userID = (Integer) session.getAttribute("userID");
+        projectListService.createProject(project, userID);
+        return "redirect:/projectList";
     }
 
-    @GetMapping("/createProjectList")
-    public String createProjectListForm(Model model) {
-        model.addAttribute("projectListObject", new Project());
-        return "projectList_create_projectList";
+    @GetMapping("/{projectID}/updateProject")
+    public String updateProjectForm(@PathVariable int projectID, Model model) {
+        Project project = projectListService.findProjectNoCompletionDate(projectID);
+        model.addAttribute("projectID", projectID);
+        model.addAttribute("project", project);
+        return "projectList_update_project";
+
     }
 
-    @PostMapping("/createProjectList")
-    public String createProjectList(@ModelAttribute ("projectListObject") ProjectList projectList) {
-        projectListService.createProjectList(projectList);
-        return "redirect:/projectList_show_projectList";
+    @PostMapping("/updateProject")
+    public String updateProject(@ModelAttribute Project project) {
+        projectListService.updateProject(project);
+        return "redirect:/projectList";
     }
 
-    @GetMapping("/{projectListID}/deleteProjectList")
-    public String deleteProject(@PathVariable("projectListID") int projectListID) {
-        projectListService.deleteProjectList(projectListID);
-        return "redirect:/projectList_show_projectList";
-    }
 
-    @GetMapping("/{projectListID}/updateProjectList")
-    public String updateProject(@PathVariable int projectListID, Model model) {
-        ProjectList projectList = projectListService.searchToUpdate(projectListID);
-        model.addAttribute("projectList", projectList);
-        return "projectList_update_projectList";
-    }
-
-    @PostMapping("/updateProjectList")
-    public String updateProject(@ModelAttribute ProjectList projectList) {
-        projectListService.updateProjectList(projectList);
-        return "redirect:/projectList_show_projectList";
-    }
 }
