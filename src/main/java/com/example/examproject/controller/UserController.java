@@ -92,6 +92,7 @@ public class UserController {
         return "redirect:/showUsers";
     }
 
+
     @GetMapping("/{userID}/edit")
     public String editUser(@PathVariable int userID, HttpSession session, Model model) {
         Integer loggenInUserId = (Integer) session.getAttribute("userID");
