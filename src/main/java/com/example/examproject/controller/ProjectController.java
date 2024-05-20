@@ -30,7 +30,7 @@ public class ProjectController {
         return "project_frontpage";
     }
 
-    @GetMapping
+    @GetMapping("/dashboard")
     public String defaultDashboard(Model model) {
         model.addAttribute("section", "default");
         return "dashboard";
