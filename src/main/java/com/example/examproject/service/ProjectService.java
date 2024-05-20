@@ -40,15 +40,15 @@ public class ProjectService {
         }
     }
     public void showUnfinishedTasks() {
-        projectRepository.showUnfinishedTasks();
+        projectRepository.findProjectsByImminentDeadlines();
     }
 
     public void showFinishedTasks() {
-        projectRepository.showFinishedTasks();
+        projectRepository.findCompletedProjects();
     }
 
     public void showOverdueTasks() {
-        projectRepository.showOverdueTasks();
+        projectRepository.findOverdueProjects();
     }
 
     public void showResources() {
@@ -77,5 +77,11 @@ public class ProjectService {
     public List<Project> findAllProjects(){
         return projectRepository.findAllProjects();
     }
+    public Project findProjectById(int projectId) {
+        return projectRepository.findProjectById(projectId);
+    }
 
+    public void updateProjectBudget(Project project) {
+        projectRepository.updateProjectBudget(project);
+    }
 }
