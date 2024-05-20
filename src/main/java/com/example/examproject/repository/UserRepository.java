@@ -1,10 +1,14 @@
 package com.example.examproject.repository;
 
+import com.example.examproject.model.ProjectList;
 import com.example.examproject.model.User;
+import com.example.examproject.util.ConnectionManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class UserRepository {
@@ -14,13 +18,13 @@ public class UserRepository {
     String dbUserName;
     @Value("${spring.datasource.password}")
     String dbPassword;
-  
+
     public int findUserById(String userEmail) {
         int userid = 0;
-        String query = "SELECT userid FROM users WHERE useremail = ?";
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String query = "SELECT userID FROM users WHERE userEmail = ?";
 
-        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, userEmail);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -33,12 +37,12 @@ public class UserRepository {
         }
         return userid;
     }
-  
+
     public User getUserById(int userId) {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String sql = "SELECT * FROM users WHERE userID = ?";
         User user = null;
-        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -47,17 +51,18 @@ public class UserRepository {
                 user.setUserName(resultSet.getString("username"));
                 user.setPassword(resultSet.getString(("userpassword")));
                 user.setUserEmail(resultSet.getString("userEmail"));
+                user.setUserRank(resultSet.getString("userRank"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return user;
     }
-  
+
     public boolean existingEmail(String userEmail) {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String query = "SELECT COUNT(*) FROM users WHERE useremail = ?";
-        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, userEmail);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -71,14 +76,15 @@ public class UserRepository {
     }
 
     public boolean createUser(User newUser) {
-        String query = "INSERT INTO users (username, userpassword, useremail) VALUES (?, ?, ?)";
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String query = "INSERT INTO users (userName, userPassword, userEmail, userRank) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, newUser.getUserName());
             preparedStatement.setString(2, newUser.getPassword());
             preparedStatement.setString(3, newUser.getUserEmail());
+            preparedStatement.setString(4, newUser.getUserRank());
 
             preparedStatement.executeUpdate();
 
@@ -88,17 +94,17 @@ public class UserRepository {
             throw new RuntimeException(e);
         }
     }
-
     public boolean loginUser(String userEmail, String password) {
-        String query = "SELECT COUNT(*) AS count FROM users WHERE useremail = ? AND userpassword = ?";
-
+        //Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String query = "SELECT COUNT(*) AS count FROM users WHERE userEmail = ? AND userPassword = ?";
+        System.out.println("1");
         try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+            System.out.println("2");
+            pstmt.setString(1, userEmail);
+            pstmt.setString(2, password);
 
-            preparedStatement.setString(1, userEmail);
-            preparedStatement.setString(2, password);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            try (ResultSet resultSet = pstmt.executeQuery()) {
                 if (resultSet.next()) {
                     int count = resultSet.getInt("count");
                     return count > 0;
@@ -109,18 +115,17 @@ public class UserRepository {
         }
         return false;
     }
-  
     public User editUser(User user) {
         int rows = 0;
-
-        String SQL = "UPDATE users SET username = ?, userpassword = ?, useremail = ? WHERE userid = ? ";
-        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
-             PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String SQL = "UPDATE users SET userName = ?, userPassword = ?, userEmail = ? , userRank = ? WHERE userID = ? ";
+        try (PreparedStatement pstmt = connection.prepareStatement(SQL)) {
 
             pstmt.setString(1, user.getUserName());
             pstmt.setString(2, user.getPassword());
             pstmt.setString(3, user.getUserEmail());
-            pstmt.setInt(4, user.getUserId());
+            pstmt.setString(4, user.getUserRank());
+            pstmt.setInt(5, user.getUserId());
 
             rows = pstmt.executeUpdate();
 
@@ -132,13 +137,12 @@ public class UserRepository {
         else
             return null;
     }
-          
     public boolean deleteUser(String userEmail) {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String query = "DELETE FROM users WHERE useremail = ?";
 
 
-        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, userEmail);
 
@@ -148,5 +152,27 @@ public class UserRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    public List<User> findAllUsers() {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM users";
+
+        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                User user = new User();
+                user.setUserId(resultSet.getInt("userID"));
+                user.setUserName(resultSet.getString("userName"));
+                user.setPassword(resultSet.getString("userPassword"));
+                user.setUserEmail(resultSet.getString("userEmail"));
+                user.setUserRank(resultSet.getString("userRank"));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return users;
     }
 }

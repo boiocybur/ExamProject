@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users List</title>
+</head>
+<body>
+<div class="container">
+    <h1>Users List</h1>
+    <a th:href="@{/createUser}" class="btn">Create User</a>
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Rank</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${allUsers}">
+            <td th:text="${user.userId}"></td>
+            <td th:text="${user.userName}"></td>
+            <td th:text="${user.userEmail}"></td>
+            <td th:text="${user.userRank}"></td>
+            <td>
+                <a th:href="@{/{userID}/edit(userID=${user.userId})}">Edit</a>
+                <form th:action="@{/{userEmail}/delete(userEmail=${user.userEmail})}" method="post" th:onsubmit="return confirm('Are you sure you want to delete this user?')">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
