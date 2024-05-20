@@ -11,7 +11,7 @@
 <p th:if="${#ctx.session.isLoggedIn != null}" th:text="'Logged in as ' + ${#ctx.session.userEmail}"></p>
 <p th:unless="${#ctx.session.isLoggedIn != null}">No user logged in. Please login or register.</p>
 
-<form action="/user/login" method="post">
+<form action="/login" method="post">
     <label for="userEmail">Email:</label>
     <input type="text" id="userEmail" name="userEmail" required/>
 
@@ -27,12 +27,12 @@
 
 <footer class="footer">
     <div th:if="${#ctx.session.isLoggedIn != null}">
-        <a th:href="@{'/user/' + ${#ctx.session.userEmail} + '/delete'}" class="btn">Delete Account</a>
-        <a href="/user/logout" class="btn">Logout</a>
-        <a th:href="@{'/user/' + ${#ctx.session.userid} + '/edit'}" class="btn">Edit Account</a>
+        <a th:href="@{'' + ${#ctx.session.userEmail} + '/delete'}" class="btn">Delete Account</a>
+        <a href="/logout" class="btn">Logout</a>
+        <a th:href="@{'' + ${#ctx.session.userID} + '/edit'}" class="btn">Edit Account</a>
     </div>
     <div th:unless="${#ctx.session.isLoggedIn != null}">
-        <a href="/user/createUser" class="btn">Register</a>
+        <a href="/createUser" class="btn">Register</a>
     </div>
 </footer>
 
