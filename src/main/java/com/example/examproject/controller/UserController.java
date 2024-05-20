@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("")
 public class UserController {
     UserService userService;
     private User user;
@@ -33,11 +33,11 @@ public class UserController {
         if (userService.loginUser(userEmail, password)) {
             session.setAttribute("isLoggedIn", true);
             session.setAttribute("userEmail", userEmail);
-            session.setAttribute("userid", userService.findUserById(userEmail));
-            return "redirect:/user/login";
+            session.setAttribute("userID", userService.findUserById(userEmail));
+            return "redirect:/projectList";
         } else {
             redirectAttributes.addAttribute("error", true);
-            return "redirect:/user/login";
+            return "redirect:";
         }
     }
     @GetMapping("/result")
@@ -46,9 +46,9 @@ public class UserController {
         if (Boolean.TRUE.equals(isLoggedIn)) {
             String userEmail = (String) session.getAttribute("userEmail");
             model.addAttribute("userEmail", userEmail);
-            return "/user/login";
+            return "/login";
         } else {
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
     }
 
@@ -58,7 +58,7 @@ public class UserController {
         if (session != null) {
             session.invalidate();
         }
-        return "redirect:/user/login";
+        return "redirect:/login";
     }
     @GetMapping("/createUser")
     public String register(Model model){
@@ -66,51 +66,52 @@ public class UserController {
         return "createUser";
     }
     @PostMapping("/createUser")
-    public String registerUser(@ModelAttribute("userForm") User userForm, Model model, RedirectAttributes redirectAttributes) {
-        boolean isRegistered = userService.createUser(userForm);
-
-        if (isRegistered) {
-            redirectAttributes.addFlashAttribute("success", "Registration successful!");
-            return "redirect:/user/login";
+    public String registerUser(@ModelAttribute("userForm") User userForm, Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+        Integer loggedInUserId = (Integer) session.getAttribute("userID");
+        if (loggedInUserId != null && userService.isAdmin(loggedInUserId)) {
+            boolean isRegistered = userService.createUser(userForm);
+            if (isRegistered) {
+                redirectAttributes.addFlashAttribute("success", "User created successfully!");
+                return "redirect:/login";
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Failed to create user.");
+                return "redirect:/createUser";
+            }
         } else {
-            model.addAttribute("error", "Registration failed. Try again.");
-            return "createUser";
+            redirectAttributes.addFlashAttribute("error", "You do not have permission to perform this action.");
+            return "redirect:/createUser";
         }
     }
-
-    @GetMapping("/{userEmail}/delete")
-    public String deleteUser(@PathVariable String userEmail, HttpSession session) {
-        String loggedInUserEmail = (String) session.getAttribute("userEmail");
-        if (loggedInUserEmail != null && loggedInUserEmail.equals(userEmail)) {
+    @PostMapping("/{userEmail}/delete")
+    public String deleteUser(@PathVariable String userEmail, HttpSession session, RedirectAttributes redirectAttributes) {
+        Integer loggenInUserId = (Integer) session.getAttribute("userID");
+        if (loggenInUserId != null && userService.isAdmin(loggenInUserId)) {
             userService.deleteUser(userEmail);
         }
-        return "redirect:/user/login";
+        redirectAttributes.addFlashAttribute("error", "You do not have permission to delete users.");
+        return "redirect:/showUsers";
     }
 
-   /* @GetMapping("/{userId}/edit")
-    public String editUser(@PathVariable int userId, HttpSession session, Model model) {
-        String loggedInUserEmail = (String) session.getAttribute("userEmail");
-        User user = userService.getUserById(userId);
-        if (user != null && loggedInUserEmail != null && user.getUserEmail().equals(loggedInUserEmail)) {
+
+    @GetMapping("/{userID}/edit")
+    public String editUser(@PathVariable int userID, HttpSession session, Model model) {
+        Integer loggenInUserId = (Integer) session.getAttribute("userID");
+        User user = userService.getUserById(userID);
+        if (user != null && loggenInUserId != null && userService.isAdmin(loggenInUserId)) {
             model.addAttribute("user", user);
             return "editUser";
         } else {
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
     }
-
-    /*@PostMapping("/save")
-    public String saveEdit(@ModelAttribute User savedEdit, HttpSession session) {
-        String loggedInUsername = (String) session.getAttribute("username");
-        if (loggedInUsername != null && savedEdit.getUserName().equals(loggedInUsername)) {
-            userService.editUser(savedEdit);
-        }
-        return "redirect:/user/login";
-    }*/
     @PostMapping("/save")
     public String saveEdit(@ModelAttribute User savedEdit) {
         userService.editUser(savedEdit);
-        return "redirect:/user/login";
+        return "redirect:/login";
     }
-
+    @GetMapping("/showUsers")
+    public String showAllProjectLists(Model model) {
+        model.addAttribute("allUsers", userService.findAllUsers());
+        return "listUsers";
+    }
 }

@@ -20,7 +20,7 @@
     </div>
 
 
-    <form th:action="@{/user/createUser}" th:method="post" th:object="${userForm}">
+    <form th:action="@{/createUser}" th:method="post" th:object="${userForm}">
 
         <label for="userName">User Name:</label>
         <input type="text" id="userName" th:field="*{userName}" required>
@@ -31,11 +31,17 @@
         <label for="userEmail">User Email:</label>
         <input type="text" id="userEmail" th:field="*{userEmail}" required>
 
+        <label for="userRank">Admin?:</label>
+        <select id="userRank" th:field="*{userRank}" required>
+            <option value="generic" th:selected="${userForm.userRank == 'generic'}">Generic</option>
+            <option value="admin" th:selected="${userForm.userRank == 'admin'}">Admin</option>
+        </select>
+
         <button type="submit">Register</button>
     </form>
 </div>
 <footer class="footer">
-    <a href="/user/login" class="btn">Return Home</a>
+    <a href="/login" class="btn">Return Home</a>
 </footer>
 </body>
 </html>

@@ -9,7 +9,7 @@
 
 <h2>Edit User Information</h2>
 
-<form action="/user/save" method="post" th:object="${user}">
+<form action="/save" method="post" th:object="${user}">
     <input type="hidden" name="userId" th:value="${user.userId}"/> <!-- Skjult inputfelt til brugerens id -->
 
     <label for="userName">New username:</label>
@@ -20,6 +20,12 @@
 
     <label for="password">New Password:</label>
     <input type="password" id="password" name="password" required/>
+
+    <label for="userRank">Admin?:</label>
+    <select id="userRank" th:field="*{userRank}" required>
+        <option value="generic" th:selected="${user.userRank == 'generic'}">Generic</option>
+        <option value="admin" th:selected="${user.userRank == 'admin'}">Admin</option>
+    </select>
 
     <input type="submit" value="Save" class="btn"/>
 
