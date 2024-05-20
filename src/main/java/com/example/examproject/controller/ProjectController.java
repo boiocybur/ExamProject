@@ -34,7 +34,7 @@ public class ProjectController {
         if (userID != null) {
             model.addAttribute("project", projectListService.findProjectWithCompletionDate(projectID));
         }
-        return "project_frontpage";
+        return "dashboard";
     }
 
     @GetMapping("/imminentProjects")
