@@ -1,19 +1,19 @@
 package com.example.examproject.controller;
 
-import com.example.examproject.model.ProjectList;
 import com.example.examproject.model.Project;
 import com.example.examproject.service.ProjectService;
+import com.example.examproject.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.example.examproject.service.ProjectListService;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("projectList")
 public class ProjectListController {
 
     private Project project;
-    private ProjectList projectList;
 
     private ProjectListService projectListService;
     private ProjectService projectService;

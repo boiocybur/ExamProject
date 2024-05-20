@@ -3,6 +3,7 @@ package com.example.examproject.controller;
 import com.example.examproject.model.Project;
 import com.example.examproject.service.ProjectListService;
 import com.example.examproject.service.ProjectService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("")
+@RequestMapping("project")
 public class ProjectController {
     private final ProjectService projectService;
     private final ProjectListService projectListService;
@@ -21,25 +22,17 @@ public class ProjectController {
         this.projectListService = projectListService;
     }
 
-    @GetMapping("/{projectID}/createProject")
-    public String createProjectForm(@PathVariable int projectID, Model model) {
-        model.addAttribute("projectID", projectID);
-        model.addAttribute("projectObject", new Project());
-        return "project_create_project";
-    }
-
     @GetMapping("")
     public String defaultDashboard(Model model) {
         model.addAttribute("section", "default");
         return "dashboard";
     }
 
-    @GetMapping("/dashboard")
-    public String frontPage(Model model, @RequestParam(required = false) Integer userID) {
+    @GetMapping("/{projectID}/dashboard")
+    public String frontPage(@PathVariable ("projectID") int projectID, Model model, HttpSession session) {
+        Integer userID = (Integer) session.getAttribute("userID");
         if (userID != null) {
-            model.addAttribute("projectList", projectListService.showProjectList(userID));
-        } else {
-            model.addAttribute("projectList", new ArrayList<>());
+            model.addAttribute("project", projectListService.findProjectWithCompletionDate(projectID));
         }
         return "project_frontpage";
     }

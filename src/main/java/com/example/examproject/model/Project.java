@@ -24,6 +24,31 @@ public class Project {
         this.completionDate = completionDate;
     }
 
+    public Project(String projectName, String projectDescription, int projectID) {
+        this.projectName = projectName;
+        this.projectDescription = projectDescription;
+        this.projectID = projectID;
+    }
+
+    public Project(String projectName, String projectDescription, int projectID, LocalDate projectStartDate, LocalDate dueDate, double projectBudget) {
+        this.projectName = projectName;
+        this.projectDescription = projectDescription;
+        this.projectID = projectID;
+        this.projectStartDate = projectStartDate;
+        this.projectDueDate = dueDate;
+        this.projectBudget = projectBudget;
+    }
+
+    public Project(String projectName, String projectDescription, int projectID, LocalDate projectStartDate, LocalDate projectDueDate, double projectBudget, LocalDate completionDate) {
+        this.projectName = projectName;
+        this.projectDescription = projectDescription;
+        this.projectID = projectID;
+        this.projectStartDate = projectStartDate;
+        this.projectDueDate = projectDueDate;
+        this.projectBudget = projectBudget;
+        this.completionDate = completionDate;
+    }
+
     public Project() {
     }
 
