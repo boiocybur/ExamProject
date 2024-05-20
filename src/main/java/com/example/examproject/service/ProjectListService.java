@@ -1,6 +1,6 @@
 package com.example.examproject.service;
 
-import com.example.examproject.model.ProjectList;
+import com.example.examproject.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.examproject.repository.ProjectListRepository;
@@ -18,27 +18,32 @@ public class ProjectListService {
         this.projectListRepository = projectListRepository;
     }
 
-    public List<ProjectList> showAllProjectLists() {
-        return projectListRepository.showAllProjectLists();
+
+    public Project findProjectNoCompletionDate(int projectID) {
+        return projectListRepository.findProjectNoCompletionDate(projectID);
     }
 
-    public List<ProjectList> showProjectList(int projectListId) {
-        return projectListRepository.showProjectList(projectListId);
+    public Project findProjectWithCompletionDate(int projectID) {
+        return projectListRepository.findProjectWithCompletionDate(projectID);
     }
 
-    public ProjectList createProjectList(ProjectList projectList) {
-        return projectListRepository.createProjectList(projectList);
+    public Project findProjectIDByProjectName(String projectName) {
+        return projectListRepository.findIDBProjectName(projectName);
     }
 
-    public boolean deleteProjectList(int projectListID) {
-        return projectListRepository.deleteProjectlist(projectListID);
+    public boolean updateProject(Project project) {
+        return projectListRepository.updateProject(project);
     }
 
-    public ProjectList searchToUpdate(int projectListID) {
-        return projectListRepository.searchToUpdate(projectListID);
+    public void createProject(Project project, int userID) {
+        projectListRepository.createProject(project, userID);
     }
 
-    public boolean updateProjectList(ProjectList projectList) {
-        return projectListRepository.updateProjectList(projectList);
+    public List<Project> getOpenProjectsCreatedByUser(int userID) {
+        return projectListRepository.getOpenProjectsCreatedByUser(userID);
+    }
+
+    public List<Project> getClosedProjectsCreatedByUser(int userID) {
+        return projectListRepository.getClosedProjectsCreatedByUser(userID);
     }
 }

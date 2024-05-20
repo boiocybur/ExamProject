@@ -6,6 +6,48 @@
     <link rel="stylesheet" th:href="@{/main.css}">
 </head>
 <body>
+<nav>
+    <div class="navbar">
+        <a href="#" class="logo">alphasolutions</a>
+    </div>
+</nav>
 
+<div class="content">
+    <h1>list of ongoing projects</h1>
+    <p th:text="${welcome}"></p>
+    <table class="mainTable">
+        <tbody>
+        <tr>
+            <th>Project Name</th>
+            <th>project ID</th>
+        </tr>
+        <tr th:each="project : ${projectList}">
+            <td class="table-header" th:text="${project.getProjectName()}"></td>
+
+            <td>
+                <a th:href="@{'project/' + ${project.getProjectID()} + '/dashboard'}">
+                    <input type="button" value="Project" class="button">
+                </a>
+            </td>
+
+            <td>
+                <a th:href="@{'projectList/' + ${project.getProjectID()} + '/updateProject'}">
+                    <input type="button" value="Edit" class="button">
+                </a>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{'projectList/' + ${userID} + '/createProject'}">
+        <input type="button" value="Create Project" class="button">
+    </a>
+</div>
+<footer>
+    <div class="contact">
+        <h2>Contact</h2>
+        <p>Write your contacts in here</p>
+    </div>
+</footer>
 </body>
 </html>

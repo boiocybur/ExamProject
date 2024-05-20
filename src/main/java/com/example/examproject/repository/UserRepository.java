@@ -1,6 +1,5 @@
 package com.example.examproject.repository;
 
-import com.example.examproject.model.ProjectList;
 import com.example.examproject.model.User;
 import com.example.examproject.util.ConnectionManager;
 import org.springframework.beans.factory.annotation.Value;

@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Dashboard</title>
-    <link rel="stylesheet" th:href="@{main.css}">
+    <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
 <header>
-    <h1>Project Dashboard</h1>
+    <h1>Dashboard Status on projects</h1>
 </header>
 <main>
     <nav>
@@ -17,8 +17,5 @@
         <button onclick="location.href='/dashboard/budgetOverview'">Budget Overview</button>
     </nav>
 </main>
-<footer>
-    <p>&copy; 2024 Project Dashboard</p>
-</footer>
 </body>
 </html>
