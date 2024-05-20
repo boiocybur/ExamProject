@@ -9,7 +9,7 @@ public class Project {
     private String projectDescription;
     private int projectID;
     private LocalDate projectStartDate;
-    private LocalDate dueDate;
+    private LocalDate projectDueDate;
     private double projectBudget;
     private List<String> projectTasks;
     private LocalDate completionDate;
@@ -18,7 +18,7 @@ public class Project {
         this.projectName = projectName;
         this.projectDescription = projectDescription;
         this.projectStartDate = projectStartDate;
-        this.dueDate = dueDate;
+        this.projectDueDate = dueDate;
         this.projectBudget = projectBudget;
         this.projectTasks = projectTasks != null ? projectTasks : new ArrayList<>();
         this.completionDate = completionDate;
@@ -31,8 +31,8 @@ public class Project {
         this.projectName = projectName;
     }
 
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
+    public void setProjectDueDate(LocalDate dueDate) {
+        this.projectDueDate = dueDate;
     }
 
     public LocalDate getCompletionDate() {
@@ -76,7 +76,7 @@ public class Project {
     }
 
     public LocalDate getProjectDueDate() {
-        return dueDate;
+        return projectDueDate;
     }
 
     public double getProjectBudget() {

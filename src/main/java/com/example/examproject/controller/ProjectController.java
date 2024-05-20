@@ -28,13 +28,7 @@ public class ProjectController {
         return "project_create_project";
     }
 
-    @PostMapping("/createProject")
-    public String createProject(@ModelAttribute("projectObject") Project project) {
-        projectService.createProject(project);
-        return "redirect:/dashboard";
-    }
-
-    @GetMapping("/dashboard")
+    @GetMapping("")
     public String defaultDashboard(Model model) {
         model.addAttribute("section", "default");
         return "dashboard";

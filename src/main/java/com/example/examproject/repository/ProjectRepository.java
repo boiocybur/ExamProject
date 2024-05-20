@@ -13,7 +13,6 @@ import java.sql.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -59,9 +58,9 @@ public class ProjectRepository {
             project.setProjectName(rs.getString("projectName")); // Opdateret kolonnenavn
             project.setProjectDescription(rs.getString("projectDescription")); // Opdateret kolonnenavn
             project.setProjectStartDate(rs.getDate("projectStartDate").toLocalDate()); // Opdateret kolonnenavn
-            project.setDueDate(rs.getDate("dueDate") != null ? rs.getDate("dueDate").toLocalDate() : null); // Opdateret kolonnenavn
+            project.setProjectDueDate(rs.getDate("projectDueDate") != null ? rs.getDate("projectDueDate").toLocalDate() : null); // Opdateret kolonnenavn
             project.setProjectBudget(rs.getDouble("projectBudget")); // Opdateret kolonnenavn
-            project.setCompletionDate(rs.getDate("completionDate") != null ? rs.getDate("completionDate").toLocalDate() : null); // Opdateret kolonnenavn
+            project.setCompletionDate(rs.getDate("projectCompletionDate") != null ? rs.getDate("completionDate").toLocalDate() : null); // Opdateret kolonnenavn
             return project;
         }
     }
@@ -69,7 +68,7 @@ public class ProjectRepository {
     public List<Project> findProjectsByImminentDeadlines() {
         LocalDate today = LocalDate.now();
         LocalDate imminentDeadline = today.plusDays(30);
-        String sql = "SELECT * FROM projects WHERE due_date BETWEEN ? AND ? AND completion_date IS NULL";
+        String sql = "SELECT * FROM projects WHERE projectDueDate BETWEEN ? AND ? AND projectCompletionDate IS NULL";
         try {
             return jdbcTemplate.query(sql, new ProjectRowMapper(), today, imminentDeadline);
         } catch (DataAccessException e) {
@@ -79,13 +78,13 @@ public class ProjectRepository {
         }
     }
     public List<Project> findCompletedProjects() {
-        String sql = "SELECT * FROM projects WHERE completionDate IS NOT NULL";
+        String sql = "SELECT * FROM projects WHERE projectCompletionDate IS NOT NULL";
         return jdbcTemplate.query(sql, new ProjectRowMapper());
     }
 
     public List<Project> findOverdueProjects() {
         LocalDate today = LocalDate.now();
-        String sql = "SELECT * FROM projects WHERE dueDate < ? AND completionDate IS NULL";
+        String sql = "SELECT * FROM projects WHERE projectDueDate < ? AND projectCompletionDate IS NULL";
         return jdbcTemplate.query(sql, new ProjectRowMapper(), today);
     }
 
@@ -95,7 +94,7 @@ public class ProjectRepository {
     }
 
     public LocalDate showProjectTime(int projectId) {
-        String sql = "SELECT completionDate FROM projects WHERE projectID = ?";
+        String sql = "SELECT projectCompletionDate FROM projects WHERE projectID = ?";
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> rs.getDate("completionDate").toLocalDate(), projectId);
     }
     public void showBudget() {

@@ -24,7 +24,6 @@ public class ProjectListController {
         this.projectService = projectService;
         this.userService = userService;
         this.project = new Project();
-        this.projectList = new ProjectList();
     }
 
     @GetMapping("")
