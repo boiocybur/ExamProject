@@ -1,12 +1,14 @@
 package com.example.examproject.controller;
 
 import com.example.examproject.model.Project;
+import com.example.examproject.model.Task;
 import com.example.examproject.service.ProjectListService;
 import com.example.examproject.service.ProjectService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ public class ProjectController {
     public ProjectController(ProjectService projectService, ProjectListService projectListService) {
         this.projectService = projectService;
         this.projectListService = projectListService;
+        this.task = new Task();
     }
 
     @GetMapping("")

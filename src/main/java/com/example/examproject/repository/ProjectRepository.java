@@ -1,6 +1,7 @@
 package com.example.examproject.repository;
 
 import com.example.examproject.model.Project;
+import com.example.examproject.model.Task;
 import com.example.examproject.util.ConnectionManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import java.sql.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -38,13 +41,13 @@ public class ProjectRepository {
         @Override
         public Project mapRow(ResultSet rs, int rowNum) throws SQLException {
             Project project = new Project();
-            project.setProjectID(rs.getInt("projectID")); // Opdateret kolonnenavn
-            project.setProjectName(rs.getString("projectName")); // Opdateret kolonnenavn
-            project.setProjectDescription(rs.getString("projectDescription")); // Opdateret kolonnenavn
-            project.setProjectStartDate(rs.getDate("projectStartDate").toLocalDate()); // Opdateret kolonnenavn
-            project.setProjectDueDate(rs.getDate("projectDueDate") != null ? rs.getDate("projectDueDate").toLocalDate() : null); // Opdateret kolonnenavn
-            project.setProjectBudget(rs.getDouble("projectBudget")); // Opdateret kolonnenavn
-            project.setCompletionDate(rs.getDate("projectCompletionDate") != null ? rs.getDate("completionDate").toLocalDate() : null); // Opdateret kolonnenavn
+            project.setProjectID(rs.getInt("projectID"));
+            project.setProjectName(rs.getString("projectName"));
+            project.setProjectDescription(rs.getString("projectDescription"));
+            project.setProjectStartDate(rs.getDate("projectStartDate").toLocalDate());
+            project.setProjectDueDate(rs.getDate("projectDueDate") != null ? rs.getDate("projectDueDate").toLocalDate() : null);
+            project.setProjectBudget(rs.getDouble("projectBudget"));
+            project.setCompletionDate(rs.getDate("projectCompletionDate") != null ? rs.getDate("completionDate").toLocalDate() : null);
             return project;
         }
     }
