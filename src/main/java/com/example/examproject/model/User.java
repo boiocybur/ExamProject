@@ -72,24 +72,4 @@ public class User {
     public int hashCode() {
         return Objects.hash(getUserName(), getPassword(), getUserId());
     }
-
-    public String formatProjectDetails(List<Project> projects) {
-        StringBuilder builder = new StringBuilder();
-
-        for (Project project : projects) {
-            builder.append("Project Name: ").append(project.getProjectName()).append("\n");
-
-            List<String> tasks = project.getProjectTasks();
-            if (tasks.isEmpty()) {
-                builder.append("  No tasks found.\n");
-            } else {
-                for (String task : tasks) {
-                    builder.append("  Task: ").append(task).append("\n");
-                }
-            }
-            builder.append("\n"); // Extra newline for better separation between projects
-        }
-
-        return builder.toString();
-    }
 }

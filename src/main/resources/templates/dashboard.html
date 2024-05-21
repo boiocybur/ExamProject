@@ -1,20 +1,100 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Dashboard</title>
     <link th:href="@{/main.css}" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
 <header>
-    <h1>Dashboard Status on projects</h1>
+    <h1>Dashboard for Project: <span th:text="${projectObject.projectName}">Project Name</span></h1>
 </header>
 <main>
-    <nav>
-        <button onclick="location.href='/dashboard/completedProjects'">imminent tasks</button>
-        <button onclick="location.href='/dashboard/completedProjects'">overdue tasks</button>
-        <button onclick="location.href='/dashboard/completedProjects'">kalender</button>
-        <button onclick="location.href='/dashboard/budgetOverview'">Budget</button>
-    </nav>
+    <a th:href="@{|/project/${projectID}/tasks|}">
+        <input type="button" value="Tasks" class="button">
+    </a>
+
+    <!-- Imminent Tasks Section -->
+    <section>
+        <h2>Imminent Tasks</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Due Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${imminentTasks}">
+                <td th:text="${task.getTaskName()}">Task Name</td>
+                <td th:text="${task.getTaskDueDate()}">Task Due Date</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Overdue Tasks Section -->
+    <section>
+        <h2>Overdue Tasks</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Due Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${overdueTasks}">
+                <td th:text="${task.taskName}">Task Name</td>
+                <td th:text="${task.taskDueDate}">Task Due Date</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Budget Overview Section -->
+    <section>
+        <h2>Budget Overview</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Total Budget</th>
+                <th>Spent</th>
+                <th>Remaining</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${projectObject.projectBudget}">Project Budget</td>
+              <!--  <td th:text="${budgetSpent}">Budget Spent</td>
+                <td th:text="${budgetRemaining}">Budget Remaining</td> -->
+            </tr>
+            </tbody>
+        </table>
+    </section>
 </main>
+<footer>
+    <p>&copy; 2024 AlphaSolutions</p>
+</footer>
 </body>
 </html>

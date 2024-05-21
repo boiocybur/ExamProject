@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,8 @@ import java.util.List;
 public class ProjectController {
     private final ProjectService projectService;
     private final ProjectListService projectListService;
+    private final Task task;
+
 
     public ProjectController(ProjectService projectService, ProjectListService projectListService) {
         this.projectService = projectService;
@@ -32,63 +35,72 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectID}/dashboard")
-    public String frontPage(@PathVariable ("projectID") int projectID, Model model, HttpSession session) {
+    public String frontPage(@PathVariable int projectID, Model model, HttpSession session) {
         Integer userID = (Integer) session.getAttribute("userID");
+
         if (userID != null) {
-            model.addAttribute("project", projectListService.findProjectWithCompletionDate(projectID));
+            model.addAttribute("projectID", projectID);
+            model.addAttribute("userID", userID);
+            model.addAttribute("projectObject", projectListService.findProjectWithCompletionDate(projectID));
+            model.addAttribute("taskObject", projectService.assignedTasks(projectID));
+
+
+            model.addAttribute("assignedTasks", projectService.assignedTasks(projectID));
+            model.addAttribute("imminentTasks", projectService.imminentAssignedTasks(projectID));
+            model.addAttribute("overdueTasks", projectService.overdueAssignedTasks(projectID));
+            return "dashboard";
+        } else {
+            return "redirect:/login";
         }
-        return "dashboard";
     }
 
-    @GetMapping("/imminentProjects")
-    public String imminentProjects(Model model) {
-        List<Project> imminentProjects = projectService.findProjectsByImminentDeadlines();
-        model.addAttribute("imminentProjects", imminentProjects);
-        return "imminentProjects";
+    @GetMapping("/{projectID}/tasks")
+    public String tasks(@PathVariable int projectID, Model model, HttpSession session) {
+        Integer userID = (Integer) session.getAttribute("userID");
+        model.addAttribute("userID", userID);
+        model.addAttribute("allTasksObject", projectService.assignedTasks(projectID));
+        model.addAttribute("imminentTasksObject", projectService.imminentAssignedTasks(projectID));
+        model.addAttribute("overdueTasksObject", projectService.overdueAssignedTasks(projectID));
+        return "project_tasks";
     }
 
-    @GetMapping("/overdueProjects")
-    public String overdueProjects(Model model) {
-        List<Project> overdueProjects = projectService.findOverdueProjects();
-        model.addAttribute("overdueProjects", overdueProjects);
-        return "overdueProjects";
+    @GetMapping("/{projectID}/{userID}/createTask")
+    public String createTaskForm(@PathVariable int projectID, @PathVariable int userID, Model model) {
+        model.addAttribute("projectID", projectID);
+        model.addAttribute("userID", userID);
+        model.addAttribute("taskObject", new Task());
+        return "project_create_task";
     }
 
-    @GetMapping("/allProjects")
-    public String allProjects(Model model) {
-        List<Project> allProjects = projectService.findAllProjects();
-        System.out.println("All Projects: " + allProjects.size());
-        for (Project project : allProjects) {
-            System.out.println("Project: " + project.getProjectName());
-        }
-        model.addAttribute("allProjects", allProjects);
-        return "allProjects";
+    @PostMapping("/createTask")
+    public String createTask(@ModelAttribute("taskObject") Task task, @ModelAttribute("projectID") int projectID, HttpSession session) {
+        Integer userID = (Integer) session.getAttribute("userID");
+        projectService.createTask(task, userID, projectID);
+        return "redirect:/project/" + projectID + "/tasks";
     }
 
-    @GetMapping("/completedProjects")
-    public String completedProjects(Model model) {
-        List<Project> completedProjects = projectService.findCompletedProjects();
-        model.addAttribute("completedProjects", completedProjects);
-        return "completedProjects";
+    @GetMapping("/{projectID}/{taskID}/updateTask")
+    public String updateProjectForm(@PathVariable int projectID, @PathVariable int taskID, Model model) {
+        Task task = projectService.findTask(taskID);
+        model.addAttribute("projectID", projectID);
+        model.addAttribute("taskID", taskID);
+        model.addAttribute("taskObject", task);
+        System.out.println("1");
+        return "project_update_task";
+
     }
 
-    @GetMapping("/budgetOverview")
-    public String budgetOverview(Model model) {
-        List<Project> allProjects = projectService.findAllProjects();
-        model.addAttribute("allProjects", allProjects);
-        return "budgetOverview";
+    @PostMapping("/updateTask")
+    public String updateTask(@ModelAttribute("taskObject") Task task, @ModelAttribute("taskID") int taskID, @ModelAttribute("projectID") int projectID) {
+        System.out.println("2");
+        projectService.updateTask(task, taskID);
+        System.out.println("3");
+        return "redirect:/project/" + projectID + "/tasks";
     }
 
-    @GetMapping("/editBudget/{projectId}")
-    public String editBudget(@PathVariable int projectId, Model model) {
-        Project project = projectService.findProjectById(projectId);
-        model.addAttribute("project", project);
-        return "editBudget";
-    }
-
-    @PostMapping("/updateBudget")
-    public String updateBudget(@ModelAttribute Project project) {
-        projectService.updateProjectBudget(project);
-        return "redirect:/dashboard/budgetOverview";
+    @PostMapping("/{projectID}/{taskID}/deleteTask")
+    public String deleteTask(@PathVariable int taskID, @PathVariable int projectID) {
+        projectService.deleteTask(taskID);
+        return "redirect:/project/" + projectID + "/tasks";
     }
 }

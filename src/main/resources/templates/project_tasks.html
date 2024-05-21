@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link th:href="@{/main.css}" rel="stylesheet">
+
+</head>
+<body>
+<header>
+
+</header>
+<main>
+
+    <!-- Imminent Tasks Section -->
+    <section>
+        <h2>Imminent Tasks</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Due Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${imminentTasksObject}">
+                <td th:text="${task.getTaskName()}">Task Name</td>
+                <td th:text="${task.getTaskDueDate()}">Task Due Date</td>
+
+
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Overdue Tasks Section -->
+    <section>
+        <h2>Overdue Tasks</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Due Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${overdueTasksObject}">
+                <td th:text="${task.getTaskName()}">Task Name</td>
+                <td th:text="${task.getTaskDueDate()}">Task Due Date</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- All Tasks Section -->
+    <section>
+        <h2>All Tasks</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Due Date</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr th:each="task : ${allTasksObject}">
+                <td th:text="${task.taskName}">Task Name</td>
+                <td th:text="${task.taskDueDate}">Task Due Date</td>
+
+                <td>
+                    <a th:href="@{|/project/${projectID}/${task.getTaskID()}/updateTask|}">
+                        <input type="button" value="Edit" class="button">
+                    </a>
+                </td>
+
+                <td>
+                    <form th:action="@{|/project/${projectID}/${task.getTaskID()}/deleteTask|}" method="post">
+                        <input type="hidden" name="projectID" th:value="${projectID}">
+                        <button type="submit" class="button">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a th:href="@{|/project/${projectID}/${#ctx.session.userID}/createTask|}">
+            <input type="button" value="Create Task" class="button">
+        </a>
+
+
+    </section>
+</main>
+<footer>
+    <p>&copy; 2024 AlphaSolutions</p>
+</footer>
+</body>
+</html>

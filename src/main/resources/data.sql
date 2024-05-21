@@ -32,13 +32,16 @@ CREATE TABLE projects (
 
 CREATE TABLE tasks (
                        taskID INTEGER AUTO_INCREMENT,
+                        taskName varchar(50),
                        taskDescription TEXT,
                        taskStartDate DATE,
-                       taskEndDate DATE,
-                       status VARCHAR(50),
+                       taskDueDate DATE,
                        projectID INTEGER NOT NULL,
+                        userID INTEGER NOT NULL,
                        FOREIGN KEY (projectID) REFERENCES projects(projectID)
                            ON DELETE CASCADE ON UPDATE CASCADE,
+                        FOREIGN KEY (userID) REFERENCES users(userID)
+                            ON DELETE CASCADE ON UPDATE CASCADE,
                        primary key(taskID)
 
 );
@@ -73,8 +76,9 @@ VALUES
 
 -- Insert data into the tasks table (example entries)
 INSERT INTO tasks
-(projectID, taskDescription, taskStartDate, taskEndDate, status)
+(projectID, taskName, taskDescription, taskStartDate, taskDueDate, userID)
 VALUES
-    (1, 'Design new layout', '2022-01-10', '2022-02-10', 'Completed'),
-    (1, 'Implement responsive features', '2022-02-15', '2022-03-15', 'InProgress'),
-    (2, 'Prepare marketing materials', '2022-02-05', '2022-03-05', 'Completed');
+    (1, 'layout task', 'Design new layout', '2022-01-10', '2022-02-10', 1),
+    (1,'implement features' ,'Implement responsive features', '2022-02-15', '2022-03-15',1),
+    (2, 'market materials','Prepare marketing materials', '2022-02-05', '2022-03-05', 2),
+    (1, 'refactoring', 'refactor backend code', '2022-01-10', '2022-03-11', 1);

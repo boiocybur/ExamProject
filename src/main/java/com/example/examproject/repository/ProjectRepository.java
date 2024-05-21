@@ -29,6 +29,8 @@ public class ProjectRepository {
     private String dbPassword;
 
 
+    private Task task;
+    private Project project;
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -84,22 +86,178 @@ public class ProjectRepository {
         String sql = "SELECT projectCompletionDate FROM projects WHERE projectID = ?";
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> rs.getDate("completionDate").toLocalDate(), projectId);
     }
-    public void showBudget() {
+
+    public List<Task> assignedTasks(int projectID) {
+        List<Task> tasks = new ArrayList<>();
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String sql = """
+        SELECT * 
+        FROM tasks 
+        WHERE projectID = ?
+        ORDER BY taskDueDate DESC
+                    """;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, projectID);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Task task = new Task(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDate(4).toLocalDate(),
+                        rs.getDate(5).toLocalDate()
+                );
+                tasks.add(task);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return tasks;
     }
 
-    public void attachResourcesToTask() {
+    public List<Task> imminentAssignedTasks(int projectID) {
+        List<Task> imminentTasks = new ArrayList<>();
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String sql = """
+                    SELECT * 
+                    FROM tasks 
+                    WHERE projectID = ? AND taskDueDate BETWEEN current_date AND current_date + INTERVAL 3 DAY
+                    ORDER BY taskDueDate DESC
+                    """;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, projectID);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Task task = new Task(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDate(4).toLocalDate(),
+                        rs.getDate(5).toLocalDate()
+                );
+                imminentTasks.add(task);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return imminentTasks;
     }
 
-    public void removeResourceFromTask() {
+    public List<Task> overdueAssignedTasks(int projectID) {
+        List<Task> overdueTasks = new ArrayList<>();
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String sql = """
+                SELECT * 
+                FROM tasks 
+                WHERE projectID = ? AND taskDueDate < current_date
+                ORDER BY taskDueDate DESC
+                """;
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, projectID);
+            ResultSet rs = pstmt.executeQuery();
 
-    }
-    public void showResources() {
+            while (rs.next()) {
+                Task task = new Task(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDate(4).toLocalDate(),
+                        rs.getDate(5).toLocalDate()
+                );
+                overdueTasks.add(task);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return overdueTasks;
     }
 
-    public Project findProjectById(int projectId) {
-        return null;
+
+
+    public void createTask(Task task, int userID, int projectID) {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String sql = "INSERT INTO tasks (projectID, taskName, taskDescription, taskStartDate, taskDueDate, userID) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, projectID);
+            pstmt.setString(2, task.getTaskName());
+            pstmt.setString(3, task.getTaskDescription());
+            pstmt.setDate(4, Date.valueOf(task.getTaskStartDate()));
+            pstmt.setDate(5, Date.valueOf(task.getTaskDueDate()));
+            pstmt.setInt(6, userID);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void updateProjectBudget(Project project) {
+    public boolean updateTask(Task task, int taskID) {
+        int rows = 0;
+        String sql = """
+        UPDATE tasks 
+        SET taskName = ?, taskDescription = ?, taskStartDate = ?, taskDueDate = ?
+        WHERE taskID = ?
+        """;
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, task.getTaskName());
+            ps.setString(2, task.getTaskDescription());
+            ps.setDate(3, Date.valueOf(task.getTaskStartDate()));
+            ps.setDate(4, Date.valueOf(task.getTaskDueDate()));
+            ps.setInt(5, taskID);
+            rows = ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return rows == 1;
+    }
+
+    public Task findTask(int taskID) {
+        String sql = """
+        SELECT *
+        FROM tasks 
+        WHERE taskID = ?
+        """;
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, taskID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                task = new Task(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDate(4).toLocalDate(),
+                        rs.getDate(5).toLocalDate()
+                );
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return task;
+    }
+    public boolean deleteTask(int taskID) {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String query = "DELETE FROM tasks WHERE taskID = ?";
+
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, taskID);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

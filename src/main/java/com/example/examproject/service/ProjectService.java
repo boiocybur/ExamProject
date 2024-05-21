@@ -57,4 +57,24 @@ public class ProjectService {
     public void createTask(Task task, int userID, int projectID) {
         projectRepository.createTask(task, userID, projectID);
     }
+
+    public List<Task> imminentAssignedTasks(int projectID) {
+        return projectRepository.imminentAssignedTasks(projectID);
+    }
+
+    public List<Task> overdueAssignedTasks(int projectID) {
+        return projectRepository.overdueAssignedTasks(projectID);
+    }
+
+    public boolean updateTask(Task task, int taskID) {
+        return projectRepository.updateTask(task, taskID);
+    }
+
+    public Task findTask(int taskID) {
+        return projectRepository.findTask(taskID);
+    }
+
+    public boolean deleteTask(int taskID) {
+        return projectRepository.deleteTask(taskID);
+    }
 }
