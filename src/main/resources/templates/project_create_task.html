@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Project</title>
+    <link th:href="@{/main.css}" rel="stylesheet">
+</head>
+<header>
+    <h1>Create Task for Project</h1>
+</header>
+<body>
+<fieldset>
+    <legend>Create Task</legend>
+    <form th:action="@{'/project/createTask'}" th:object="${taskObject}" method="post">
+
+        <input type="hidden" name="userID" th:value="${#ctx.session.userID}">
+        <input type="hidden" name="projectID" th:value="${projectID}">
+
+        <p>
+            <label for="taskName">Task name</label>
+            <input id="taskName" th:field="*{taskName}" placeholder="task Name">
+        </p>
+
+        <p>
+            <label for="taskDescription">Task description</label>
+            <input id="taskDescription" th:field="*{taskDescription}" placeholder="task description">
+        </p>
+
+        <p>
+            <label for="taskStartDate">Project Start Date</label>
+            <input id="taskStartDate" type="date" th:field="*{taskStartDate}" placeholder="task start date">
+        </p>
+
+        <p>
+            <label for="taskDueDate">Task Due Date</label>
+            <input id="taskDueDate" type="date" th:field="*{taskDueDate}" placeholder="task due date">
+        </p>
+
+        <input id="taskID" type="hidden" th:field="*{taskID}">
+
+        <button type="submit">Create Task</button>
+    </form>
+</fieldset>
+<footer>
+    <p>&copy; 2024 Alpha Solutions</p>
+</footer>
+</body>
+</html>

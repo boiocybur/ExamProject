@@ -2,6 +2,7 @@
 package com.example.examproject.service;
 
 import com.example.examproject.model.Project;
+import com.example.examproject.model.Task;
 import com.example.examproject.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ public class ProjectService {
     private ProjectRepository projectRepository;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository){
+    public ProjectService(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
     }
 
@@ -23,9 +24,6 @@ public class ProjectService {
         return projectRepository.showProjectTime(projectId);
     }
 
-    public void showBudget() {
-        projectRepository.showBudget();
-    }
 
     public void printProjectTime(int projectId) {
         LocalDate projectEndTime = projectRepository.showProjectTime(projectId);
@@ -35,29 +33,11 @@ public class ProjectService {
             System.out.println("No end time found for project " + projectId);
         }
     }
-    public void showUnfinishedTasks() {
-        projectRepository.findProjectsByImminentDeadlines();
+
+    public List<Task> assignedTasks(int projectID) {
+        return projectRepository.assignedTasks(projectID);
     }
 
-    public void showFinishedTasks() {
-        projectRepository.findCompletedProjects();
-    }
-
-    public void showOverdueTasks() {
-        projectRepository.findOverdueProjects();
-    }
-
-    public void showResources() {
-        projectRepository.showResources();
-    }
-
-    public void attachResourcesToTask() {
-        projectRepository.attachResourcesToTask();
-    }
-
-    public void removeResourceFromTask() {
-        projectRepository.removeResourceFromTask();
-    }
     public List<Project> findProjectsByImminentDeadlines() {
         return projectRepository.findProjectsByImminentDeadlines();
     }
@@ -70,14 +50,31 @@ public class ProjectService {
         return projectRepository.findCompletedProjects();
     }
 
-    public List<Project> findAllProjects(){
+    public List<Project> findAllProjects() {
         return projectRepository.findAllProjects();
     }
-    public Project findProjectById(int projectId) {
-        return projectRepository.findProjectById(projectId);
+
+    public void createTask(Task task, int userID, int projectID) {
+        projectRepository.createTask(task, userID, projectID);
     }
 
-    public void updateProjectBudget(Project project) {
-        projectRepository.updateProjectBudget(project);
+    public List<Task> imminentAssignedTasks(int projectID) {
+        return projectRepository.imminentAssignedTasks(projectID);
+    }
+
+    public List<Task> overdueAssignedTasks(int projectID) {
+        return projectRepository.overdueAssignedTasks(projectID);
+    }
+
+    public boolean updateTask(Task task, int taskID) {
+        return projectRepository.updateTask(task, taskID);
+    }
+
+    public Task findTask(int taskID) {
+        return projectRepository.findTask(taskID);
+    }
+
+    public boolean deleteTask(int taskID) {
+        return projectRepository.deleteTask(taskID);
     }
 }

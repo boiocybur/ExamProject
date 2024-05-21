@@ -11,10 +11,10 @@ public class Project {
     private LocalDate projectStartDate;
     private LocalDate projectDueDate;
     private double projectBudget;
-    private List<String> projectTasks;
+    private List<Task> projectTasks;
     private LocalDate completionDate;
 
-    public Project(String projectName, String projectDescription, LocalDate projectStartDate, LocalDate dueDate, double projectBudget, List<String> projectTasks, LocalDate completionDate) {
+    public Project(String projectName, String projectDescription, LocalDate projectStartDate, LocalDate dueDate, double projectBudget, List<Task> projectTasks, LocalDate completionDate) {
         this.projectName = projectName;
         this.projectDescription = projectDescription;
         this.projectStartDate = projectStartDate;
@@ -48,7 +48,9 @@ public class Project {
         this.projectBudget = projectBudget;
         this.completionDate = completionDate;
     }
-
+    public Project(int projectID){
+        this.projectID = projectID;
+    }
     public Project() {
     }
 
@@ -112,11 +114,11 @@ public class Project {
         this.projectBudget = projectBudget;
     }
 
-    public List<String> getProjectTasks() {
+    public List<Task> getProjectTasks() {
         return projectTasks;
     }
 
-    public void setProjectTasks(List<String> projectTasks) {
+    public void setProjectTasks(List<Task> projectTasks) {
         this.projectTasks = projectTasks;
     }
 }

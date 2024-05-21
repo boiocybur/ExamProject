@@ -96,10 +96,9 @@ public class UserRepository {
     public boolean loginUser(String userEmail, String password) {
         //Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String query = "SELECT COUNT(*) AS count FROM users WHERE userEmail = ? AND userPassword = ?";
-        System.out.println("1");
         try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
              PreparedStatement pstmt = connection.prepareStatement(query)) {
-            System.out.println("2");
+
             pstmt.setString(1, userEmail);
             pstmt.setString(2, password);
 
