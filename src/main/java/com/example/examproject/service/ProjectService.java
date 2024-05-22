@@ -77,4 +77,7 @@ public class ProjectService {
     public boolean deleteTask(int taskID) {
         return projectRepository.deleteTask(taskID);
     }
+    public void assignUserToTask(int userID, int taskID) {
+        projectRepository.assignTaskToUser(userID, taskID);
+    }
 }

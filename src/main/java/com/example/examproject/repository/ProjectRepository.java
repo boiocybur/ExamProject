@@ -2,6 +2,7 @@ package com.example.examproject.repository;
 
 import com.example.examproject.model.Project;
 import com.example.examproject.model.Task;
+import com.example.examproject.model.User;
 import com.example.examproject.util.ConnectionManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -260,4 +261,18 @@ public class ProjectRepository {
             throw new RuntimeException(e);
         }
     }
-}
+    public void assignTaskToUser(int userID, int taskID) {
+            try {
+                Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+                String query = "INSERT INTO tasksanduser (taskID, userID) VALUES (?,?);";
+
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setInt(1, taskID);
+                preparedStatement.setInt(2, userID);
+
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }

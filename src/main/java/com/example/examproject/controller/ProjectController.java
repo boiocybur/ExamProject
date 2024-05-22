@@ -4,6 +4,7 @@ import com.example.examproject.model.Project;
 import com.example.examproject.model.Task;
 import com.example.examproject.service.ProjectListService;
 import com.example.examproject.service.ProjectService;
+import com.example.examproject.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +20,14 @@ import java.util.List;
 public class ProjectController {
     private final ProjectService projectService;
     private final ProjectListService projectListService;
+    private UserService userService;
     private final Task task;
 
 
-    public ProjectController(ProjectService projectService, ProjectListService projectListService) {
+    public ProjectController(ProjectService projectService, ProjectListService projectListService, UserService userService) {
         this.projectService = projectService;
         this.projectListService = projectListService;
+        this.userService = userService;
         this.task = new Task();
     }
 
@@ -101,6 +104,24 @@ public class ProjectController {
     @PostMapping("/{projectID}/{taskID}/deleteTask")
     public String deleteTask(@PathVariable int taskID, @PathVariable int projectID) {
         projectService.deleteTask(taskID);
+        return "redirect:/project/" + projectID + "/tasks";
+    }
+    @GetMapping("/{projectID}/{taskID}/assignUsers")
+    public String assignUsers(@PathVariable int projectID, @PathVariable int taskID, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        Integer loggedInUserId = (Integer) session.getAttribute("userID");
+        if (loggedInUserId != null && userService.isProjectManager(loggedInUserId) || loggedInUserId != null && userService.isAdmin(loggedInUserId)) {
+            model.addAttribute("projectID", projectID);
+            model.addAttribute("taskID", taskID);
+            model.addAttribute("users", userService.findAllUsers());
+            return "project_assign_users";
+        } else {
+            redirectAttributes.addFlashAttribute("error", "You do not have permission to assign users.");
+            return "redirect:/projectList";
+        }
+    }
+    @PostMapping("/{projectID}/{taskID}/assignUserToTask")
+    public String assignUserToTask(@PathVariable int projectID, @PathVariable int taskID, @RequestParam("userID") int userID) {
+        projectService.assignUserToTask(userID, taskID);
         return "redirect:/project/" + projectID + "/tasks";
     }
 }
