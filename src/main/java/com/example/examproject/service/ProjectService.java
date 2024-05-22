@@ -20,39 +20,13 @@ public class ProjectService {
     }
 
 
-    public LocalDate getProjectEndDate(int projectId) {
-        return projectRepository.showProjectTime(projectId);
-    }
 
-
-    public void printProjectTime(int projectId) {
-        LocalDate projectEndTime = projectRepository.showProjectTime(projectId);
-        if (projectEndTime != null) {
-            System.out.println("Project End Time for project " + projectId + ": " + projectEndTime);
-        } else {
-            System.out.println("No end time found for project " + projectId);
-        }
-    }
 
     public List<Task> assignedTasks(int projectID) {
         return projectRepository.assignedTasks(projectID);
     }
 
-    public List<Project> findProjectsByImminentDeadlines() {
-        return projectRepository.findProjectsByImminentDeadlines();
-    }
 
-    public List<Project> findOverdueProjects() {
-        return projectRepository.findOverdueProjects();
-    }
-
-    public List<Project> findCompletedProjects() {
-        return projectRepository.findCompletedProjects();
-    }
-
-    public List<Project> findAllProjects() {
-        return projectRepository.findAllProjects();
-    }
 
     public void createTask(Task task, int userID, int projectID) {
         projectRepository.createTask(task, userID, projectID);
@@ -77,4 +51,16 @@ public class ProjectService {
     public boolean deleteTask(int taskID) {
         return projectRepository.deleteTask(taskID);
     }
+
+    public double getBudgetSpent(int projectID) {
+        return projectRepository.getBudgetSpent(projectID);
+    }
+
+    public double getBudgetRemaining(int projectID) {
+        return projectRepository.getBudgetRemaining(projectID);
+    }
+    public Project findProjectById(int projectID){
+        return projectRepository.findProjectById(projectID);
+    }
+
 }

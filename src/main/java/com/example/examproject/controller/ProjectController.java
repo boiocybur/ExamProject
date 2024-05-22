@@ -103,4 +103,11 @@ public class ProjectController {
         projectService.deleteTask(taskID);
         return "redirect:/project/" + projectID + "/tasks";
     }
+    @GetMapping("/{projectID}/budget")
+    public String budgetOverview(@ModelAttribute("projectObject") Project project, @PathVariable int projectID, Model model) {
+        projectService.findProjectById(projectID);
+        model.addAttribute("budgetSpent", projectService.getBudgetSpent(projectID));
+        model.addAttribute("budgetRemaining", projectService.getBudgetRemaining(projectID));
+        return "budgetOverview";
+    }
 }
