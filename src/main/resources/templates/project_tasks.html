@@ -80,6 +80,14 @@
                         <button type="submit" class="button">Delete</button>
                     </form>
                 </td>
+
+                <td>
+                    <!-- Button to assign user to task -->
+                    <a th:href="@{|/project/${projectID}/${task.getTaskID()}/assignUsers|}">
+                        <input type="button" value="Assign User" class="button">
+                    </a>
+                </td>
+
             </tr>
             </tbody>
         </table>

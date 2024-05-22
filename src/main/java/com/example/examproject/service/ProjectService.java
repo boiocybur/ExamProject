@@ -52,6 +52,10 @@ public class ProjectService {
         return projectRepository.deleteTask(taskID);
     }
 
+    public void assignUserToTask(int userID, int taskID) {
+        projectRepository.assignTaskToUser(userID, taskID);
+    }
+
     public double getBudgetSpent(int projectID) {
         return projectRepository.getBudgetSpent(projectID);
     }
@@ -59,8 +63,8 @@ public class ProjectService {
     public double getBudgetRemaining(int projectID) {
         return projectRepository.getBudgetRemaining(projectID);
     }
+  
     public Project findProjectById(int projectID){
         return projectRepository.findProjectById(projectID);
     }
-
 }
