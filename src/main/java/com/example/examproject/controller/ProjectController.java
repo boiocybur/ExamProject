@@ -106,6 +106,7 @@ public class ProjectController {
         projectService.deleteTask(taskID);
         return "redirect:/project/" + projectID + "/tasks";
     }
+
     @GetMapping("/{projectID}/{taskID}/assignUsers")
     public String assignUsers(@PathVariable int projectID, @PathVariable int taskID, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         Integer loggedInUserId = (Integer) session.getAttribute("userID");
@@ -119,9 +120,18 @@ public class ProjectController {
             return "redirect:/projectList";
         }
     }
+  
     @PostMapping("/{projectID}/{taskID}/assignUserToTask")
     public String assignUserToTask(@PathVariable int projectID, @PathVariable int taskID, @RequestParam("userID") int userID) {
         projectService.assignUserToTask(userID, taskID);
         return "redirect:/project/" + projectID + "/tasks";
+    }
+  
+    @GetMapping("/{projectID}/budget")
+    public String budgetOverview(@ModelAttribute("projectObject") Project project, @PathVariable int projectID, Model model) {
+        projectService.findProjectById(projectID);
+        model.addAttribute("budgetSpent", projectService.getBudgetSpent(projectID));
+        model.addAttribute("budgetRemaining", projectService.getBudgetRemaining(projectID));
+        return "budgetOverview";
     }
 }
