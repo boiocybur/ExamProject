@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class ProjectListRepository {
 
 
 
-    public Project findIDBProjectName(String projectName) {
+    public Project findIDByProjectName(String projectName) {
         String sql = """
                 SELECT projectName, projectDescription, projectID, projectStartDate, projectDueDate, projectBudget FROM projects WHERE projectName = ?
                 """;
@@ -181,10 +180,10 @@ public class ProjectListRepository {
     public List<Project> getClosedProjectsCreatedByUser(int userID) {
         List<Project> projects = new ArrayList<>();
         String sql = """
-            SELECT projects.projectID, projects.projectName, projects.projectDescription, projects.projectStartDate, projects.projectBudget, projects.projectDueDate, projects.completionDate, users.userName 
+            SELECT projects.projectID, projects.projectName, projects.projectDescription, projects.projectStartDate, projects.projectBudget, projects.projectDueDate, projects.projectCompletionDate, users.userName 
             FROM projects
             LEFT JOIN users ON projects.userID = users.userID
-            WHERE users.userID = ? AND projects.completionDate IS NOT NULL
+            WHERE users.userID = ? AND projects.projectCompletionDate IS NOT NULL
             """;
 
 
@@ -202,7 +201,7 @@ public class ProjectListRepository {
                 project.setProjectStartDate(resultSet.getDate("projectStartDate").toLocalDate());
                 project.setProjectBudget(resultSet.getDouble("projectBudget"));
                 project.setProjectDueDate(resultSet.getDate("projectDueDate").toLocalDate());
-                project.setCompletionDate(resultSet.getDate("completionDate").toLocalDate());
+                project.setCompletionDate(resultSet.getDate("projectCompletionDate").toLocalDate());
 
                 projects.add(project);
             }

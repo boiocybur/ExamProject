@@ -28,7 +28,7 @@ public class ProjectListService {
     }
 
     public Project findProjectIDByProjectName(String projectName) {
-        return projectListRepository.findIDBProjectName(projectName);
+        return projectListRepository.findIDByProjectName(projectName);
     }
 
     public boolean updateProject(Project project) {
