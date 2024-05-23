@@ -100,8 +100,7 @@ public class ProjectService {
         return projectRepository.getTimeTotal();
     }
     public int getTimeLeft() {
-return projectRepository.getTimeLeft();
-}
+        return projectRepository.getTimeLeft();
     }
 
     public void removeAssignedUserToTask(int userID, int taskID) {
