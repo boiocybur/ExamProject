@@ -3,6 +3,7 @@ package com.example.examproject.controller;
 import com.example.examproject.model.Project;
 import com.example.examproject.model.Task;
 import com.example.examproject.model.User;
+import com.example.examproject.model.TaskAcceptCriteria;
 import com.example.examproject.service.ProjectListService;
 import com.example.examproject.service.ProjectService;
 import com.example.examproject.service.UserService;
@@ -79,26 +80,23 @@ public class ProjectController {
     @PostMapping("/createTask")
     public String createTask(@ModelAttribute("taskObject") Task task, @ModelAttribute("projectID") int projectID, HttpSession session) {
         Integer userID = (Integer) session.getAttribute("userID");
-        projectService.createTask(task, userID, projectID);
+        projectService.createTask2(task, userID, projectID);
         return "redirect:/project/" + projectID + "/tasks";
     }
 
     @GetMapping("/{projectID}/{taskID}/updateTask")
     public String updateProjectForm(@PathVariable int projectID, @PathVariable int taskID, Model model) {
-        Task task = projectService.findTask(taskID);
+        Task task = projectService.findTask2(taskID);
         model.addAttribute("projectID", projectID);
         model.addAttribute("taskID", taskID);
         model.addAttribute("taskObject", task);
-        System.out.println("1");
         return "project_update_task";
 
     }
 
     @PostMapping("/updateTask")
     public String updateTask(@ModelAttribute("taskObject") Task task, @ModelAttribute("taskID") int taskID, @ModelAttribute("projectID") int projectID) {
-        System.out.println("2");
-        projectService.updateTask(task, taskID);
-        System.out.println("3");
+        projectService.updateTask2(task, taskID);
         return "redirect:/project/" + projectID + "/tasks";
     }
 
@@ -107,6 +105,51 @@ public class ProjectController {
         projectService.deleteTask(taskID);
         return "redirect:/project/" + projectID + "/tasks";
     }
+
+
+    @GetMapping("/{projectID}/{taskID}/taskDetails")
+    public String viewTaskDetails(@PathVariable int projectID, @PathVariable int taskID, Model model) {
+        Task task = projectService.findTask2(taskID);
+        List<TaskAcceptCriteria> taskAcceptCriteria = projectService.findTaskAcceptCriteria(taskID);
+
+        model.addAttribute("projectID", projectID);
+        model.addAttribute("taskObject", task);
+        model.addAttribute("taskAcceptCriteria", taskAcceptCriteria);
+        return "project_task_details";
+    }
+
+    @PostMapping("/updateTaskCriteria")
+    public String updateCriteria(@RequestParam("taskID") int taskID,
+                                 @RequestParam("projectID") int projectID,
+                                 @RequestParam("criteriaID") List<Integer> criteriaIDs,
+                                 @RequestParam(value = "criteriaStatus", required = false) List<Integer> criteriaStatus,
+                                 RedirectAttributes redirectAttributes) {
+
+        System.out.println("1");
+
+        System.out.println("Updating criteria for taskID: " + taskID + " in projectID: " + projectID);
+        System.out.println("Received criteria IDs: " + criteriaIDs);
+        System.out.println("Received criteria status: " + criteriaStatus);
+
+        List<TaskAcceptCriteria> criteriaList = new ArrayList<>();
+
+        for (Integer criteriaID : criteriaIDs) {
+            boolean taskStatus = criteriaStatus != null && criteriaStatus.contains(criteriaID);
+            String criteriaString = projectService.getCriteriaString(criteriaID);
+            TaskAcceptCriteria criteria = new TaskAcceptCriteria(criteriaID, taskStatus, criteriaString);
+            criteriaList.add(criteria);
+
+            System.out.println("Criteria ID: " + criteriaID + " Status: " + taskStatus);
+        }
+
+        System.out.println("Criteria List to be updated: " + criteriaList);
+
+        projectService.updateTaskAcceptCriteria(taskID, criteriaList);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Criteria updated successfully!");
+        return "redirect:/project/" + projectID + "/" + taskID + "/taskDetails";
+    }
+
 
     @GetMapping("/{projectID}/{taskID}/assignUsers")
     public String assignUsers(@PathVariable int projectID, @PathVariable int taskID, Model model, HttpSession session, RedirectAttributes redirectAttributes) {

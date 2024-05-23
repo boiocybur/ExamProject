@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>Tasks</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 
 </head>
@@ -65,7 +65,9 @@
             </thead>
             <tbody>
             <tr th:each="task : ${allTasksObject}">
-                <td th:text="${task.taskName}">Task Name</td>
+                <td>
+                    <a th:href="@{|/project/${projectID}/${task.getTaskID()}/taskDetails|}" th:text="${task.taskName}">Task Name</a>
+                </td>
                 <td th:text="${task.taskDueDate}">Task Due Date</td>
 
                 <td>
@@ -80,6 +82,7 @@
                         <button type="submit" class="button">Delete</button>
                     </form>
                 </td>
+
 
                 <td>
                     <a th:href="@{|/project/${projectID}/${task.getTaskID()}/assignUsers|}">
@@ -101,10 +104,24 @@
         </a>
 
 
-    </section>
-</main>
-<footer>
-    <p>&copy; 2024 AlphaSolutions</p>
-</footer>
-</body>
-</html>
+                <!--      <td>
+                          <a th:href="@{|/project/${projectID}/${task.getTaskID()}/taskDetails|}">
+                              <input type="button" value="Details" class="button">
+                          </a>
+                      </td> -->
+
+                  </tr>
+                  </tbody>
+              </table>
+              <a th:href="@{|/project/${projectID}/${#ctx.session.userID}/createTask|}">
+                  <input type="button" value="Create Task" class="button">
+              </a>
+
+
+          </section>
+      </main>
+      <footer>
+          <p>&copy; 2024 AlphaSolutions</p>
+      </footer>
+      </body>
+      </html>

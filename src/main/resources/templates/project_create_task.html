@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org/" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create Project</title>
+    <title>Create Task</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <header>
@@ -17,23 +17,28 @@
         <input type="hidden" name="projectID" th:value="${projectID}">
 
         <p>
-            <label for="taskName">Task name</label>
-            <input id="taskName" th:field="*{taskName}" placeholder="task Name">
+            <label for="taskName">Task Name</label>
+            <input id="taskName" th:field="*{taskName}" placeholder="Task Name">
         </p>
 
         <p>
-            <label for="taskDescription">Task description</label>
-            <input id="taskDescription" th:field="*{taskDescription}" placeholder="task description">
+            <label for="taskDescription">Task Description</label>
+            <input id="taskDescription" th:field="*{taskDescription}" placeholder="Task Description">
         </p>
 
         <p>
-            <label for="taskStartDate">Project Start Date</label>
-            <input id="taskStartDate" type="date" th:field="*{taskStartDate}" placeholder="task start date">
+            <label for="taskStartDate">Task Start Date</label>
+            <input id="taskStartDate" type="date" th:field="*{taskStartDate}" placeholder="Task Start Date">
         </p>
 
         <p>
             <label for="taskDueDate">Task Due Date</label>
-            <input id="taskDueDate" type="date" th:field="*{taskDueDate}" placeholder="task due date">
+            <input id="taskDueDate" type="date" th:field="*{taskDueDate}" placeholder="Task Due Date">
+        </p>
+
+        <p>
+            <label for="taskAcceptCriteria">Acceptance Criteria</label>
+            <textarea id="taskAcceptCriteria" th:field="*{taskAcceptCriteria}" placeholder="Acceptance Criteria"></textarea>
         </p>
 
         <input id="taskID" type="hidden" th:field="*{taskID}">
