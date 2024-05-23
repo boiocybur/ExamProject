@@ -75,6 +75,7 @@ public class ProjectService {
 
     public String getCriteriaString(int criteriaID) {
         return projectRepository.getCriteriaString(criteriaID);
+    }
 
     public void assignUserToTask(int userID, int taskID) {
         projectRepository.assignTaskToUser(userID, taskID);
