@@ -164,13 +164,13 @@ public class ProjectController {
             return "redirect:/projectList";
         }
     }
-  
+
     @PostMapping("/{projectID}/{taskID}/assignUserToTask")
     public String assignUserToTask(@PathVariable int projectID, @PathVariable int taskID, @RequestParam("userID") int userID) {
         projectService.assignUserToTask(userID, taskID);
         return "redirect:/project/" + projectID + "/tasks";
     }
-  
+
     @GetMapping("/{projectID}/budget")
     public String budgetOverview(@ModelAttribute("projectObject") Project project, @PathVariable int projectID, Model model) {
         projectService.findProjectById(projectID);
@@ -182,7 +182,7 @@ public class ProjectController {
 
     @GetMapping("/{projectID}/time")
     public String timeOverview(@ModelAttribute("projectObject") Project project, @PathVariable("projectID") int projectId, Model model) {
-       projectService.findProjectById(projectId);
+        projectService.findProjectById(projectId);
 
         int timeSpent = projectService.getTimeSpent();
         int timeLeft = projectService.getTimeLeft();
@@ -194,7 +194,8 @@ public class ProjectController {
         model.addAttribute("timeTotal", timeTotal);
 
         return "timeOverview";
-  
+    }
+
     @PostMapping("/{projectID}/{taskID}/removeUserFromTask")
     public String removeUserFromTask(@PathVariable int projectID, @PathVariable int taskID, @RequestParam("userID") int userID, HttpSession session, RedirectAttributes redirectAttributes) {
         Integer loggedInUserId = (Integer) session.getAttribute("userID");
@@ -223,3 +224,4 @@ public class ProjectController {
 
     }
 }
+
