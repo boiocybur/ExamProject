@@ -13,7 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +99,6 @@ public class ProjectController {
     @PostMapping("/updateTask")
     public String updateTask(@ModelAttribute("taskObject") Task task, @ModelAttribute("taskID") int taskID, @ModelAttribute("projectID") int projectID) {
         projectService.updateTask2(task, taskID);
-        System.out.println("1");
         return "redirect:/project/" + projectID + "/tasks";
     }
 
@@ -182,20 +183,32 @@ public class ProjectController {
 
 
     @GetMapping("/{projectID}/time")
-    public String timeOverview(@ModelAttribute("projectObject") Project project, @PathVariable("projectID") int projectId, Model model) {
-        projectService.findProjectById(projectId);
+    public String timeOverview(@ModelAttribute("projectObject") Project project, @PathVariable("projectID") int projectID, Model model) {
+        projectService.findProjectById(projectID);
 
-        int timeSpent = projectService.getTimeSpent();
-        int timeLeft = projectService.getTimeLeft();
-        int timeTotal = projectService.getTimeTotal();
+        double totalEstTime = projectService.getTotalEstimatedTime(projectID);
+        double totalActualTime = projectService.getTotalActualTime(projectID);
+        Duration totalDuration = projectService.getTotalDuration(projectID);
+
+        Period period = Period.ofDays((int) totalDuration.toDays());
+        long hours = totalDuration.toHours() % 24;
+
+        int years = period.getYears();
+        int months = period.getMonths();
+        int days = period.getDays();
+
 
         model.addAttribute("project", project);
-        model.addAttribute("timeSpent", timeSpent);
-        model.addAttribute("timeLeft", timeLeft);
-        model.addAttribute("timeTotal", timeTotal);
+        model.addAttribute("totalEstTime", totalEstTime);
+        model.addAttribute("totalActualTime", totalActualTime);
+        model.addAttribute("years", years);
+        model.addAttribute("months", months);
+        model.addAttribute("days", days);
+        model.addAttribute("hours", hours);
 
         return "timeOverview";
     }
+
 
     @PostMapping("/{projectID}/{taskID}/removeUserFromTask")
     public String removeUserFromTask(@PathVariable int projectID, @PathVariable int taskID, @RequestParam("userID") int userID, HttpSession session, RedirectAttributes redirectAttributes) {

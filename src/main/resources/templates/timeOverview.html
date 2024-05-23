@@ -40,7 +40,7 @@
         }
         .button:hover {background-color: #3e8e41}
         .button:active {
-            background-color: #3e8e41;
+            background-color: #3e8e8e41;
             box-shadow: 0 5px #666;
             transform: translateY(4px);
         }
@@ -55,21 +55,37 @@
         <table>
             <thead>
             <tr>
-                <th>Total Time (days)</th>
-                <th>Time Spent (days)</th>
-                <th>Time Left (days)</th>
+                <th>Years</th>
+                <th>Months</th>
+                <th>Days</th>
+                <th>Hours</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td th:text="${timeTotal}">Total Time</td>
-                <td th:text="${timeSpent}">Time Spent</td>
-                <td th:text="${timeLeft}">Time Left</td>
+                <td th:text="${years}">Years</td>
+                <td th:text="${months}">Months</td>
+                <td th:text="${days}">Days</td>
+                <td th:text="${hours}">Hours</td>
+            </tr>
+            </tbody>
+        </table>
+        <table>
+            <thead>
+            <tr>
+                <th>Total Estimated Hours</th>
+                <th>Total Actual Hours</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${totalEstTime}">Total Estimated Hours</td>
+                <td th:text="${totalActualTime}">Total Actual Hours</td>
             </tr>
             </tbody>
         </table>
     </section>
-    <a th:href="@{|/project/${projectID}/dashboard|}">
+    <a th:href="@{|/project/${project.projectID}/dashboard|}">
         <input type="button" value="Return" class="button">
     </a>
 </main>
