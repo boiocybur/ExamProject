@@ -235,13 +235,50 @@ public class ProjectRepository {
     }
 
     public double getBudgetSpent(int projectID) {
-        Period period = Period.between(project.getProjectStartDate(), LocalDate.now());
-        int daysSpent = period.getDays() + period.getMonths() * 30 + period.getYears() * 365;
-        double dailyBudgetRate = project.getProjectBudget() / (Period.between(project.getProjectStartDate(), project.getProjectDueDate()).getDays() + 1);
-        return daysSpent * dailyBudgetRate;
+        Project project = findProjectById(projectID);
+        LocalDate startDate = project.getProjectStartDate();
+        LocalDate dueDate = project.getProjectDueDate();
+        LocalDate currentDate = LocalDate.now();
+
+        if (startDate == null || dueDate == null) {
+            return 0.0;
+        }
+
+        long totalDays = java.time.temporal.ChronoUnit.DAYS.between(startDate, dueDate);
+        long daysSpent = java.time.temporal.ChronoUnit.DAYS.between(startDate, currentDate);
+
+        // Avoid division by zero
+        if (totalDays == 0) {
+            return 0.0;
+        }
+
+        double dailyBudgetRate = project.getProjectBudget() / totalDays;
+        double budgetSpent = daysSpent * dailyBudgetRate;
+
+        // Ensure budget spent does not exceed the total budget
+        return Math.min(budgetSpent, project.getProjectBudget());
     }
 
     public double getBudgetRemaining(int projectID) {
-        return project.getProjectBudget() - getBudgetSpent(projectID);
+        Project project = findProjectById(projectID);
+        double budgetSpent = getBudgetSpent(projectID);
+        return project.getProjectBudget() - budgetSpent;
+    }
+
+
+
+    public int getTimeTotal() {
+        Period period = Period.between(project.getProjectStartDate(), project.getProjectDueDate());
+        return period.getYears() * 365 + period.getMonths() * 30 + period.getDays();
+    }
+
+    public int getTimeSpent() {
+        Period period = Period.between(project.getProjectStartDate(), LocalDate.now());
+        return period.getYears() * 365 + period.getMonths() * 30 + period.getDays();
+    }
+
+    public int getTimeLeft() {
+        Period period = Period.between(LocalDate.now(), project.getProjectDueDate());
+        return period.getYears() * 365 + period.getMonths() * 30 + period.getDays();
     }
 }

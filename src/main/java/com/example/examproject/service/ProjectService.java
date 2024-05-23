@@ -62,5 +62,13 @@ public class ProjectService {
     public Project findProjectById(int projectID){
         return projectRepository.findProjectById(projectID);
     }
-
+    public int getTimeSpent() {
+        return projectRepository.getTimeSpent();
+    }
+    public int getTimeTotal() {
+        return projectRepository.getTimeTotal();
+    }
+    public int getTimeLeft() {
+return projectRepository.getTimeLeft();
 }
+    }

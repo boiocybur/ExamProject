@@ -110,4 +110,20 @@ public class ProjectController {
         model.addAttribute("budgetRemaining", projectService.getBudgetRemaining(projectID));
         return "budgetOverview";
     }
+
+    @GetMapping("/{projectID}/time")
+    public String timeOverview(@ModelAttribute("projectObject") Project project, @PathVariable("projectID") int projectId, Model model) {
+       projectService.findProjectById(projectId);
+
+        int timeSpent = projectService.getTimeSpent();
+        int timeLeft = projectService.getTimeLeft();
+        int timeTotal = projectService.getTimeTotal();
+
+        model.addAttribute("project", project);
+        model.addAttribute("timeSpent", timeSpent);
+        model.addAttribute("timeLeft", timeLeft);
+        model.addAttribute("timeTotal", timeTotal);
+
+        return "timeOverview";
+    }
 }
