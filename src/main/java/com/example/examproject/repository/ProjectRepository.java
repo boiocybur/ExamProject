@@ -358,7 +358,7 @@ public class ProjectRepository {
         }
         return null; // Return null if no criteria string found for the given criteria ID
     }
-}
+
 
     public void assignTaskToUser(int userID, int taskID) {
             try {
