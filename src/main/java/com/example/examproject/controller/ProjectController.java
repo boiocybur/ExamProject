@@ -179,6 +179,22 @@ public class ProjectController {
         return "budgetOverview";
     }
 
+
+    @GetMapping("/{projectID}/time")
+    public String timeOverview(@ModelAttribute("projectObject") Project project, @PathVariable("projectID") int projectId, Model model) {
+       projectService.findProjectById(projectId);
+
+        int timeSpent = projectService.getTimeSpent();
+        int timeLeft = projectService.getTimeLeft();
+        int timeTotal = projectService.getTimeTotal();
+
+        model.addAttribute("project", project);
+        model.addAttribute("timeSpent", timeSpent);
+        model.addAttribute("timeLeft", timeLeft);
+        model.addAttribute("timeTotal", timeTotal);
+
+        return "timeOverview";
+  
     @PostMapping("/{projectID}/{taskID}/removeUserFromTask")
     public String removeUserFromTask(@PathVariable int projectID, @PathVariable int taskID, @RequestParam("userID") int userID, HttpSession session, RedirectAttributes redirectAttributes) {
         Integer loggedInUserId = (Integer) session.getAttribute("userID");
@@ -204,5 +220,6 @@ public class ProjectController {
             redirectAttributes.addFlashAttribute("error", "You do not have permission to view assigned users.");
             return "redirect:/projectList";
         }
+
     }
 }
