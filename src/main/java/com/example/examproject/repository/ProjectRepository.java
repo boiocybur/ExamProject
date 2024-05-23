@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.YearMonth;
@@ -448,6 +449,65 @@ public class ProjectRepository {
     public int getTimeLeft() {
         Period period = Period.between(LocalDate.now(), project.getProjectDueDate());
         return period.getYears() * 365 + period.getMonths() * 30 + period.getDays();
+    }
+
+    public Double getTotalEstimatedTime(int projectID) {
+        Double totalEstimatedTime = 0.0;
+        String sql = """
+                SELECT COALESCE(SUM(estimatedHours), 0) 
+                AS totalEstTime
+                FROM tasks 
+                WHERE projectID = ?
+                """;
+        try {
+            Connection con = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, projectID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                totalEstimatedTime = rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return totalEstimatedTime;
+    }
+
+    public Double getTotalActualTime(int projectID) {
+        Double totalActualTime = 0.0;
+        Connection con = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String sql = "SELECT COALESCE(SUM(actualHours), 0) AS totalActualTime " +
+                "FROM tasks WHERE projectID = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, projectID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                totalActualTime = rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return totalActualTime;
+    }
+
+    public Duration getTotalDuration(int projectID) {
+        Duration totalDuration = Duration.ZERO;
+        try (Connection con = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword)) {
+            String SQL = "SELECT taskStartDate, taskDueDate " +
+                    "FROM tasks WHERE projectID = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectID);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                LocalDate startDate = rs.getDate("taskStartDate").toLocalDate();
+                LocalDate dueDate = rs.getDate("taskDueDate").toLocalDate();
+                totalDuration = totalDuration.plus(Duration.between(startDate.atStartOfDay(), dueDate.atStartOfDay()));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return totalDuration;
     }
 
     public void removeAssignedTaskToUser(int userID, int taskID) {

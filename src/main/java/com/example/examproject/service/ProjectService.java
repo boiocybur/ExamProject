@@ -9,6 +9,7 @@ import com.example.examproject.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,12 +23,9 @@ public class ProjectService {
     }
 
 
-
-
     public List<Task> assignedTasks(int projectID) {
         return projectRepository.assignedTasks(projectID);
     }
-
 
 
     public void createTask(Task task, int userID, int projectID) {
@@ -89,16 +87,19 @@ public class ProjectService {
     public double getBudgetRemaining(int projectID) {
         return projectRepository.getBudgetRemaining(projectID);
     }
-  
-    public Project findProjectById(int projectID){
+
+    public Project findProjectById(int projectID) {
         return projectRepository.findProjectById(projectID);
     }
+
     public int getTimeSpent() {
         return projectRepository.getTimeSpent();
     }
+
     public int getTimeTotal() {
         return projectRepository.getTimeTotal();
     }
+
     public int getTimeLeft() {
         return projectRepository.getTimeLeft();
     }
@@ -109,5 +110,17 @@ public class ProjectService {
 
     public List<User> getAssignedUsers(int taskID) {
         return projectRepository.findAssignedUsersByTaskID(taskID);
+    }
+
+    public Double getTotalEstimatedTime(int projectID) {
+        return projectRepository.getTotalEstimatedTime(projectID);
+    }
+
+    public Double getTotalActualTime(int projectID) {
+        return projectRepository.getTotalActualTime(projectID);
+    }
+
+    public Duration getTotalDuration(int projectID) {
+        return projectRepository.getTotalDuration(projectID);
     }
 }
