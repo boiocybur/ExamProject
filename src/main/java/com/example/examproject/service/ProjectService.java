@@ -3,6 +3,7 @@ package com.example.examproject.service;
 
 import com.example.examproject.model.Project;
 import com.example.examproject.model.Task;
+import com.example.examproject.model.User;
 import com.example.examproject.model.TaskAcceptCriteria;
 import com.example.examproject.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,5 +92,13 @@ public class ProjectService {
   
     public Project findProjectById(int projectID){
         return projectRepository.findProjectById(projectID);
+    }
+
+    public void removeAssignedUserToTask(int userID, int taskID) {
+        projectRepository.removeAssignedTaskToUser(userID, taskID);
+    }
+
+    public List<User> getAssignedUsers(int taskID) {
+        return projectRepository.findAssignedUsersByTaskID(taskID);
     }
 }
