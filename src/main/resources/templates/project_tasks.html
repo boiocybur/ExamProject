@@ -82,9 +82,14 @@
                 </td>
 
                 <td>
-                    <!-- Button to assign user to task -->
                     <a th:href="@{|/project/${projectID}/${task.getTaskID()}/assignUsers|}">
                         <input type="button" value="Assign User" class="button">
+                    </a>
+                </td>
+
+                <td>
+                    <a th:href="@{|/project/${projectID}/${task.getTaskID()}/assignedUsers|}">
+                        <input type="button" value="Assigned Users" class="button">
                     </a>
                 </td>
 

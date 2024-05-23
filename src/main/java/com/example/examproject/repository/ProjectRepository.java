@@ -260,5 +260,46 @@ public class ProjectRepository {
     public double getBudgetRemaining(int projectID) {
         return project.getProjectBudget() - getBudgetSpent(projectID);
     }
+
+    public void removeAssignedTaskToUser(int userID, int taskID) {
+        try {
+            Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+            String query = "DELETE FROM tasksanduser WHERE taskID=? AND userID=?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, taskID);
+            preparedStatement.setInt(2, userID);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<User> findAssignedUsersByTaskID(int taskID) {
+        List<User> assignedUsers = new ArrayList<>();
+        try {
+            Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+            String query = "SELECT * FROM users WHERE userID IN \n" +
+            "(SELECT userID FROM tasksanduser WHERE taskID = ?)";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, taskID);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setUserId(resultSet.getInt("userID"));
+                user.setUserName(resultSet.getString("userName"));
+                user.setPassword(resultSet.getString("userPassword"));
+                user.setUserEmail(resultSet.getString("userEmail"));
+                user.setUserRank(resultSet.getString("userRank"));
+                assignedUsers.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return assignedUsers;
+    }
 }
 
