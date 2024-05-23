@@ -97,6 +97,7 @@ public class ProjectController {
     @PostMapping("/updateTask")
     public String updateTask(@ModelAttribute("taskObject") Task task, @ModelAttribute("taskID") int taskID, @ModelAttribute("projectID") int projectID) {
         projectService.updateTask2(task, taskID);
+        System.out.println("1");
         return "redirect:/project/" + projectID + "/tasks";
     }
 
