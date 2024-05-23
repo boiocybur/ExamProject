@@ -31,10 +31,12 @@
         <label for="userEmail">User Email:</label>
         <input type="text" id="userEmail" th:field="*{userEmail}" required>
 
-        <label for="userRank">Admin?:</label>
+        <label for="userRank">Kompetencer:</label>
         <select id="userRank" th:field="*{userRank}" required>
-            <option value="generic" th:selected="${userForm.userRank == 'generic'}">Generic</option>
             <option value="admin" th:selected="${userForm.userRank == 'admin'}">Admin</option>
+            <option value="projectManager" th:selected="${userForm.userRank == 'projectManager'}">Project Manager</option>
+            <option value="frontend" th:selected="${userForm.userRank == 'frontend'}">FrontEnd</option>
+            <option value="backend" th:selected="${userForm.userRank == 'backend'}">BackEnd</option>
         </select>
 
         <button type="submit">Register</button>

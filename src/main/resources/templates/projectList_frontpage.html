@@ -15,6 +15,9 @@
 <div class="content">
     <h1>list of ongoing projects</h1>
     <p th:text="${welcome}"></p>
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
     <table class="mainTable">
         <tbody>
         <tr>

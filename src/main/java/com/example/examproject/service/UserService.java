@@ -38,6 +38,10 @@ public class UserService {
         User user = getUserById(userId);
         return user != null && "admin".equals(user.getUserRank());
     }
+    public boolean isProjectManager(int userId) {
+        User user = getUserById(userId);
+        return user != null && "projectmanager".equals(user.getUserRank());
+    }
     public List<User> findAllUsers() {
         return userRepository.findAllUsers();
     }

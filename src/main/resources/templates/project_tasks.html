@@ -83,6 +83,22 @@
                     </form>
                 </td>
 
+
+                <td>
+                    <!-- Button to assign user to task -->
+                    <a th:href="@{|/project/${projectID}/${task.getTaskID()}/assignUsers|}">
+                        <input type="button" value="Assign User" class="button">
+                    </a>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+        <a th:href="@{|/project/${projectID}/${#ctx.session.userID}/createTask|}">
+            <input type="button" value="Create Task" class="button">
+        </a>
+
+
                 <!--      <td>
                           <a th:href="@{|/project/${projectID}/${task.getTaskID()}/taskDetails|}">
                               <input type="button" value="Details" class="button">

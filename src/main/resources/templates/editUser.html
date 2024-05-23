@@ -21,10 +21,12 @@
     <label for="password">New Password:</label>
     <input type="password" id="password" name="password" required/>
 
-    <label for="userRank">Admin?:</label>
+    <label for="userRank">Kompetencer:</label>
     <select id="userRank" th:field="*{userRank}" required>
-        <option value="generic" th:selected="${user.userRank == 'generic'}">Generic</option>
         <option value="admin" th:selected="${user.userRank == 'admin'}">Admin</option>
+        <option value="projectmanager" th:selected="${user.userRank == 'projectmanager'}">Project Manager</option>
+        <option value="frontend" th:selected="${user.userRank == 'frontend'}">Frontend</option>
+        <option value="backend" th:selected="${user.userRank == 'backend'}">Backend</option>
     </select>
 
     <input type="submit" value="Save" class="btn"/>
