@@ -1,10 +1,12 @@
 CREATE SCHEMA if not exists alphaSolutions;
 use alphasolutions;
 
-drop table if exists projectLists;
+drop table if exists taskAcceptCriteria;
 drop table if exists tasks;
 drop table if exists projects;
 drop table if exists users;
+
+
 
 
 CREATE TABLE users (
@@ -32,18 +34,28 @@ CREATE TABLE projects (
 
 CREATE TABLE tasks (
                        taskID INTEGER AUTO_INCREMENT,
-                        taskName varchar(50),
+                       taskName varchar(50),
                        taskDescription TEXT,
                        taskStartDate DATE,
                        taskDueDate DATE,
                        projectID INTEGER NOT NULL,
-                        userID INTEGER NOT NULL,
+                       userID INTEGER NOT NULL,
                        FOREIGN KEY (projectID) REFERENCES projects(projectID)
                            ON DELETE CASCADE ON UPDATE CASCADE,
-                        FOREIGN KEY (userID) REFERENCES users(userID)
-                            ON DELETE CASCADE ON UPDATE CASCADE,
+                       FOREIGN KEY (userID) REFERENCES users(userID)
+                           ON DELETE CASCADE ON UPDATE CASCADE,
                        primary key(taskID)
 
+);
+
+CREATE TABLE taskAcceptCriteria (
+                                    criteriaID INTEGER AUTO_INCREMENT,
+                                    taskID INTEGER,
+                                    taskAcceptCriteriaTEXT TEXT,
+                                    taskStatus BOOLEAN DEFAULT FALSE,
+                                    FOREIGN KEY (taskID) REFERENCES tasks(taskID)
+                                        ON DELETE CASCADE ON UPDATE CASCADE,
+                                    PRIMARY KEY (criteriaID)
 );
 
 
@@ -82,3 +94,10 @@ VALUES
     (1,'implement features' ,'Implement responsive features', '2022-02-15', '2022-03-15',1),
     (2, 'market materials','Prepare marketing materials', '2022-02-05', '2022-03-05', 2),
     (1, 'refactoring', 'refactor backend code', '2022-01-10', '2022-03-11', 1);
+
+INSERT INTO taskAcceptCriteria
+(taskID, taskAcceptCriteriaTEXT, taskStatus)
+VALUES
+    (1, 'Unit tests', FALSE),
+    (1, 'UI tests', FALSE);
+
