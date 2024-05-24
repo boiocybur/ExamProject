@@ -44,6 +44,9 @@
         <input id="taskID" type="hidden" th:field="*{taskID}">
 
         <button type="submit">Create Task</button>
+        <a th:href="@{'/projectList'}">
+            <input type="button" value="Cancel" class="button">
+        </a>
     </form>
 </fieldset>
 <footer>

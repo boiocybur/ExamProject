@@ -41,6 +41,9 @@
         <input id="projectID" type="hidden" th:field="*{projectID}">
 
         <button type="submit">Create Project</button>
+        <a th:href="@{'/projectList'}">
+            <input type="button" value="Cancel" class="button">
+        </a>
     </form>
 </fieldset>
 </body>
