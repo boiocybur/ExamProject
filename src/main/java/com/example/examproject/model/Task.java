@@ -16,6 +16,7 @@ public class Task {
     private int projectID;
     private int userID;
     private List<TaskAcceptCriteria> taskAcceptCriteria;
+    private boolean taskCompletionStatus;
 
     public Task(int taskID, String taskName, String taskDescription, LocalDate taskStartDate, LocalDate taskDueDate) {
         this.taskID = taskID;
@@ -33,6 +34,29 @@ public class Task {
         this.taskDueDate = taskDueDate;
         this.projectID = projectID;
         this.userID = userID;
+    }
+
+    public Task(int taskID, String taskName, String taskDescription, LocalDate taskStartDate, LocalDate taskDueDate, int projectID, int userID, boolean taskCompletionStatus) {
+        this.taskID = taskID;
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.taskStartDate = taskStartDate;
+        this.taskDueDate = taskDueDate;
+        this.projectID = projectID;
+        this.userID = userID;
+        this.taskCompletionStatus = taskCompletionStatus;
+    }
+
+    public Task(int taskID, String taskName, String taskDescription, LocalDate taskStartDate, LocalDate taskDueDate, int projectID, int userID, List<TaskAcceptCriteria> taskAcceptCriteria, boolean taskCompletionStatus) {
+        this.taskID = taskID;
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.taskStartDate = taskStartDate;
+        this.taskDueDate = taskDueDate;
+        this.projectID = projectID;
+        this.userID = userID;
+        this.taskAcceptCriteria = taskAcceptCriteria;
+        this.taskCompletionStatus = taskCompletionStatus;
     }
 
     public Task() {
@@ -100,5 +124,28 @@ public class Task {
 
     public void setTaskAcceptCriteria(List<TaskAcceptCriteria> taskAcceptCriteria) {
         this.taskAcceptCriteria = taskAcceptCriteria;
+    }
+
+    public boolean isTaskCompletionStatus() {
+        return taskCompletionStatus;
+    }
+
+    public void setTaskCompletionStatus(boolean taskCompletionStatus) {
+        this.taskCompletionStatus = taskCompletionStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskID=" + taskID +
+                ", taskName='" + taskName + '\'' +
+                ", taskDescription='" + taskDescription + '\'' +
+                ", taskStartDate=" + taskStartDate +
+                ", taskDueDate=" + taskDueDate +
+                ", projectID=" + projectID +
+                ", userID=" + userID +
+                ", taskAcceptCriteria=" + taskAcceptCriteria +
+                ", taskCompletionStatus=" + taskCompletionStatus +
+                '}';
     }
 }

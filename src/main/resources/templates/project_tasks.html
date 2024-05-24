@@ -13,7 +13,7 @@
 <main>
 
     <!-- Imminent Tasks Section -->
-    <section>
+    <section style="float: left; width: 50%;">
         <h2>Imminent Tasks</h2>
         <table>
             <thead>
@@ -23,7 +23,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="task : ${imminentTasksObject}">
+            <tr th:each="task : ${imminentOpenTasksObject}">
                 <td th:text="${task.getTaskName()}">Task Name</td>
                 <td th:text="${task.getTaskDueDate()}">Task Due Date</td>
 
@@ -34,7 +34,7 @@
     </section>
 
     <!-- Overdue Tasks Section -->
-    <section>
+    <section style="float: right; width: 50%;">
         <h2>Overdue Tasks</h2>
         <table>
             <thead>
@@ -44,16 +44,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="task : ${overdueTasksObject}">
-                <td th:text="${task.getTaskName()}">Task Name</td>
-                <td th:text="${task.getTaskDueDate()}">Task Due Date</td>
+            <tr th:each="task : ${overdueOpenTasksObject}">
+                <td th:text="${task.taskName}">Task Name</td>
+                <td th:text="${task.taskDueDate}">Task Due Date</td>
             </tr>
             </tbody>
         </table>
     </section>
 
     <!-- All Tasks Section -->
-    <section>
+    <section style="float: left; width: 50%;">
         <h2>All Tasks</h2>
         <table>
             <thead>
@@ -64,9 +64,9 @@
 
             </thead>
             <tbody>
-            <tr th:each="task : ${allTasksObject}">
+            <tr th:each="task : ${openTasksObject}">
                 <td>
-                    <a th:href="@{|/project/${projectID}/${task.getTaskID()}/taskDetails|}" th:text="${task.taskName}">Task Name</a>
+                    <a th:href="@{|/project/${projectID}/${task.getTaskID()}/taskDetails|}" th:text="${task.getTaskName()}">Task Name</a>
                 </td>
                 <td th:text="${task.taskDueDate}">Task Due Date</td>
 
@@ -94,27 +94,33 @@
             </tr>
             </tbody>
         </table>
+
         <a th:href="@{|/project/${projectID}/${#ctx.session.userID}/createTask|}">
             <input type="button" value="Create Task" class="button">
         </a>
 
+    </section>
 
-                <!--      <td>
-                          <a th:href="@{|/project/${projectID}/${task.getTaskID()}/taskDetails|}">
-                              <input type="button" value="Details" class="button">
-                          </a>
-                      </td> -->
+    <!-- Completed Tasks Section -->
+    <section style="float: right; width: 50%;">
+        <h2>Completed Tasks</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Due Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${closedTasksObject}">
+                <td th:text="${task.taskName}">Task Name</td>
+                <td th:text="${task.taskDueDate}">Task Due Date</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
 
-                  </tr>
-                  </tbody>
-              </table>
-              <a th:href="@{|/project/${projectID}/${#ctx.session.userID}/createTask|}">
-                  <input type="button" value="Create Task" class="button">
-              </a>
-
-
-          </section>
-      </main>
+</main>
       <footer>
           <p>&copy; 2024 AlphaSolutions</p>
       </footer>
