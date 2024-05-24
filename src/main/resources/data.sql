@@ -90,65 +90,55 @@ VALUES
 
 -- Insert data into the tasks table
 INSERT INTO tasks
-(projectID, taskName, taskDescription, taskStartDate, taskDueDate, userID, taskCompletionStatus)
+(projectID, taskName, taskDescription, taskStartDate, taskDueDate, estimatedHours, actualHours, userID, taskCompletionStatus)
 VALUES
     -- Project 1
-    (1, 'Website Performance Optimization', 'Optimize website performance for faster loading times and better user experience', '2024-05-21', '2024-05-25', 2, FALSE),
-    (1, 'Security Audit', 'Conduct a security audit to identify and address vulnerabilities', '2024-07-15', '2024-07-30', 3, FALSE),
-    (1, 'Content Localization', 'Localize website content for international audiences', '2024-07-20', '2024-08-04', 1, FALSE),
-    (1, 'Customer Feedback Integration', 'Integrate customer feedback system for real-time feedback collection', '2024-07-25', '2024-08-09', 2, FALSE),
-    (1, 'Marketing Campaign Analysis', 'Analyze the effectiveness of past marketing campaigns for insights', '2024-07-30', '2024-08-14', 3, FALSE),
-    (1, 'User Interface Refinement', 'Refine user interface elements for improved usability', '2024-08-05', '2024-08-20', 1, FALSE),
+    (1, 'layout task', 'Design new layout', '2022-01-10', '2022-02-10', 50, 60, 1, TRUE),
+    (1, 'implement features', 'Implement responsive features', '2022-02-15', '2022-03-15', 100, 120, 1, FALSE),
+    (1, 'refactoring', 'Refactor backend code', '2022-01-10', '2022-03-11', 80, 90, 1, FALSE),
+    (1, 'UI design', 'Create UI components', '2022-03-01', '2022-04-01', 60, 65, 1, TRUE),
+    (1, 'API integration', 'Integrate third-party APIs', '2022-04-05', '2022-05-05', 70, 75, 1, FALSE),
+    (1, 'testing', 'Perform unit testing', '2022-05-10', '2022-06-10', 50, 55, 1, TRUE),
 
     -- Project 2
-    (2, 'Market Segmentation Analysis', 'Analyze market segments to identify target audiences', '2024-07-12', '2024-07-27', 3, FALSE),
-    (2, 'Content Calendar Creation', 'Create a content calendar for organized content planning', '2024-07-17', '2024-08-01', 1, FALSE),
-    (2, 'Email Automation Setup', 'Set up automated email campaigns for efficient marketing', '2024-07-22', '2024-08-06', 2, FALSE),
-    (2, 'SEO Strategy Review', 'Review and refine SEO strategy for improved search rankings', '2024-07-27', '2024-08-11', 3, FALSE),
-    (2, 'Social Media Engagement Analysis', 'Analyze social media engagement metrics for optimization', '2024-08-01', '2024-08-16', 1, FALSE),
-    (2, 'Content Optimization Workshop', 'Organize a workshop to optimize marketing content', '2024-08-06', '2024-08-21', 2, FALSE),
+    (2, 'market materials', 'Prepare marketing materials', '2022-02-05', '2022-03-05', 40, 30, 1, TRUE),
+    (2, 'campaign planning', 'Plan marketing campaign', '2022-03-10', '2022-04-10', 50, 45, 1, FALSE),
+    (2, 'content creation', 'Create social media content', '2022-04-15', '2022-05-15', 60, 70, 1, TRUE),
+    (2, 'SEO optimization', 'Optimize website for SEO', '2022-05-20', '2022-06-20', 30, 35, 1, FALSE),
+    (2, 'email marketing', 'Develop email marketing strategy', '2022-06-25', '2022-07-25', 40, 50, 1, TRUE),
+    (2, 'analytics review', 'Review campaign analytics', '2022-08-01', '2022-09-01', 20, 25, 1, FALSE),
 
     -- Project 3
-    (3, 'Product Feature Prioritization', 'Prioritize product features based on market demand', '2024-07-14', '2024-07-29', 1, FALSE),
-    (3, 'Competitor Analysis', 'Conduct a comprehensive analysis of competitors in the market', '2024-07-19', '2024-08-03', 2, FALSE),
-    (3, 'Usability Testing', 'Conduct usability testing sessions to gather user feedback', '2024-07-24', '2024-08-08', 3, FALSE),
-    (3, 'Product Demo Preparation', 'Prepare product demos for showcasing key features', '2024-07-29', '2024-08-13', 1, FALSE),
-    (3, 'Sales Strategy Development', 'Develop a strategic sales plan to maximize revenue', '2024-08-03', '2024-08-18', 2, FALSE),
-    (3, 'Customer Support Training', 'Provide training sessions for customer support representatives', '2024-08-08', '2024-08-23', 3, FALSE),
+    (3, 'database design', 'Design database schema', '2022-03-01', '2022-04-01', 50, 60, 1, TRUE),
+    (3, 'data migration', 'Migrate data to new system', '2022-04-05', '2022-05-05', 80, 85, 1, FALSE),
+    (3, 'backup setup', 'Setup backup system', '2022-05-10', '2022-06-10', 30, 35, 1, TRUE),
+    (3, 'security audit', 'Perform security audit', '2022-06-15', '2022-07-15', 40, 45, 1, FALSE),
+    (3, 'performance tuning', 'Tune database performance', '2022-07-20', '2022-08-20', 50, 55, 1, TRUE),
+    (3, 'index optimization', 'Optimize database indexes', '2022-09-01', '2022-10-01', 30, 35, 1, FALSE),
 
     -- Project 4
-    (4, 'Inventory Management System Update', 'Update inventory management system for efficiency improvements', '2024-07-16', '2024-07-31', 2, FALSE),
-    (4, 'Supplier Negotiations', 'Negotiate with suppliers for better terms and pricing', '2024-07-21', '2024-08-05', 3, FALSE),
-    (4, 'Warehouse Organization', 'Organize warehouse layout for better inventory management', '2024-07-26', '2024-08-10', 1, FALSE),
-    (4, 'Shipping Process Optimization', 'Optimize shipping processes for faster order fulfillment', '2024-07-31', '2024-08-15', 2, FALSE),
-    (4, 'Customer Satisfaction Survey', 'Conduct a customer satisfaction survey for feedback collection', '2024-08-05', '2024-08-20', 3, FALSE),
-    (4, 'Supplier Performance Evaluation', 'Evaluate supplier performance to ensure quality standards', '2024-08-10', '2024-08-25', 1, FALSE),
+    (4, 'initial research', 'Conduct initial research', '2022-01-15', '2022-02-15', 40, 45, 2, TRUE),
+    (4, 'prototype development', 'Develop prototype', '2022-02-20', '2022-03-20', 70, 75, 2, FALSE),
+    (4, 'user testing', 'Conduct user testing', '2022-03-25', '2022-04-25', 60, 65, 2, TRUE),
+    (4, 'feedback analysis', 'Analyze user feedback', '2022-05-01', '2022-06-01', 50, 55, 2, FALSE),
+    (4, 'final adjustments', 'Make final adjustments', '2022-06-05', '2022-07-05', 40, 45, 2, TRUE),
+    (4, 'documentation', 'Prepare project documentation', '2022-07-10', '2022-08-10', 30, 35, 2, FALSE),
 
     -- Project 5
-    (5, 'Financial Analysis Report', 'Prepare a detailed financial analysis report for stakeholders', '2024-07-18', '2024-08-02', 3, FALSE),
-    (5, 'Budget Planning Meeting', 'Hold a meeting to plan budgets for upcoming projects', '2024-07-23', '2024-08-07', 1, FALSE),
-    (5, 'Investment Portfolio Review', 'Review and optimize investment portfolios for maximum returns', '2024-07-28', '2024-08-12', 2, FALSE),
-    (5, 'Tax Compliance Audit', 'Conduct an audit to ensure compliance with tax regulations', '2024-08-02', '2024-08-17', 3, FALSE),
-    (5, 'Expense Tracking System Implementation', 'Implement a new expense tracking system for better financial management', '2024-08-12', '2024-08-27', 1, FALSE),
-    (5, 'Financial Risk Assessment', 'Assess financial risks and develop mitigation strategies', '2024-08-17', '2024-09-01', 2, FALSE),
-    (5, 'Profitability Analysis', 'Analyze profitability of different business units and products', '2024-08-22', '2024-09-06', 3, FALSE),
+    (5, 'market research', 'Conduct market research', '2022-02-01', '2022-03-01', 50, 55, 3, TRUE),
+    (5, 'strategy development', 'Develop marketing strategy', '2022-03-05', '2022-04-05', 60, 65, 3, FALSE),
+    (5, 'branding', 'Create branding materials', '2022-04-10', '2022-05-10', 70, 75, 3, TRUE),
+    (5, 'advertising', 'Plan advertising campaign', '2022-05-15', '2022-06-15', 80, 85, 3, FALSE),
+    (5, 'partnerships', 'Establish partnerships', '2022-06-20', '2022-07-20', 50, 55, 3, TRUE),
+    (5, 'evaluation', 'Evaluate campaign effectiveness', '2022-08-01', '2022-09-01', 40, 45, 3, FALSE),
 
     -- Project 6
-    (6, 'Customer Relationship Management (CRM) Integration', 'Integrate CRM system for improved customer interactions', '2024-08-14', '2024-08-29', 3, FALSE),
-    (6, 'Supply Chain Optimization', 'Optimize supply chain processes for cost efficiency', '2024-08-19', '2024-09-03', 1, FALSE),
-    (6, 'Quality Control System Upgrade', 'Upgrade quality control system for enhanced product quality', '2024-08-24', '2024-09-08', 2, FALSE),
-    (6, 'Inventory Forecasting Model Development', 'Develop a predictive model for inventory forecasting', '2024-08-29', '2024-09-13', 3, FALSE),
-    (6, 'Market Expansion Strategy Planning', 'Plan strategies for expanding into new markets', '2024-09-03', '2024-09-18', 1, FALSE),
-    (6, 'Logistics Optimization', 'Optimize logistics operations for faster and cheaper deliveries', '2024-09-08', '2024-09-23', 2, FALSE),
-    (6, 'Employee Training Program Development', 'Develop training programs to enhance employee skills', '2024-09-13', '2024-09-28', 3, FALSE),
-    (6, 'Performance Evaluation System Implementation', 'Implement a system for employee performance evaluations', '2024-09-18', '2024-10-03', 1, FALSE);
-
-(projectID, taskName, taskDescription, taskStartDate, taskDueDate, estimatedHours, actualHours, userID)
-VALUES
-    (1, 'layout task', 'Design new layout', '2022-01-10', '2022-02-10', 50, 60, 1),
-    (1,'implement features' ,'Implement responsive features', '2022-02-15', '2022-03-15', 100, 120, 1),
-    (2, 'market materials','Prepare marketing materials', '2022-02-05', '2022-03-05', 40, 30, 2),
-    (1, 'refactoring', 'refactor backend code', '2022-01-10', '2022-03-11', 80, 90, 1);
+    (6, 'conceptual design', 'Create conceptual design', '2022-03-01', '2022-04-01', 60, 65, 3, TRUE),
+    (6, 'technical specs', 'Write technical specifications', '2022-04-05', '2022-05-05', 70, 75, 3, FALSE),
+    (6, 'development', 'Develop software', '2022-05-10', '2022-06-10', 90, 95, 3, TRUE),
+    (6, 'testing phase', 'Execute testing phase', '2022-06-15', '2022-07-15', 80, 85, 3, FALSE),
+    (6, 'deployment', 'Deploy to production', '2022-07-20', '2022-08-20', 60, 65, 3, TRUE),
+    (6, 'maintenance', 'Perform maintenance', '2022-09-01', '2022-10-01', 50, 55, 3, FALSE);
 
 
 INSERT INTO taskAcceptCriteria
