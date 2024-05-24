@@ -27,6 +27,7 @@ public class ProjectController {
     private final ProjectListService projectListService;
     private UserService userService;
     private final Task task;
+    private final TaskAcceptCriteria taskAcceptCriteria;
 
 
     public ProjectController(ProjectService projectService, ProjectListService projectListService, UserService userService) {
@@ -34,6 +35,7 @@ public class ProjectController {
         this.projectListService = projectListService;
         this.userService = userService;
         this.task = new Task();
+        this.taskAcceptCriteria = new TaskAcceptCriteria();
     }
 
     @GetMapping("")
@@ -66,6 +68,7 @@ public class ProjectController {
     public String tasks(@PathVariable int projectID, Model model, HttpSession session) {
         Integer userID = (Integer) session.getAttribute("userID");
         model.addAttribute("userID", userID);
+        model.addAttribute("projectID", projectID);
         model.addAttribute("openTasksObject", projectService.openTasks(projectID));
         model.addAttribute("closedTasksObject", projectService.closedTasks(projectID));
         model.addAttribute("imminentOpenTasksObject", projectService.imminentOpenTasks(projectID));
@@ -102,18 +105,35 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectID}/{taskID}/updateTask")
-    public String updateProjectForm(@PathVariable int projectID, @PathVariable int taskID, Model model) {
+    public String updateTaskForm(@PathVariable("taskID") int taskID,
+                                 @PathVariable ("projectID") int projectID,
+                                 Model model) {
         Task task = projectService.findOpenTask(taskID);
-        model.addAttribute("projectID", projectID);
-        model.addAttribute("taskID", taskID);
+        List<TaskAcceptCriteria> criteriaList = projectService.findTaskAcceptCriteria(taskID);
         model.addAttribute("taskObject", task);
+        model.addAttribute("projectID", projectID);
+        model.addAttribute("criteriaList", criteriaList);
+        System.out.println(criteriaList);
+        System.out.println(projectID);
+        System.out.println(task);
         return "project_update_task";
-
     }
 
     @PostMapping("/updateTask")
-    public String updateTask(@ModelAttribute("taskObject") Task task, @ModelAttribute("taskID") int taskID, @ModelAttribute("projectID") int projectID) {
-        projectService.updateTask2(task, taskID);
+    public String updateTask(@ModelAttribute("taskObject") Task task,
+                             @ModelAttribute("taskID") int taskID,
+                             @ModelAttribute("projectID") int projectID,
+                             @ModelAttribute("criteriaList") List<String> criteriaListText,
+                             @ModelAttribute("taskStatus") List<Boolean> taskStatusList) {
+        List<TaskAcceptCriteria> criteriaList = new ArrayList<>();
+        for (int i = 0; i < criteriaListText.size(); i++) {
+            TaskAcceptCriteria criteria = new TaskAcceptCriteria();
+            criteria.setTaskAcceptCriteriaTEXT(criteriaListText.get(i));
+            criteria.setTaskStatus(taskStatusList.get(i));
+            criteriaList.add(criteria);
+        }
+        projectService.updateTask(task, taskID);
+        projectService.updateTaskAcceptCriteria(taskID, criteriaList);
         return "redirect:/project/" + projectID + "/tasks";
     }
 

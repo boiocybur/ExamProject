@@ -80,6 +80,10 @@ public class ProjectService {
         projectRepository.updateTaskAcceptCriteria(taskID, taskAcceptCriteria);
     }
 
+    public TaskAcceptCriteria updateTaskAcceptCriteriaObject(int taskID) {
+        return projectRepository.findTaskAcceptCriteriaObject(taskID);
+    }
+
     public List<TaskAcceptCriteria> findTaskAcceptCriteria(int taskID) {
         return projectRepository.findTaskAcceptCriteria(taskID);
     }

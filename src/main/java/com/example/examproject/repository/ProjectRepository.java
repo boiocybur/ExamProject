@@ -181,7 +181,7 @@ public class ProjectRepository {
         int rows = 0;
         String sql = """
         UPDATE tasks 
-        SET taskName = ?, taskDescription = ?, taskStartDate = ?, taskDueDate = ?
+        SET taskName = ?, taskDescription = ?, taskStartDate = ?, taskDueDate = ?, estimatedHours = ?, actualHours = ?, projectID = ?, userID = ?, taskCompletionStatus = ?
         WHERE taskID = ?
         """;
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
@@ -191,7 +191,12 @@ public class ProjectRepository {
             ps.setString(2, task.getTaskDescription());
             ps.setDate(3, Date.valueOf(task.getTaskStartDate()));
             ps.setDate(4, Date.valueOf(task.getTaskDueDate()));
-            ps.setInt(5, taskID);
+            ps.setDouble(5, task.getEstimatedHours());
+            ps.setDouble(6, task.getActualHours());
+            ps.setInt(7, task.getProjectID());
+            ps.setInt(8, task.getUserID());
+            ps.setBoolean(9, task.isTaskCompletionStatus());
+            ps.setInt(10, taskID);
             rows = ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -458,7 +463,7 @@ public class ProjectRepository {
     public List<TaskAcceptCriteria> findTaskAcceptCriteria(int taskID) {
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
 
-        String sql = "SELECT criteriaID, taskAcceptCriteriaTEXT, taskStatus FROM taskAcceptCriteria WHERE taskID = ?";
+        String sql = "SELECT taskID, criteriaID, taskAcceptCriteriaTEXT, taskStatus FROM taskAcceptCriteria WHERE taskID = ?";
         List<TaskAcceptCriteria> criteriaList = new ArrayList<>();
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -469,7 +474,7 @@ public class ProjectRepository {
                     String taskAcceptCriteriaText = rs.getString("taskAcceptCriteriaTEXT");
                     boolean taskStatus = rs.getBoolean("taskStatus");
 
-                    TaskAcceptCriteria criteria = new TaskAcceptCriteria(criteriaID, taskStatus, taskAcceptCriteriaText);
+                    TaskAcceptCriteria criteria = new TaskAcceptCriteria(taskID, criteriaID, taskStatus, taskAcceptCriteriaText);
                     criteriaList.add(criteria);
                 }
             }
@@ -477,6 +482,33 @@ public class ProjectRepository {
             throw new RuntimeException(e);
         }
         return criteriaList;
+    }
+
+    public TaskAcceptCriteria findTaskAcceptCriteriaObject(int taskID) {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+
+        String sql = "SELECT taskID, criteriaID, taskAcceptCriteriaTEXT, taskStatus FROM taskAcceptCriteria WHERE taskID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, taskID);
+            ResultSet rs = ps.executeQuery();
+
+
+
+            while (rs.next()) {
+                // Fetch task details if not fetched already
+                taskAcceptCriteria = new TaskAcceptCriteria(
+                        rs.getInt("taskID"),
+                        rs.getInt("criteriaID"),
+                        rs.getBoolean("taskStatus"),
+                        rs.getString("taskAcceptCriteriaTEXT")
+                );
+
+            }
+            return taskAcceptCriteria;
+            } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getCriteriaString(int criteriaID) {

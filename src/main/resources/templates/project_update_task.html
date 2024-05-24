@@ -33,8 +33,21 @@
         </div>
 
         <div>
-            <label for="taskAcceptCriteria">Acceptance Criteria</label><br>
-            <textarea id="taskAcceptCriteria" th:field="*{taskAcceptCriteria}" placeholder="Acceptance Criteria"></textarea><br>
+            <label>Acceptance Criteria</label><br>
+            <div th:each="criterion, iterStat : ${criteriaList}">
+                <!-- Add hidden inputs for taskID and taskStatus -->
+                <input type="hidden" name="taskID" th:value="${taskID}">
+                <input type="hidden" name="projectID" th:value="${projectID}">
+                <!-- Use indexed names for each input -->
+                <label th:for="'acceptanceCriterion_' + ${iterStat.index}" th:text="'Criterion ' + ${iterStat.index + 1}"></label>
+                <!-- Use indexed names for text input and checkbox -->
+                <label>
+                    <input type="text" th:id="'acceptanceCriterion_' + ${iterStat.index}" th:name="'criteriaListText[' + ${iterStat.index} + ']'" th:value="${criterion.taskAcceptCriteriaTEXT}">
+                </label>
+                <label>
+                    <input type="checkbox" th:id="'acceptanceCriterionStatus_' + ${iterStat.index}" th:name="'taskStatusList[' + ${iterStat.index} + ']'" th:checked="${criterion.taskStatus}">
+                </label>
+            </div>
         </div>
 
         <input type="submit" value="Submit" class="button">

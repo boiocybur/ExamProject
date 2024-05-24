@@ -24,7 +24,7 @@
             </thead>
             <tbody>
             <tr th:each="task : ${imminentOpenTasksObject}">
-                <td th:text="${task.getTaskName()}">Task Name</td>
+                <td th:text="${task.taskName}">Task Name</td>
                 <td th:text="${task.getTaskDueDate()}">Task Due Date</td>
 
 
@@ -72,7 +72,7 @@
 
                 <td>
                     <a th:href="@{|/project/${projectID}/${task.getTaskID()}/updateTask|}">
-                        <input type="button" value="Edit" class="button">
+                        <input type="button" value="Update" class="button">
                     </a>
                 </td>
 
