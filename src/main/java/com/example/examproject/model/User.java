@@ -10,7 +10,6 @@ public class User {
     private String userEmail;
     private String userRank;
     public User() {
-
     }
 
     public User(String userName, String password, int userId, String userEmail, String userRank) {
