@@ -3,6 +3,7 @@ package com.example.examproject.repository;
 import com.example.examproject.model.TaskAcceptCriteria;
 import com.example.examproject.model.Project;
 import com.example.examproject.model.Task;
+import com.example.examproject.model.User;
 import com.example.examproject.util.ConnectionManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;

@@ -27,10 +27,6 @@ public class ProjectService {
     public List<Task> openTasks(int projectID) {
         return projectRepository.openTasks(projectID);
     }
-    public List<Task> assignedTasks(int projectID) {
-        return projectRepository.assignedTasks(projectID);
-
-    }
 
     public List<Task> closedTasks(int projectID) {
         return projectRepository.closedTasks(projectID);
