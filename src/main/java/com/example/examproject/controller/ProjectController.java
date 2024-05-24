@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
@@ -49,12 +50,12 @@ public class ProjectController {
             model.addAttribute("projectID", projectID);
             model.addAttribute("userID", userID);
             model.addAttribute("projectObject", projectListService.findProjectWithCompletionDate(projectID));
-            model.addAttribute("taskObject", projectService.assignedTasks(projectID));
+            model.addAttribute("taskObject", projectService.openTasks(projectID));
 
 
-            model.addAttribute("assignedTasks", projectService.assignedTasks(projectID));
-            model.addAttribute("imminentTasks", projectService.imminentAssignedTasks(projectID));
-            model.addAttribute("overdueTasks", projectService.overdueAssignedTasks(projectID));
+            model.addAttribute("assignedTasks", projectService.openTasks(projectID));
+            model.addAttribute("imminentTasks", projectService.imminentOpenTasks(projectID));
+            model.addAttribute("overdueTasks", projectService.overdueOpenTasks(projectID));
             return "dashboard";
         } else {
             return "redirect:/login";
@@ -65,10 +66,24 @@ public class ProjectController {
     public String tasks(@PathVariable int projectID, Model model, HttpSession session) {
         Integer userID = (Integer) session.getAttribute("userID");
         model.addAttribute("userID", userID);
-        model.addAttribute("allTasksObject", projectService.assignedTasks(projectID));
-        model.addAttribute("imminentTasksObject", projectService.imminentAssignedTasks(projectID));
-        model.addAttribute("overdueTasksObject", projectService.overdueAssignedTasks(projectID));
+        model.addAttribute("openTasksObject", projectService.openTasks(projectID));
+        model.addAttribute("closedTasksObject", projectService.closedTasks(projectID));
+        model.addAttribute("imminentOpenTasksObject", projectService.imminentOpenTasks(projectID));
+        model.addAttribute("overdueOpenTasksObject", projectService.overdueOpenTasks(projectID));
         return "project_tasks";
+    }
+
+    @PostMapping("/closeTask")
+    public String closeTask(@RequestParam int taskID, @RequestParam int projectID, Model model) {
+        boolean canClose = projectService.closeTask(taskID);
+        if (canClose) {
+            return "redirect:/project/" + projectID + "/tasks";
+        } else {
+            Task task = projectService.findOpenTask(taskID);
+            model.addAttribute("openTaskObject", task);
+            model.addAttribute("errorMessage", "All acceptance criteria must be met to close the task, remember to update.");
+            return "project_task_details";
+        }
     }
 
     @GetMapping("/{projectID}/{userID}/createTask")
@@ -88,7 +103,7 @@ public class ProjectController {
 
     @GetMapping("/{projectID}/{taskID}/updateTask")
     public String updateProjectForm(@PathVariable int projectID, @PathVariable int taskID, Model model) {
-        Task task = projectService.findTask2(taskID);
+        Task task = projectService.findOpenTask(taskID);
         model.addAttribute("projectID", projectID);
         model.addAttribute("taskID", taskID);
         model.addAttribute("taskObject", task);
@@ -111,11 +126,13 @@ public class ProjectController {
 
     @GetMapping("/{projectID}/{taskID}/taskDetails")
     public String viewTaskDetails(@PathVariable int projectID, @PathVariable int taskID, Model model) {
-        Task task = projectService.findTask2(taskID);
+        Task taskOpen = projectService.findOpenTask(taskID);
+        Task taskClosed = projectService.findClosedTask(taskID);
         List<TaskAcceptCriteria> taskAcceptCriteria = projectService.findTaskAcceptCriteria(taskID);
 
         model.addAttribute("projectID", projectID);
-        model.addAttribute("taskObject", task);
+        model.addAttribute("openTaskObject", taskOpen);
+        model.addAttribute("closedTaskObject", taskClosed);
         model.addAttribute("taskAcceptCriteria", taskAcceptCriteria);
         return "project_task_details";
     }
@@ -127,12 +144,6 @@ public class ProjectController {
                                  @RequestParam(value = "criteriaStatus", required = false) List<Integer> criteriaStatus,
                                  RedirectAttributes redirectAttributes) {
 
-        System.out.println("1");
-
-        System.out.println("Updating criteria for taskID: " + taskID + " in projectID: " + projectID);
-        System.out.println("Received criteria IDs: " + criteriaIDs);
-        System.out.println("Received criteria status: " + criteriaStatus);
-
         List<TaskAcceptCriteria> criteriaList = new ArrayList<>();
 
         for (Integer criteriaID : criteriaIDs) {
@@ -140,11 +151,7 @@ public class ProjectController {
             String criteriaString = projectService.getCriteriaString(criteriaID);
             TaskAcceptCriteria criteria = new TaskAcceptCriteria(criteriaID, taskStatus, criteriaString);
             criteriaList.add(criteria);
-
-            System.out.println("Criteria ID: " + criteriaID + " Status: " + taskStatus);
         }
-
-        System.out.println("Criteria List to be updated: " + criteriaList);
 
         projectService.updateTaskAcceptCriteria(taskID, criteriaList);
 

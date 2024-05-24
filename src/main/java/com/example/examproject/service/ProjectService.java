@@ -9,6 +9,7 @@ import com.example.examproject.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
@@ -23,21 +24,32 @@ public class ProjectService {
     }
 
 
+    public List<Task> openTasks(int projectID) {
+        return projectRepository.openTasks(projectID);
+    }
     public List<Task> assignedTasks(int projectID) {
         return projectRepository.assignedTasks(projectID);
+
     }
 
+    public List<Task> closedTasks(int projectID) {
+        return projectRepository.closedTasks(projectID);
+    }
 
+    public boolean closeTask(int taskID) {
+        return projectRepository.closeTask(taskID);
+    }
+  
     public void createTask(Task task, int userID, int projectID) {
         projectRepository.createTask(task, userID, projectID);
     }
 
-    public List<Task> imminentAssignedTasks(int projectID) {
-        return projectRepository.imminentAssignedTasks(projectID);
+    public List<Task> imminentOpenTasks(int projectID) {
+        return projectRepository.imminentOpenTasks(projectID);
     }
 
-    public List<Task> overdueAssignedTasks(int projectID) {
-        return projectRepository.overdueAssignedTasks(projectID);
+    public List<Task> overdueOpenTasks(int projectID) {
+        return projectRepository.overdueOpenTasks(projectID);
     }
 
     public boolean updateTask(Task task, int taskID) {
@@ -60,8 +72,12 @@ public class ProjectService {
         projectRepository.updateTask2(task, taskID);
     }
 
-    public Task findTask2(int taskID) {
-        return projectRepository.findTask2(taskID);
+    public Task findOpenTask(int taskID) {
+        return projectRepository.findOpenTask(taskID);
+    }
+
+    public Task findClosedTask(int taskID) {
+        return projectRepository.findClosedTask(taskID);
     }
 
     public void updateTaskAcceptCriteria(int taskID, List<TaskAcceptCriteria> taskAcceptCriteria) {

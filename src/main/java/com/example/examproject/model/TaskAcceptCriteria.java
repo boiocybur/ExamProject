@@ -4,15 +4,22 @@ public class TaskAcceptCriteria {
     private int taskID;
     private int criteriaID;
     private boolean taskStatus;
-    private String taskAcceptCriteria;
+    private String taskAcceptCriteriaTEXT;
 
-    public TaskAcceptCriteria(int criteriaID, boolean taskStatus, String taskAcceptCriteria) {
+    public TaskAcceptCriteria(int taskID, int criteriaID, boolean taskStatus, String taskAcceptCriteriaTEXT) {
+        this.taskID = taskID;
         this.criteriaID = criteriaID;
         this.taskStatus = taskStatus;
-        this.taskAcceptCriteria = taskAcceptCriteria;
+        this.taskAcceptCriteriaTEXT = taskAcceptCriteriaTEXT;
     }
 
     public TaskAcceptCriteria() {
+    }
+
+    public TaskAcceptCriteria(int criteriaID, boolean taskStatus, String taskAcceptCriteriaTEXT) {
+        this.criteriaID = criteriaID;
+        this.taskStatus = taskStatus;
+        this.taskAcceptCriteriaTEXT = taskAcceptCriteriaTEXT;
     }
 
     public int getTaskID() {
@@ -39,11 +46,21 @@ public class TaskAcceptCriteria {
         this.taskStatus = taskStatus;
     }
 
-    public String getTaskAcceptCriteria() {
-        return taskAcceptCriteria;
+    public String getTaskAcceptCriteriaTEXT() {
+        return taskAcceptCriteriaTEXT;
     }
 
-    public void setTaskAcceptCriteria(String taskAcceptCriteria) {
-        this.taskAcceptCriteria = taskAcceptCriteria;
+    public void setTaskAcceptCriteriaTEXT(String taskAcceptCriteriaTEXT) {
+        this.taskAcceptCriteriaTEXT = taskAcceptCriteriaTEXT;
+    }
+
+    @Override
+    public String toString() {
+        return "TaskAcceptCriteria{" +
+                "taskID=" + taskID +
+                ", criteriaID=" + criteriaID +
+                ", taskStatus=" + taskStatus +
+                ", taskAcceptCriteriaTEXT='" + taskAcceptCriteriaTEXT + '\'' +
+                '}';
     }
 }

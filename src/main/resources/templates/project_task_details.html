@@ -11,27 +11,38 @@
 </header>
 <main>
     <section>
-        <h2 th:text="${taskObject.taskName}">Task Name</h2>
-        <p><strong>Description:</strong> <span th:text="${taskObject.taskDescription}"></span></p>
-        <p><strong>Start Date:</strong> <span th:text="${taskObject.taskStartDate}"></span></p>
-        <p><strong>Due Date:</strong> <span th:text="${taskObject.taskDueDate}"></span></p>
-        <a th:href="@{|/project/${taskObject.projectID}/tasks|}">Back to Tasks</a>
+        <h2 th:text="${openTaskObject.taskName}">Task Name</h2>
+        <p><strong>Description:</strong> <span th:text="${openTaskObject.taskDescription}"></span></p>
+        <p><strong>Start Date:</strong> <span th:text="${openTaskObject.taskStartDate}"></span></p>
+        <p><strong>Due Date:</strong> <span th:text="${openTaskObject.taskDueDate}"></span></p>
+        <a th:href="@{|/project/${openTaskObject.projectID}/tasks|}">Back to Tasks</a>
 
         <h3>Acceptance Criteria</h3>
         <form id="criteriaForm" th:action="@{|/project/updateTaskCriteria|}" method="post">
-            <input type="hidden" name="taskID" th:value="${taskObject.taskID}">
-            <input type="hidden" name="projectID" th:value="${taskObject.projectID}">
+            <input type="hidden" name="taskID" th:value="${openTaskObject.taskID}">
+            <input type="hidden" name="projectID" th:value="${openTaskObject.projectID}">
             <ul>
-                <li th:each="criteria : ${taskAcceptCriteria}"> <!-- Corrected to use taskAcceptCriteria -->
+                <li th:each="criteria : ${openTaskObject.taskAcceptCriteria}">
                     <input type="hidden" name="criteriaID" th:value="${criteria.criteriaID}">
                     <label>
                         <input type="checkbox" name="criteriaStatus" th:value="${criteria.criteriaID}" th:checked="${criteria.taskStatus}">
-                        <span th:text="${criteria.taskAcceptCriteria}">Criteria</span>
+                        <span th:text="${criteria.taskAcceptCriteriaTEXT}">Criteria</span>
                     </label>
                 </li>
             </ul>
             <button type="submit">Update Criteria</button>
         </form>
+
+        <!-- Close Button -->
+        <form th:action="@{|/project/closeTask|}" method="post">
+            <input type="hidden" name="taskID" th:value="${openTaskObject.taskID}">
+            <input type="hidden" name="projectID" th:value="${openTaskObject.projectID}">
+            <button type="submit">Close Task</button>
+        </form>
+
+        <!-- Error Message -->
+        <p th:if="${errorMessage}" th:text="${errorMessage}" style="color:red;"></p>
+
     </section>
 </main>
 <footer>
