@@ -1,6 +1,7 @@
 CREATE SCHEMA if not exists alphaSolutions;
 use alphasolutions;
 
+drop table if exists tasksanduser;
 drop table if exists taskAcceptCriteria;
 drop table if exists tasks;
 drop table if exists projects;
@@ -41,7 +42,7 @@ CREATE TABLE tasks (
                        actualHours DOUBLE,
                        projectID INTEGER NOT NULL,
                        userID INTEGER NOT NULL,
-                        taskCompletionStatus BOOLEAN DEFAULT FALSE,
+                       taskCompletionStatus BOOLEAN DEFAULT FALSE,
                        FOREIGN KEY (projectID) REFERENCES projects(projectID)
                            ON DELETE CASCADE ON UPDATE CASCADE,
                        FOREIGN KEY (userID) REFERENCES users(userID)
@@ -58,6 +59,14 @@ CREATE TABLE taskAcceptCriteria (
                                     FOREIGN KEY (taskID) REFERENCES tasks(taskID)
                                         ON DELETE CASCADE ON UPDATE CASCADE,
                                     PRIMARY KEY (criteriaID)
+);
+
+CREATE TABLE tasksanduser (
+                              taskID INTEGER NOT NULL,
+                              userID INTEGER NOT NULL,
+                              FOREIGN KEY (taskID) REFERENCES tasks(taskID) ON DELETE CASCADE ON UPDATE CASCADE,
+                              FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
+                              PRIMARY KEY(taskID, userID)
 );
 
 
