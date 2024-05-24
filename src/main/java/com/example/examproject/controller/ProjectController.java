@@ -2,6 +2,7 @@ package com.example.examproject.controller;
 
 import com.example.examproject.model.Project;
 import com.example.examproject.model.Task;
+import com.example.examproject.model.User;
 import com.example.examproject.model.TaskAcceptCriteria;
 import com.example.examproject.service.ProjectListService;
 import com.example.examproject.service.ProjectService;
@@ -12,6 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,13 +173,13 @@ public class ProjectController {
             return "redirect:/projectList";
         }
     }
-  
+
     @PostMapping("/{projectID}/{taskID}/assignUserToTask")
     public String assignUserToTask(@PathVariable int projectID, @PathVariable int taskID, @RequestParam("userID") int userID) {
         projectService.assignUserToTask(userID, taskID);
         return "redirect:/project/" + projectID + "/tasks";
     }
-  
+
     @GetMapping("/{projectID}/budget")
     public String budgetOverview(@ModelAttribute("projectObject") Project project, @PathVariable int projectID, Model model) {
         projectService.findProjectById(projectID);
@@ -182,4 +187,62 @@ public class ProjectController {
         model.addAttribute("budgetRemaining", projectService.getBudgetRemaining(projectID));
         return "budgetOverview";
     }
+
+
+    @GetMapping("/{projectID}/time")
+    public String timeOverview(@ModelAttribute("projectObject") Project project, @PathVariable("projectID") int projectID, Model model) {
+        projectService.findProjectById(projectID);
+
+        double totalEstTime = projectService.getTotalEstimatedTime(projectID);
+        double totalActualTime = projectService.getTotalActualTime(projectID);
+        Duration totalDuration = projectService.getTotalDuration(projectID);
+
+        Period period = Period.ofDays((int) totalDuration.toDays());
+        long hours = totalDuration.toHours() % 24;
+
+        int years = period.getYears();
+        int months = period.getMonths();
+        int days = period.getDays();
+
+
+        model.addAttribute("project", project);
+        model.addAttribute("totalEstTime", totalEstTime);
+        model.addAttribute("totalActualTime", totalActualTime);
+        model.addAttribute("years", years);
+        model.addAttribute("months", months);
+        model.addAttribute("days", days);
+        model.addAttribute("hours", hours);
+
+        return "timeOverview";
+    }
+
+
+    @PostMapping("/{projectID}/{taskID}/removeUserFromTask")
+    public String removeUserFromTask(@PathVariable int projectID, @PathVariable int taskID, @RequestParam("userID") int userID, HttpSession session, RedirectAttributes redirectAttributes) {
+        Integer loggedInUserId = (Integer) session.getAttribute("userID");
+        if (loggedInUserId != null && (userService.isProjectManager(loggedInUserId) || userService.isAdmin(loggedInUserId))) {
+            projectService.removeAssignedUserToTask(userID, taskID);
+            redirectAttributes.addFlashAttribute("message", "User successfully removed from task.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "You do not have permission to remove users.");
+        }
+        return "redirect:/project/" + projectID + "/" + taskID + "/assignedUsers";
+    }
+
+    @GetMapping("/{projectID}/{taskID}/assignedUsers")
+    public String viewAssignedUsers(@PathVariable int projectID, @PathVariable int taskID, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        Integer loggedInUserId = (Integer) session.getAttribute("userID");
+        if (loggedInUserId != null && (userService.isProjectManager(loggedInUserId) || userService.isAdmin(loggedInUserId))) {
+            List<User> assignedUsers = projectService.getAssignedUsers(taskID);
+            model.addAttribute("projectID", projectID);
+            model.addAttribute("taskID", taskID);
+            model.addAttribute("assignedUsers", assignedUsers);
+            return "project_assigned_users";
+        } else {
+            redirectAttributes.addFlashAttribute("error", "You do not have permission to view assigned users.");
+            return "redirect:/projectList";
+        }
+
+    }
 }
+

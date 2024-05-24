@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Assigned Users</title>
+</head>
+<body>
+<h1>Assigned Users for Task</h1>
+<p th:text="'Project ID: ' + ${projectID}"></p>
+<p th:text="'Task ID: ' + ${taskID}"></p>
+
+<table>
+  <thead>
+  <tr>
+    <th>User ID</th>
+    <th>User Name</th>
+    <th>Email</th>
+    <th>Rank</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="user : ${assignedUsers}">
+    <td th:text="${user.userId}"></td>
+    <td th:text="${user.userName}"></td>
+    <td th:text="${user.userEmail}"></td>
+    <td th:text="${user.userRank}"></td>
+    <td>
+      <form th:action="@{|/project/${projectID}/${taskID}/removeUserFromTask|}" method="post" th:onsubmit="return confirm('Are you sure you want to remove this user?')">
+        <input type="hidden" name="userID" th:value="${user.userId}" />
+        <button type="submit">Remove</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<a th:href="'/project/' + ${projectID} + '/tasks'">Back to Task List</a>
+</body>
+</html>

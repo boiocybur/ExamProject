@@ -8,7 +8,6 @@ drop table if exists users;
 
 
 
-
 CREATE TABLE users (
                        userID INTEGER AUTO_INCREMENT,
                        userName VARCHAR(100),
@@ -23,8 +22,8 @@ CREATE TABLE projects (
                           projectName VARCHAR(255) NOT NULL,
                           projectDescription TEXT,
                           projectStartDate DATE,
-                          projectBudget DOUBLE,
                           projectDueDate DATE,
+                          projectBudget DOUBLE,
                           projectCompletionDate DATE,
                           userID INTEGER NOT NULL,
                           FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -38,6 +37,8 @@ CREATE TABLE tasks (
                        taskDescription TEXT,
                        taskStartDate DATE,
                        taskDueDate DATE,
+                       estimatedHours DOUBLE,
+                       actualHours DOUBLE,
                        projectID INTEGER NOT NULL,
                        userID INTEGER NOT NULL,
                         taskCompletionStatus BOOLEAN DEFAULT FALSE,
@@ -68,26 +69,26 @@ VALUES
 
 -- Overdue projects
 INSERT INTO projects
-(projectName, projectDescription, projectStartDate, projectBudget, projectDueDate, projectCompletionDate, userID)
+(projectName, projectDescription, projectStartDate, projectDueDate, projectBudget, projectCompletionDate, userID)
 VALUES
-    ('Website Redesign', 'Overdue website overhaul', '2022-01-01', 10000, '2023-04-01', NULL, 1),
-    ('Marketing Launch', 'Overdue launch of marketing campaign', '2022-02-01', 5000, '2023-04-10', NULL, 2);
+    ('Website Redesign', 'Overdue website overhaul', '2022-01-01', '2023-04-01', 10000, NULL, 1),
+    ('Marketing Launch', 'Overdue launch of marketing campaign', '2022-02-01', '2023-04-10', 5000, NULL, 2);
 
 -- Imminent projects
 INSERT INTO projects
-(projectName, projectDescription, projectStartDate, projectBudget, projectDueDate, projectCompletionDate, userID)
+(projectName, projectDescription, projectStartDate, projectDueDate, projectBudget, projectCompletionDate, userID)
 VALUES
-    ('New Software', 'Launch of new software version', '2023-01-01', 15000, '2024-05-10', NULL, 1),
-    ('Office Move', 'Relocation of office premises', '2023-02-01', 20000, '2024-05-15', NULL, 2);
+    ('New Software', 'Launch of new software version', '2023-01-01', '2024-05-10', 15000, NULL, 1),
+    ('Office Move', 'Relocation of office premises', '2023-02-01', '2024-05-15', 20000, NULL, 3);
 
 -- Completed projects
 INSERT INTO projects
-(projectName, projectDescription, projectStartDate, projectBudget, projectDueDate, projectCompletionDate, userID)
+(projectName, projectDescription, projectStartDate, projectDueDate, projectBudget, projectCompletionDate, userID)
 VALUES
-    ('App Update', 'Update of mobile application', '2022-01-01', 8000, '2025-04-01', '2024-05-04', 1),
-    ('HR System Overhaul', 'Complete revamp of HR system', '2022-02-01', 12000, '2025-04-20', '2024-05-07', 2);
+    ('App Update', 'Update of mobile application', '2022-01-01', '2025-04-01', 8000, '2024-05-04', 1),
+    ('HR System Overhaul', 'Complete revamp of HR system', '2022-02-01', '2025-04-20', 12000, '2024-05-07', 2);
 
--- Insert data into the tasks table (example entries)
+-- Insert data into the tasks table
 INSERT INTO tasks
 (projectID, taskName, taskDescription, taskStartDate, taskDueDate, userID, taskCompletionStatus)
 VALUES
@@ -141,6 +142,14 @@ VALUES
     (6, 'Logistics Optimization', 'Optimize logistics operations for faster and cheaper deliveries', '2024-09-08', '2024-09-23', 2, FALSE),
     (6, 'Employee Training Program Development', 'Develop training programs to enhance employee skills', '2024-09-13', '2024-09-28', 3, FALSE),
     (6, 'Performance Evaluation System Implementation', 'Implement a system for employee performance evaluations', '2024-09-18', '2024-10-03', 1, FALSE);
+
+(projectID, taskName, taskDescription, taskStartDate, taskDueDate, estimatedHours, actualHours, userID)
+VALUES
+    (1, 'layout task', 'Design new layout', '2022-01-10', '2022-02-10', 50, 60, 1),
+    (1,'implement features' ,'Implement responsive features', '2022-02-15', '2022-03-15', 100, 120, 1),
+    (2, 'market materials','Prepare marketing materials', '2022-02-05', '2022-03-05', 40, 30, 2),
+    (1, 'refactoring', 'refactor backend code', '2022-01-10', '2022-03-11', 80, 90, 1);
+
 
 INSERT INTO taskAcceptCriteria
 (taskID, taskAcceptCriteriaTEXT, taskStatus)

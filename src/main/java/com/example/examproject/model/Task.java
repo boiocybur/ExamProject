@@ -13,6 +13,8 @@ public class Task {
     private String taskDescription;
     private LocalDate taskStartDate;
     private LocalDate taskDueDate;
+    private double estimatedHours;
+    private double actualHours;
     private int projectID;
     private int userID;
     private List<TaskAcceptCriteria> taskAcceptCriteria;
@@ -24,6 +26,24 @@ public class Task {
         this.taskDescription = taskDescription;
         this.taskStartDate = taskStartDate;
         this.taskDueDate = taskDueDate;
+    }
+
+    public Task(int taskID, String taskName, String taskDescription, LocalDate taskStartDate, LocalDate taskDueDate, double estimatedHours, double actualHours, int projectID, int userID, List<TaskAcceptCriteria> taskAcceptCriteria) {
+        this.taskID = taskID;
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.taskStartDate = taskStartDate;
+        this.taskDueDate = taskDueDate;
+        this.estimatedHours = estimatedHours;
+        this.actualHours = actualHours;
+        this.projectID = projectID;
+        this.userID = userID;
+        this.taskAcceptCriteria = taskAcceptCriteria;
+    }
+
+    public Task(double estimatedHours, double actualHours){
+        this.estimatedHours = estimatedHours;
+        this.actualHours = actualHours;
     }
 
     public Task(int taskID, String taskName, String taskDescription, LocalDate taskStartDate, LocalDate taskDueDate, int projectID, int userID) {
@@ -72,6 +92,22 @@ public class Task {
 
     public String getTaskName() {
         return taskName;
+    }
+
+    public double getEstimatedHours() {
+        return estimatedHours;
+    }
+
+    public void setEstimatedHours(double estimatedHours) {
+        this.estimatedHours = estimatedHours;
+    }
+
+    public double getActualHours() {
+        return actualHours;
+    }
+
+    public void setActualHours(double actualHours) {
+        this.actualHours = actualHours;
     }
 
     public void setTaskName(String taskName) {

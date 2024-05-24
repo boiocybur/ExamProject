@@ -3,11 +3,15 @@ package com.example.examproject.service;
 
 import com.example.examproject.model.Project;
 import com.example.examproject.model.Task;
+import com.example.examproject.model.User;
 import com.example.examproject.model.TaskAcceptCriteria;
 import com.example.examproject.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,10 +24,12 @@ public class ProjectService {
     }
 
 
-
-
     public List<Task> openTasks(int projectID) {
         return projectRepository.openTasks(projectID);
+    }
+    public List<Task> assignedTasks(int projectID) {
+        return projectRepository.assignedTasks(projectID);
+
     }
 
     public List<Task> closedTasks(int projectID) {
@@ -33,7 +39,7 @@ public class ProjectService {
     public boolean closeTask(int taskID) {
         return projectRepository.closeTask(taskID);
     }
-
+  
     public void createTask(Task task, int userID, int projectID) {
         projectRepository.createTask(task, userID, projectID);
     }
@@ -97,8 +103,40 @@ public class ProjectService {
     public double getBudgetRemaining(int projectID) {
         return projectRepository.getBudgetRemaining(projectID);
     }
-  
-    public Project findProjectById(int projectID){
+
+    public Project findProjectById(int projectID) {
         return projectRepository.findProjectById(projectID);
+    }
+
+    public int getTimeSpent() {
+        return projectRepository.getTimeSpent();
+    }
+
+    public int getTimeTotal() {
+        return projectRepository.getTimeTotal();
+    }
+
+    public int getTimeLeft() {
+        return projectRepository.getTimeLeft();
+    }
+
+    public void removeAssignedUserToTask(int userID, int taskID) {
+        projectRepository.removeAssignedTaskToUser(userID, taskID);
+    }
+
+    public List<User> getAssignedUsers(int taskID) {
+        return projectRepository.findAssignedUsersByTaskID(taskID);
+    }
+
+    public Double getTotalEstimatedTime(int projectID) {
+        return projectRepository.getTotalEstimatedTime(projectID);
+    }
+
+    public Double getTotalActualTime(int projectID) {
+        return projectRepository.getTotalActualTime(projectID);
+    }
+
+    public Duration getTotalDuration(int projectID) {
+        return projectRepository.getTotalDuration(projectID);
     }
 }

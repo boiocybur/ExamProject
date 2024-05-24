@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -580,13 +581,150 @@ public class ProjectRepository {
     }
 
     public double getBudgetSpent(int projectID) {
-        Period period = Period.between(project.getProjectStartDate(), LocalDate.now());
-        int daysSpent = period.getDays() + period.getMonths() * 30 + period.getYears() * 365;
-        double dailyBudgetRate = project.getProjectBudget() / (Period.between(project.getProjectStartDate(), project.getProjectDueDate()).getDays() + 1);
-        return daysSpent * dailyBudgetRate;
+        Project project = findProjectById(projectID);
+        LocalDate startDate = project.getProjectStartDate();
+        LocalDate dueDate = project.getProjectDueDate();
+        LocalDate currentDate = LocalDate.now();
+
+        if (startDate == null || dueDate == null) {
+            return 0.0;
+        }
+
+        long totalDays = java.time.temporal.ChronoUnit.DAYS.between(startDate, dueDate);
+        long daysSpent = java.time.temporal.ChronoUnit.DAYS.between(startDate, currentDate);
+
+        // Avoid division by zero
+        if (totalDays == 0) {
+            return 0.0;
+        }
+
+        double dailyBudgetRate = project.getProjectBudget() / totalDays;
+        double budgetSpent = daysSpent * dailyBudgetRate;
+
+        // Ensure budget spent does not exceed the total budget
+        return Math.min(budgetSpent, project.getProjectBudget());
     }
 
     public double getBudgetRemaining(int projectID) {
-        return project.getProjectBudget() - getBudgetSpent(projectID);
+        Project project = findProjectById(projectID);
+        double budgetSpent = getBudgetSpent(projectID);
+        return project.getProjectBudget() - budgetSpent;
+    }
+
+
+
+    public int getTimeTotal() {
+        Period period = Period.between(project.getProjectStartDate(), project.getProjectDueDate());
+        return period.getYears() * 365 + period.getMonths() * 30 + period.getDays();
+    }
+
+    public int getTimeSpent() {
+        Period period = Period.between(project.getProjectStartDate(), LocalDate.now());
+        return period.getYears() * 365 + period.getMonths() * 30 + period.getDays();
+    }
+
+    public int getTimeLeft() {
+        Period period = Period.between(LocalDate.now(), project.getProjectDueDate());
+        return period.getYears() * 365 + period.getMonths() * 30 + period.getDays();
+    }
+
+    public Double getTotalEstimatedTime(int projectID) {
+        Double totalEstimatedTime = 0.0;
+        String sql = """
+                SELECT COALESCE(SUM(estimatedHours), 0) 
+                AS totalEstTime
+                FROM tasks 
+                WHERE projectID = ?
+                """;
+        try {
+            Connection con = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, projectID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                totalEstimatedTime = rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return totalEstimatedTime;
+    }
+
+    public Double getTotalActualTime(int projectID) {
+        Double totalActualTime = 0.0;
+        Connection con = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String sql = "SELECT COALESCE(SUM(actualHours), 0) AS totalActualTime " +
+                "FROM tasks WHERE projectID = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, projectID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                totalActualTime = rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return totalActualTime;
+    }
+
+    public Duration getTotalDuration(int projectID) {
+        Duration totalDuration = Duration.ZERO;
+        try (Connection con = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword)) {
+            String SQL = "SELECT taskStartDate, taskDueDate " +
+                    "FROM tasks WHERE projectID = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectID);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                LocalDate startDate = rs.getDate("taskStartDate").toLocalDate();
+                LocalDate dueDate = rs.getDate("taskDueDate").toLocalDate();
+                totalDuration = totalDuration.plus(Duration.between(startDate.atStartOfDay(), dueDate.atStartOfDay()));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return totalDuration;
+    }
+
+    public void removeAssignedTaskToUser(int userID, int taskID) {
+        try {
+            Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+            String query = "DELETE FROM tasksanduser WHERE taskID=? AND userID=?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, taskID);
+            preparedStatement.setInt(2, userID);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<User> findAssignedUsersByTaskID(int taskID) {
+        List<User> assignedUsers = new ArrayList<>();
+        try {
+            Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+            String query = "SELECT * FROM users WHERE userID IN \n" +
+            "(SELECT userID FROM tasksanduser WHERE taskID = ?)";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, taskID);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setUserId(resultSet.getInt("userID"));
+                user.setUserName(resultSet.getString("userName"));
+                user.setPassword(resultSet.getString("userPassword"));
+                user.setUserEmail(resultSet.getString("userEmail"));
+                user.setUserRank(resultSet.getString("userRank"));
+                assignedUsers.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return assignedUsers;
     }
 }
