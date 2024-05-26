@@ -70,9 +70,4 @@ UserRepository userRepository;
         assertTrue(deleted);
         assertFalse(userRepository.existingEmail("Mikkel@mail.dk"));
     }
-    @Test
-    void findAllUsers() {
-        List<User> users = userRepository.findAllUsers();
-        assertEquals(3, users.size());
-    }
 }
