@@ -96,7 +96,7 @@ public class UserRepository {
     public boolean loginUser(String userEmail, String password) {
         //Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String query = "SELECT COUNT(*) AS count FROM users WHERE userEmail = ? AND userPassword = ?";
-        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
+        try (Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
              PreparedStatement pstmt = connection.prepareStatement(query)) {
 
             pstmt.setString(1, userEmail);
@@ -155,7 +155,7 @@ public class UserRepository {
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM users";
 
-        try (Connection connection = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
+        try (Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
 
