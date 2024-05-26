@@ -644,8 +644,6 @@ public class ProjectRepository {
         return project.getProjectBudget() - budgetSpent;
     }
 
-
-
     public int getTimeTotal() {
         Period period = Period.between(project.getProjectStartDate(), project.getProjectDueDate());
         return period.getYears() * 365 + period.getMonths() * 30 + period.getDays();
