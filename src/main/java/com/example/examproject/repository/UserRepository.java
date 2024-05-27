@@ -94,10 +94,9 @@ public class UserRepository {
         }
     }
     public boolean loginUser(String userEmail, String password) {
-        //Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         String query = "SELECT COUNT(*) AS count FROM users WHERE userEmail = ? AND userPassword = ?";
-        try (Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
-             PreparedStatement pstmt = connection.prepareStatement(query)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 
             pstmt.setString(1, userEmail);
             pstmt.setString(2, password);
@@ -152,11 +151,11 @@ public class UserRepository {
         }
     }
     public List<User> findAllUsers() {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM users";
 
-        try (Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
-             Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
