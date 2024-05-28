@@ -26,11 +26,6 @@ public class ProjectListService {
     public Project findProjectWithCompletionDate(int projectID) {
         return projectListRepository.findProjectWithCompletionDate(projectID);
     }
-
-    public Project findProjectIDByProjectName(String projectName) {
-        return projectListRepository.findIDByProjectName(projectName);
-    }
-
     public boolean updateProject(Project project) {
         return projectListRepository.updateProject(project);
     }
@@ -41,9 +36,5 @@ public class ProjectListService {
 
     public List<Project> getOpenProjectsCreatedByUser(int userID) {
         return projectListRepository.getOpenProjectsCreatedByUser(userID);
-    }
-
-    public List<Project> getClosedProjectsCreatedByUser(int userID) {
-        return projectListRepository.getClosedProjectsCreatedByUser(userID);
     }
 }
