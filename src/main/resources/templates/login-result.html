@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>resultat side</title>
+    <title>Login</title>
     <link rel="stylesheet" th:href="@{/main.css}">
 </head>
 <body>
-<h2>Current User:</h2>
+<h2>Nuværende bruger:</h2>
 <p th:if="${#ctx.session.isLoggedIn != null}" th:text="'Logged in as ' + ${#ctx.session.userEmail}"></p>
-<p th:unless="${#ctx.session.isLoggedIn != null}">No user logged in. Please login or register.</p>
+<p th:unless="${#ctx.session.isLoggedIn != null}">Ingen bruger er logget ind. Venligst login.</p>
 </body>
 </html>
