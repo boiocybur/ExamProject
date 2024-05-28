@@ -11,27 +11,27 @@
         <input type="hidden" name="projectID" th:value="${project.projectID}">
 
         <div>
-            <label for="projectName">Project name</label><br>
+            <label for="projectName">Projekt navn</label><br>
             <input id="projectName" th:field="*{projectName}" placeholder="projectName"><br>
         </div>
 
         <div>
-            <label for="projectDescription">Description</label><br>
+            <label for="projectDescription">Beskrivelse</label><br>
             <input id="projectDescription" th:field="*{projectDescription}" placeholder="project description"><br>
         </div>
 
         <div>
-            <label for="projectStartDate">Price</label><br>
+            <label for="projectStartDate">Projekt start dato</label><br>
             <input id="projectStartDate" type="date" th:field="*{projectStartDate}" min="2024-01-01T00:00"><br>
         </div>
 
         <div>
-            <label for="projectBudget">Project Budget</label><br>
+            <label for="projectBudget">Projekt budget</label><br>
             <input id="projectBudget" th:field="*{projectBudget}" placeholder="project budget"><br>
         </div>
 
         <div>
-            <label for="projectDueDate">Project Due Date</label><br>
+            <label for="projectDueDate">Projekt deadline</label><br>
             <input id="projectDueDate" type="date" th:field="*{projectDueDate}" min="2024-01-01T00:00"><br>
         </div>
 

@@ -2,48 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create Task</title>
+    <title>Opret task</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <header>
-    <h1>Create Task for Project</h1>
+    <h1>Opret task til projekt</h1>
 </header>
 <body>
 <fieldset>
-    <legend>Create Task</legend>
+    <legend>Opret task</legend>
     <form th:action="@{'/project/createTask'}" th:object="${taskObject}" method="post">
 
         <input type="hidden" name="userID" th:value="${#ctx.session.userID}">
         <input type="hidden" name="projectID" th:value="${projectID}">
 
         <p>
-            <label for="taskName">Task Name</label>
+            <label for="taskName">Task navn</label>
             <input id="taskName" th:field="*{taskName}" placeholder="Task Name">
         </p>
 
         <p>
-            <label for="taskDescription">Task Description</label>
+            <label for="taskDescription">Task beskrivelse</label>
             <input id="taskDescription" th:field="*{taskDescription}" placeholder="Task Description">
         </p>
 
         <p>
-            <label for="taskStartDate">Task Start Date</label>
+            <label for="taskStartDate">Task start dato</label>
             <input id="taskStartDate" type="date" th:field="*{taskStartDate}" placeholder="Task Start Date">
         </p>
 
         <p>
-            <label for="taskDueDate">Task Due Date</label>
+            <label for="taskDueDate">Task deadline</label>
             <input id="taskDueDate" type="date" th:field="*{taskDueDate}" placeholder="Task Due Date">
         </p>
 
         <p>
-            <label for="taskAcceptCriteria">Acceptance Criteria</label>
+            <label for="taskAcceptCriteria">Accept kriterier</label>
             <textarea id="taskAcceptCriteria" th:field="*{taskAcceptCriteria}" placeholder="Acceptance Criteria"></textarea>
         </p>
 
         <input id="taskID" type="hidden" th:field="*{taskID}">
 
-        <button type="submit">Create Task</button>
+        <button type="submit">Opret task</button>
         <a th:href="@{'/projectList'}">
             <input type="button" value="Cancel" class="button">
         </a>
