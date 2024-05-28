@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Time Overview</title>
+    <title>Tidsoverblik</title>
     <link th:href="@{/main.css}" rel="stylesheet">
     <style>
         body {
@@ -48,39 +48,39 @@
 </head>
 <body>
 <header>
-    <h1>Time Overview for Project: <span th:text="${project.projectName}">Project Name</span></h1>
+    <h1>Tidsoverblik for projekt: <span th:text="${project.projectName}">Projekt navn</span></h1>
 </header>
 <main>
     <section>
         <table>
             <thead>
             <tr>
-                <th>Years</th>
-                <th>Months</th>
-                <th>Days</th>
-                <th>Hours</th>
+                <th>År</th>
+                <th>Måneder</th>
+                <th>Dage</th>
+                <th>Timer</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td th:text="${years}">Years</td>
-                <td th:text="${months}">Months</td>
-                <td th:text="${days}">Days</td>
-                <td th:text="${hours}">Hours</td>
+                <td th:text="${years}">År</td>
+                <td th:text="${months}">Måneder</td>
+                <td th:text="${days}">Dage</td>
+                <td th:text="${hours}">Timer</td>
             </tr>
             </tbody>
         </table>
         <table>
             <thead>
             <tr>
-                <th>Total Estimated Hours</th>
-                <th>Total Actual Hours</th>
+                <th>Total estimerede timer</th>
+                <th>Total aktuelle timer</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td th:text="${totalEstTime}">Total Estimated Hours</td>
-                <td th:text="${totalActualTime}">Total Actual Hours</td>
+                <td th:text="${totalEstTime}">Total estimerede timer</td>
+                <td th:text="${totalActualTime}">Total aktuelle timer</td>
             </tr>
             </tbody>
         </table>

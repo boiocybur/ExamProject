@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Update Task</title>
+    <title>Opdater task</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
@@ -13,34 +13,34 @@
         <input type="hidden" name="projectID" th:value="${projectID}">
 
         <div>
-            <label for="taskName">Name</label><br>
+            <label for="taskName">Navn</label><br>
             <input id="taskName" th:field="*{taskName}" placeholder="Task Name"><br>
         </div>
 
         <div>
-            <label for="taskDescription">Description</label><br>
+            <label for="taskDescription">Beskrivelse</label><br>
             <input id="taskDescription" th:field="*{taskDescription}" placeholder="Task Description"><br>
         </div>
 
         <div>
-            <label for="taskStartDate">Start Date</label><br>
+            <label for="taskStartDate">Start dato</label><br>
             <input id="taskStartDate" type="date" th:field="*{taskStartDate}" min="2024-01-01"><br>
         </div>
 
         <div>
-            <label for="taskDueDate">Due Date</label><br>
+            <label for="taskDueDate">Deadline</label><br>
             <input id="taskDueDate" type="date" th:field="*{taskDueDate}" min="2024-01-01"><br>
         </div>
 
         <div>
-            <label>Acceptance Criteria</label><br>
+            <label>Accept kriteria</label><br>
             <div th:each="criterion, iterStat : ${criteriaList}">
-                <!-- Add hidden inputs for taskID and taskStatus -->
+
                 <input type="hidden" name="taskID" th:value="${taskID}">
                 <input type="hidden" name="projectID" th:value="${projectID}">
-                <!-- Use indexed names for each input -->
+
                 <label th:for="'acceptanceCriterion_' + ${iterStat.index}" th:text="'Criterion ' + ${iterStat.index + 1}"></label>
-                <!-- Use indexed names for text input and checkbox -->
+
                 <label>
                     <input type="text" th:id="'acceptanceCriterion_' + ${iterStat.index}" th:name="'criteriaListText[' + ${iterStat.index} + ']'" th:value="${criterion.taskAcceptCriteriaTEXT}">
                 </label>
