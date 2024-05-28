@@ -30,7 +30,9 @@ public class ProjectRepository {
     private Task task;
     private Project project;
     private TaskAcceptCriteria taskAcceptCriteria;
-    
+
+
+
 
     public List<Task> openTasks(int projectID) {
         List<Task> tasks = new ArrayList<>();
