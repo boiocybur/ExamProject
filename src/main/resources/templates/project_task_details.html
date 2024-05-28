@@ -2,22 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Task Details</title>
+    <title>Task Detaljer</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
 <header>
-    <h1>Task Details</h1>
+    <h1>Task Detaljer</h1>
 </header>
 <main>
     <section>
         <h2 th:text="${openTaskObject.taskName}">Task Name</h2>
-        <p><strong>Description:</strong> <span th:text="${openTaskObject.taskDescription}"></span></p>
-        <p><strong>Start Date:</strong> <span th:text="${openTaskObject.taskStartDate}"></span></p>
-        <p><strong>Due Date:</strong> <span th:text="${openTaskObject.taskDueDate}"></span></p>
+        <p><strong>Beskrivelse:</strong> <span th:text="${openTaskObject.taskDescription}"></span></p>
+        <p><strong>Start dato:</strong> <span th:text="${openTaskObject.taskStartDate}"></span></p>
+        <p><strong>Deadline:</strong> <span th:text="${openTaskObject.taskDueDate}"></span></p>
         <a th:href="@{|/project/${openTaskObject.projectID}/tasks|}">Back to Tasks</a>
 
-        <h3>Acceptance Criteria</h3>
+        <h3>Accept kriterier</h3>
         <form id="criteriaForm" th:action="@{|/project/updateTaskCriteria|}" method="post">
             <input type="hidden" name="taskID" th:value="${openTaskObject.taskID}">
             <input type="hidden" name="projectID" th:value="${openTaskObject.projectID}">
@@ -26,18 +26,18 @@
                     <input type="hidden" name="criteriaID" th:value="${criteria.criteriaID}">
                     <label>
                         <input type="checkbox" name="criteriaStatus" th:value="${criteria.criteriaID}" th:checked="${criteria.taskStatus}">
-                        <span th:text="${criteria.taskAcceptCriteriaTEXT}">Criteria</span>
+                        <span th:text="${criteria.taskAcceptCriteriaTEXT}">Kriterier</span>
                     </label>
                 </li>
             </ul>
-            <button type="submit">Update Criteria</button>
+            <button type="submit">Opdater Kriterier</button>
         </form>
 
         <!-- Close Button -->
         <form th:action="@{|/project/closeTask|}" method="post">
             <input type="hidden" name="taskID" th:value="${openTaskObject.taskID}">
             <input type="hidden" name="projectID" th:value="${openTaskObject.projectID}">
-            <button type="submit">Close Task</button>
+            <button type="submit">Luk Task</button>
         </form>
 
         <!-- Error Message -->
