@@ -7,9 +7,9 @@
 </head>
 <body>
 
-<h2>Nuværende bruger:</h2>
+<h2>Current User:</h2>
 <p th:if="${#ctx.session.isLoggedIn != null}" th:text="'Logged in as ' + ${#ctx.session.userEmail}"></p>
-<p th:unless="${#ctx.session.isLoggedIn != null}">Ingen bruger er logget ind. Venligst login.</p>
+<p th:unless="${#ctx.session.isLoggedIn != null}">No user logged in. Please login or register.</p>
 
 <form action="/login" method="post">
     <label for="userEmail">Email:</label>
@@ -21,18 +21,18 @@
     <input type="submit" value="Login" class="btn"/>
 
     <div th:if="${param.error}">
-        <p>Forkert email eller password, prøv igen.</p>
+        <p>Invalid Email or password, please try again.</p>
     </div>
 </form>
 
 <footer class="footer">
     <div th:if="${#ctx.session.isLoggedIn != null}">
-        <a th:href="@{'' + ${#ctx.session.userEmail} + '/delete'}" class="btn">Slet konto</a>
-        <a href="/logout" class="btn">log ud</a>
-        <a th:href="@{'' + ${#ctx.session.userID} + '/edit'}" class="btn">Rediger konto</a>
+        <a th:href="@{'' + ${#ctx.session.userEmail} + '/delete'}" class="btn">Delete Account</a>
+        <a href="/logout" class="btn">Logout</a>
+        <a th:href="@{'' + ${#ctx.session.userID} + '/edit'}" class="btn">Edit Account</a>
     </div>
     <div th:unless="${#ctx.session.isLoggedIn != null}">
-        <a href="/createUser" class="btn">Registrer bruger</a>
+        <a href="/createUser" class="btn">Register</a>
     </div>
 </footer>
 

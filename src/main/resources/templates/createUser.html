@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registrer bruger</title>
+    <title>Register</title>
     <link rel="stylesheet" th:href="@{/main.css}">
 </head>
 <body>
 <div class="container">
     <header class="header">
-        <h1>Registrer bruger</h1>
+        <h1>Regiser user</h1>
     </header>
 
     <div th:if="${success}" class="success-message">
@@ -22,28 +22,28 @@
 
     <form th:action="@{/createUser}" th:method="post" th:object="${userForm}">
 
-        <label for="userName">Navn:</label>
+        <label for="userName">User Name:</label>
         <input type="text" id="userName" th:field="*{userName}" required>
 
-        <label for="password">Password:</label>
+        <label for="password">User Password:</label>
         <input type="password" id="password" th:field="*{password}" required>
 
-        <label for="userEmail">Email:</label>
+        <label for="userEmail">User Email:</label>
         <input type="text" id="userEmail" th:field="*{userEmail}" required>
 
         <label for="userRank">Kompetencer:</label>
         <select id="userRank" th:field="*{userRank}" required>
             <option value="admin" th:selected="${userForm.userRank == 'admin'}">Admin</option>
-            <option value="projectManager" th:selected="${userForm.userRank == 'projectManager'}">Projektmanager</option>
+            <option value="projectManager" th:selected="${userForm.userRank == 'projectManager'}">Project Manager</option>
             <option value="frontend" th:selected="${userForm.userRank == 'frontend'}">FrontEnd</option>
             <option value="backend" th:selected="${userForm.userRank == 'backend'}">BackEnd</option>
         </select>
 
-        <button type="submit">Registrer</button>
+        <button type="submit">Register</button>
     </form>
 </div>
 <footer class="footer">
-    <a href="/login" class="btn">tilbage til hjem</a>
+    <a href="/login" class="btn">Return Home</a>
 </footer>
 </body>
 </html>

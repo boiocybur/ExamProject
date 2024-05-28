@@ -20,6 +20,35 @@ public class ProjectListRepository {
 
     private Project project;
 
+
+
+    public Project findIDByProjectName(String projectName) {
+        String sql = """
+                SELECT projectName, projectDescription, projectID, projectStartDate, projectDueDate, projectBudget FROM projects WHERE projectName = ?
+                """;
+
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, projectName);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                project = new Project(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getInt(3),
+                        rs.getDate(4).toLocalDate(),
+                        rs.getDate(5).toLocalDate(),
+                        rs.getDouble(6)
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } return project;
+    }
+
     public Project findProjectNoCompletionDate(int projectID) {
         String sql = """
         SELECT projectName, projectDescription, projectID, projectStartDate, projectDueDate, projectBudget
@@ -55,9 +84,8 @@ public class ProjectListRepository {
         FROM projects 
         WHERE projectID = ?
         """;
-
-        try (        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
-                     PreparedStatement ps = connection.prepareStatement(sql)) {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, projectID);
             ResultSet rs = ps.executeQuery();
@@ -95,7 +123,6 @@ public class ProjectListRepository {
             ps.setDouble(4, project.getProjectBudget());
             ps.setDate(5, Date.valueOf(project.getProjectDueDate()));
             ps.setInt(6, project.getProjectID());
-            rows = ps.executeUpdate();
             rows = ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -147,5 +174,41 @@ public class ProjectListRepository {
             throw new RuntimeException(e);
         }
         return items;
+    }
+
+
+    public List<Project> getClosedProjectsCreatedByUser(int userID) {
+        List<Project> projects = new ArrayList<>();
+        String sql = """
+            SELECT projects.projectID, projects.projectName, projects.projectDescription, projects.projectStartDate, projects.projectBudget, projects.projectDueDate, projects.projectCompletionDate, users.userName 
+            FROM projects
+            LEFT JOIN users ON projects.userID = users.userID
+            WHERE users.userID = ? AND projects.projectCompletionDate IS NOT NULL
+            """;
+
+
+        try (Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Project project = new Project();
+                project.setProjectID(resultSet.getInt("projectID"));
+                project.setProjectName(resultSet.getString("projectName"));
+                project.setProjectDescription(resultSet.getString("projectDescription"));
+                project.setProjectStartDate(resultSet.getDate("projectStartDate").toLocalDate());
+                project.setProjectBudget(resultSet.getDouble("projectBudget"));
+                project.setProjectDueDate(resultSet.getDate("projectDueDate").toLocalDate());
+                project.setCompletionDate(resultSet.getDate("projectCompletionDate").toLocalDate());
+
+                projects.add(project);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return projects;
     }
 }

@@ -13,7 +13,7 @@
 </nav>
 
 <div class="content">
-    <h1>Liste af igangværende projekter</h1>
+    <h1>list of ongoing projects</h1>
     <p th:text="${welcome}"></p>
     <div th:if="${error}" class="error-message">
         <p th:text="${error}"></p>
@@ -21,8 +21,8 @@
     <table class="mainTable">
         <tbody>
         <tr>
-            <th>Projekt navn</th>
-            <th>Projekt ID</th>
+            <th>Project Name</th>
+            <th>project ID</th>
         </tr>
         <tr th:each="project : ${projectList}">
             <td class="table-header" th:text="${project.getProjectName()}"></td>
@@ -47,7 +47,10 @@
     </a>
 </div>
 <footer>
-    <p>&copy; 2024 AlphaSolutions</p>
+    <div class="contact">
+        <h2>Contact</h2>
+        <p>Write your contacts in here</p>
+    </div>
 </footer>
 </body>
 </html>
