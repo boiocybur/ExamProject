@@ -27,7 +27,7 @@
 </head>
 <body>
 <header>
-    <h1>Projekt dashboard: <span th:text="${projectObject.projectName}">Projekt navn</span></h1>
+    <h1>Dashboard for Project: <span th:text="${projectObject.projectName}">Project Name</span></h1>
 </header>
 <main>
     <a th:href="@{|/project/${projectID}/tasks|}">
@@ -45,18 +45,18 @@
 
     <!-- Imminent Tasks Section -->
     <section>
-        <h2>Forestående tasks</h2>
+        <h2>Imminent Tasks</h2>
         <table>
             <thead>
             <tr>
-                <th>Task navn</th>
-                <th>Deadline</th>
+                <th>Task Name</th>
+                <th>Due Date</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="task : ${imminentTasks}">
-                <td th:text="${task.getTaskName()}">Task navn</td>
-                <td th:text="${task.getTaskDueDate()}">Deadline</td>
+                <td th:text="${task.getTaskName()}">Task Name</td>
+                <td th:text="${task.getTaskDueDate()}">Task Due Date</td>
             </tr>
             </tbody>
         </table>
@@ -64,18 +64,18 @@
 
     <!-- Overdue Tasks Section -->
     <section>
-        <h2>Overskredne tasks</h2>
+        <h2>Overdue Tasks</h2>
         <table>
             <thead>
             <tr>
-                <th>Task navn</th>
-                <th>Deadline</th>
+                <th>Task Name</th>
+                <th>Due Date</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="task : ${overdueTasks}">
-                <td th:text="${task.taskName}">Task navn</td>
-                <td th:text="${task.taskDueDate}">Deadline</td>
+                <td th:text="${task.taskName}">Task Name</td>
+                <td th:text="${task.taskDueDate}">Task Due Date</td>
             </tr>
             </tbody>
         </table>
@@ -83,18 +83,20 @@
 
     <!-- Budget Overview Section -->
     <section>
-        <h2>Budget overblik</h2>
+        <h2>Budget Overview</h2>
         <table>
             <thead>
             <tr>
-                <th>Totalt budget</th>
-                <th>Brugt</th>
-                <th>Tilbage</th>
+                <th>Total Budget</th>
+                <th>Spent</th>
+                <th>Remaining</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td th:text="${projectObject.projectBudget}">Projekt budget</td>
+                <td th:text="${projectObject.projectBudget}">Project Budget</td>
+              <!--  <td th:text="${budgetSpent}">Budget Spent</td>
+                <td th:text="${budgetRemaining}">Budget Remaining</td> -->
             </tr>
             </tbody>
         </table>

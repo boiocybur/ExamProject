@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tilføj udviklere til task</title>
+    <title>Assign Users to Task</title>
 </head>
 <body>
-<h2>Tilføj udviklere til task</h2>
+<h2>Assign Users to Task</h2>
 <form th:action="@{|/project/${projectID}/${taskID}/assignUserToTask|}" method="POST">
     <input type="hidden" name="projectID" th:value="${projectID}">
     <input type="hidden" name="taskID" th:value="${taskID}">
-    <label for="userID">Vælg udvilker:</label>
+    <label for="userID">Select User:</label>
     <select name="userID" id="userID">
-        <option value="">Vælg udvikler</option>
+        <option value="">Select User</option>
         <th:block th:each="user : ${users}">
             <option th:value="${user.userId}" th:text="${user.userName}"></option>
         </th:block>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Budget overblik</title>
+    <title>Budget Overview</title>
     <link th:href="@{/main.css}" rel="stylesheet">
     <style>
         body {
@@ -48,23 +48,23 @@
 </head>
 <body>
 <header>
-    <h1>Budget overblik for projekt: <span th:text="${projectObject.projectName}">Projekt navn</span></h1>
+    <h1>Budget Overview for Project: <span th:text="${projectObject.projectName}">Project Name</span></h1>
 </header>
 <main>
     <section>
         <table>
             <thead>
             <tr>
-                <th>Total budget</th>
-                <th>Brugt</th>
-                <th>Tilbageværende</th>
+                <th>Total Budget</th>
+                <th>Spent</th>
+                <th>Remaining</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td th:text="${projectObject.projectBudget}">Total budget</td>
-                <td th:text="${budgetSpent}">Brugt</td>
-                <td th:text="${budgetRemaining}">Tilbageværende</td>
+                <td th:text="${projectObject.projectBudget}">Total Budget</td>
+                <td th:text="${budgetSpent}">Budget Spent</td>
+                <td th:text="${budgetRemaining}">Budget Remaining</td>
             </tr>
             </tbody>
         </table>

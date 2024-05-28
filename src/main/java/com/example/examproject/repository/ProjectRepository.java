@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,6 +157,26 @@ public class ProjectRepository {
         return overdueTasks;
     }
 
+
+
+    public void createTask(Task task, int userID, int projectID) {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        String sql = "INSERT INTO tasks (projectID, taskName, taskDescription, taskStartDate, taskDueDate, userID) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, projectID);
+            pstmt.setString(2, task.getTaskName());
+            pstmt.setString(3, task.getTaskDescription());
+            pstmt.setDate(4, Date.valueOf(task.getTaskStartDate()));
+            pstmt.setDate(5, Date.valueOf(task.getTaskDueDate()));
+            pstmt.setInt(6, userID);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean updateTask(Task task, int taskID) {
         int rows = 0;
         String sql = """
@@ -228,7 +249,7 @@ public class ProjectRepository {
         }
     }
 
-    public void createTask(Task task, int userID, int projectID) {
+    public void createTask2(Task task, int userID, int projectID) {
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
 
         String sql = "INSERT INTO tasks (projectID, taskName, taskDescription, taskStartDate, taskDueDate, userID) VALUES (?, ?, ?, ?, ?, ?)";
@@ -363,6 +384,64 @@ public class ProjectRepository {
         }
     }
 
+    public Task findClosedTask2(int taskID) {
+        String sql = """
+        SELECT *
+        FROM tasks 
+        WHERE taskID = ? AND taskCompletionStatus IS TRUE
+        """;
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, taskID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                task = new Task(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDate(4).toLocalDate(),
+                        rs.getDate(5).toLocalDate(),
+                        rs.getInt(6),
+                        rs.getInt(7),
+                        rs.getBoolean(8)
+                );
+                return task;
+            } else {
+                return null;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public boolean updateTask2(Task task, int taskID) {
+        int rows = 0;
+        String sql = """
+        UPDATE tasks 
+        SET taskName = ?, taskDescription = ?, taskStartDate = ?, taskDueDate = ?
+        WHERE taskID = ?
+        """;
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, task.getTaskName());
+            ps.setString(2, task.getTaskDescription());
+            ps.setDate(3, Date.valueOf(task.getTaskStartDate()));
+            ps.setDate(4, Date.valueOf(task.getTaskDueDate()));
+            ps.setInt(5, taskID);
+            rows = ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return rows == 1;
+    }
+
+
     public void updateTaskAcceptCriteria(int taskID, List<TaskAcceptCriteria> criteriaList) {
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
 
@@ -405,6 +484,33 @@ public class ProjectRepository {
         return criteriaList;
     }
 
+    public TaskAcceptCriteria findTaskAcceptCriteriaObject(int taskID) {
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+
+        String sql = "SELECT taskID, criteriaID, taskAcceptCriteriaTEXT, taskStatus FROM taskAcceptCriteria WHERE taskID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, taskID);
+            ResultSet rs = ps.executeQuery();
+
+
+
+            while (rs.next()) {
+                // Fetch task details if not fetched already
+                taskAcceptCriteria = new TaskAcceptCriteria(
+                        rs.getInt("taskID"),
+                        rs.getInt("criteriaID"),
+                        rs.getBoolean("taskStatus"),
+                        rs.getString("taskAcceptCriteriaTEXT")
+                );
+
+            }
+            return taskAcceptCriteria;
+            } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public String getCriteriaString(int criteriaID) {
         String sql = "SELECT taskAcceptCriteriaTEXT FROM taskAcceptCriteria WHERE criteriaID = ?";
         Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
@@ -441,6 +547,29 @@ public class ProjectRepository {
             throw new RuntimeException(e);
         }
     }
+
+    private List<TaskAcceptCriteria> findTaskAcceptCriteriaByTaskID(int taskID) {
+        List<TaskAcceptCriteria> criteriaList = new ArrayList<>();
+        String sql = "SELECT * FROM taskAcceptCriteria WHERE taskID = ?";
+        Connection connection = ConnectionManager.getConnection(dbUrl, dbUserName, dbPassword);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, taskID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                TaskAcceptCriteria criteria = new TaskAcceptCriteria(
+                        rs.getInt("criteriaID"),
+                        rs.getInt("taskID"),
+                        rs.getBoolean("taskStatus"),
+                        rs.getString("taskAcceptCriteriaTEXT")
+                );
+                criteriaList.add(criteria);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return criteriaList;
+    }
+
 
     public void assignTaskToUser(int userID, int taskID) {
             try {
@@ -513,6 +642,21 @@ public class ProjectRepository {
         Project project = findProjectById(projectID);
         double budgetSpent = getBudgetSpent(projectID);
         return project.getProjectBudget() - budgetSpent;
+    }
+
+    public int getTimeTotal() {
+        Period period = Period.between(project.getProjectStartDate(), project.getProjectDueDate());
+        return period.getYears() * 365 + period.getMonths() * 30 + period.getDays();
+    }
+
+    public int getTimeSpent() {
+        Period period = Period.between(project.getProjectStartDate(), LocalDate.now());
+        return period.getYears() * 365 + period.getMonths() * 30 + period.getDays();
+    }
+
+    public int getTimeLeft() {
+        Period period = Period.between(LocalDate.now(), project.getProjectDueDate());
+        return period.getYears() * 365 + period.getMonths() * 30 + period.getDays();
     }
 
     public Double getTotalEstimatedTime(int projectID) {

@@ -2,45 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org/" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Opret projekt</title>
+    <title>Create Project</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
-<h3>Opret projekt</h3>
+<h3>Create Project</h3>
 <body>
 <fieldset>
-    <legend>Opret projekt</legend>
+    <legend>Create Project</legend>
     <form action="/projectList/createProject" th:object="${projectObject}" method="post">
 
         <input type="hidden" name="userID" th:value="${#ctx.session.userID}">
 
         <p>
-            <label for="projectName">Projekt navn</label>
+            <label for="projectName">Project name</label>
             <input id="projectName" th:field="*{projectName}" placeholder="projectName">
         </p>
 
         <p>
-            <label for="projectDescription">Beskrivelse</label>
+            <label for="projectDescription">Project description</label>
             <input id="projectDescription" th:field="*{projectDescription}" placeholder="project description">
         </p>
 
         <p>
-            <label for="projectStartDate">Projekt start dato</label>
+            <label for="projectStartDate">Project Start Date</label>
             <input id="projectStartDate" type="date" th:field="*{projectStartDate}" placeholder="project start date">
         </p>
 
         <p>
-            <label for="projectBudget">Projekt budget</label>
+            <label for="projectBudget">Project Budget</label>
             <input id="projectBudget" th:field="*{projectBudget}" placeholder="project budget">
         </p>
 
         <p>
-            <label for="projectDueDate">Projekt deadline</label>
+            <label for="projectDueDate">Project Due Date</label>
             <input id="projectDueDate" type="date" th:field="*{projectDueDate}" placeholder="project due date">
         </p>
 
         <input id="projectID" type="hidden" th:field="*{projectID}">
 
-        <button type="submit">Opret projekt</button>
+        <button type="submit">Create Project</button>
         <a th:href="@{'/projectList'}">
             <input type="button" value="Cancel" class="button">
         </a>

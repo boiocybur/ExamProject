@@ -14,12 +14,12 @@
 
     <!-- Imminent Tasks Section -->
     <section style="float: left; width: 50%;">
-        <h2>Forestående tasks</h2>
+        <h2>Imminent Tasks</h2>
         <table>
             <thead>
             <tr>
-                <th>Task navn</th>
-                <th>Deadline</th>
+                <th>Task Name</th>
+                <th>Due Date</th>
             </tr>
             </thead>
             <tbody>
@@ -35,12 +35,12 @@
 
     <!-- Overdue Tasks Section -->
     <section style="float: right; width: 50%;">
-        <h2>Overskredne tasks</h2>
+        <h2>Overdue Tasks</h2>
         <table>
             <thead>
             <tr>
-                <th>Task navn</th>
-                <th>Deadline</th>
+                <th>Task Name</th>
+                <th>Due Date</th>
             </tr>
             </thead>
             <tbody>
@@ -54,21 +54,21 @@
 
     <!-- All Tasks Section -->
     <section style="float: left; width: 50%;">
-        <h2>Alle tasks</h2>
+        <h2>All Tasks</h2>
         <table>
             <thead>
             <tr>
-                <th>Task navn</th>
-                <th>Deadline</th>
+                <th>Task Name</th>
+                <th>Due Date</th>
             </tr>
 
             </thead>
             <tbody>
             <tr th:each="task : ${openTasksObject}">
                 <td>
-                    <a th:href="@{|/project/${projectID}/${task.getTaskID()}/taskDetails|}" th:text="${task.getTaskName()}">Task navn</a>
+                    <a th:href="@{|/project/${projectID}/${task.getTaskID()}/taskDetails|}" th:text="${task.getTaskName()}">Task Name</a>
                 </td>
-                <td th:text="${task.taskDueDate}">Task deadline</td>
+                <td th:text="${task.taskDueDate}">Task Due Date</td>
 
                 <td>
                     <a th:href="@{|/project/${projectID}/${task.getTaskID()}/updateTask|}">
@@ -79,7 +79,7 @@
                 <td>
                     <form th:action="@{|/project/${projectID}/${task.getTaskID()}/deleteTask|}" method="post">
                         <input type="hidden" name="projectID" th:value="${projectID}">
-                        <button type="submit" class="button">Slet</button>
+                        <button type="submit" class="button">Delete</button>
                     </form>
                 </td>
 
@@ -111,12 +111,12 @@
 
     <!-- Completed Tasks Section -->
     <section style="float: right; width: 50%;">
-        <h2>Afsluttede tasks</h2>
+        <h2>Completed Tasks</h2>
         <table>
             <thead>
             <tr>
-                <th>Task navn</th>
-                <th>Deadline</th>
+                <th>Task Name</th>
+                <th>Due Date</th>
             </tr>
             </thead>
             <tbody>

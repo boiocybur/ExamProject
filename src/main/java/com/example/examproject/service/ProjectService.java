@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -34,6 +35,10 @@ public class ProjectService {
     public boolean closeTask(int taskID) {
         return projectRepository.closeTask(taskID);
     }
+  
+    public void createTask(Task task, int userID, int projectID) {
+        projectRepository.createTask(task, userID, projectID);
+    }
 
     public List<Task> imminentOpenTasks(int projectID) {
         return projectRepository.imminentOpenTasks(projectID);
@@ -47,12 +52,20 @@ public class ProjectService {
         return projectRepository.updateTask(task, taskID);
     }
 
+    public Task findTask(int taskID) {
+        return projectRepository.findTask(taskID);
+    }
+
     public boolean deleteTask(int taskID) {
         return projectRepository.deleteTask(taskID);
     }
 
     public void createTask2(Task task, int userID, int projectID) {
-        projectRepository.createTask(task, userID, projectID);
+        projectRepository.createTask2(task, userID, projectID);
+    }
+
+    public void updateTask2(Task task, int taskID) {
+        projectRepository.updateTask2(task, taskID);
     }
 
     public Task findOpenTask(int taskID) {
@@ -65,6 +78,10 @@ public class ProjectService {
 
     public void updateTaskAcceptCriteria(int taskID, List<TaskAcceptCriteria> taskAcceptCriteria) {
         projectRepository.updateTaskAcceptCriteria(taskID, taskAcceptCriteria);
+    }
+
+    public TaskAcceptCriteria updateTaskAcceptCriteriaObject(int taskID) {
+        return projectRepository.findTaskAcceptCriteriaObject(taskID);
     }
 
     public List<TaskAcceptCriteria> findTaskAcceptCriteria(int taskID) {
@@ -89,6 +106,18 @@ public class ProjectService {
 
     public Project findProjectById(int projectID) {
         return projectRepository.findProjectById(projectID);
+    }
+
+    public int getTimeSpent() {
+        return projectRepository.getTimeSpent();
+    }
+
+    public int getTimeTotal() {
+        return projectRepository.getTimeTotal();
+    }
+
+    public int getTimeLeft() {
+        return projectRepository.getTimeLeft();
     }
 
     public void removeAssignedUserToTask(int userID, int taskID) {
